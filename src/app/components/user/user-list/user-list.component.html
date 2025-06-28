@@ -1,0 +1,45 @@
+<div>
+  <table class="table-auto border-collapse border border-crater-brown w-full">
+    <thead>
+      <tr class="text-center border border-crater-brown bg-crater-brown rounded-sm">
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Lastname</th>
+        <th scope="col">Email</th>
+        <th scope="col">Created</th>
+        <th scope="col">Updated</th>
+        <th class="text-center" scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of users; track item.id) {
+      <tr class="text-center border border-crater-brown">
+        <th scope="row">{{item.id}}</th>
+        <td>{{item.name}}</td>
+        <td>{{item.lastname}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.createdAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+        <td>{{item.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
+        <td>
+          <button (click)="callModalAction.emit(item);" class="btn btn-warning me-2" type="button">
+            <mat-icon class="material-symbols-outlined text-crater-brown">
+              edit
+            </mat-icon></button>
+          <button (click)="callDeleteAction.emit(item)" [disabled]="(item.id == idUser)" class="btn btn-danger"
+            type="button"> <mat-icon class="material-symbols-outlined text-crater-brown">
+              delete
+            </mat-icon></button>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="7">
+          <div class="d-flex justify-content-center align-items-center w-100">
+            <p class="mb-0">There are not users</p>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

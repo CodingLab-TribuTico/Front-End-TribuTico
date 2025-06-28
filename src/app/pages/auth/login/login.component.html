@@ -1,0 +1,20 @@
+<form (ngSubmit)="handleLogin($event)" autocomplete="off" #frm="ngForm" class="grid grid-rows-1 items-center space-y-3">
+  <input #email="ngModel" type="text" class="border-2 border-black w-2/6" id="email" name="email"
+    placeholder="agent@gmail.com" [(ngModel)]="loginForm.email" [ngClass]="{
+                  'is-invalid': email.invalid && email.touched,
+                  'is-valid': email.valid && email.touched
+                }" required />
+
+
+  <input #password="ngModel" type="password" class="border-2 border-black w-2/6" id="password" name="password"
+    placeholder="*****" [(ngModel)]="loginForm.password" [ngClass]="{
+                  'is-invalid': password.invalid && password.touched,
+                  'is-valid': password.valid && password.touched
+                }" required />
+
+
+  <button class="bg-blue-700 rounded p-1 w-2/6" type="submit">
+    Sign in
+  </button>
+  <a href="/signup" class="bg-blue-700 rounded p-1 w-2/6 text-center">Go SignUp</a>
+</form>

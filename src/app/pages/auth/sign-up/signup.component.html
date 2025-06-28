@@ -1,0 +1,26 @@
+<form (ngSubmit)="handleSignup($event)" autocomplete="off" #frm="ngForm"
+  class="grid grid-rows-1 items-center space-y-3">
+  <input class="border-2 border-black w-2/6" #name="ngModel" type="text" id="name" name="name" placeholder="User"
+    [(ngModel)]="user.name" required />
+
+  <input class="border-2 border-black w-2/6" #lastname="ngModel" type="text" id="lastname" name="lastname"
+    placeholder="demo" [(ngModel)]="user.lastname" required />
+
+  <input class="border-2 border-black w-2/6" #email="ngModel" type="text" id="email" name="email"
+    placeholder="agent@gmail.com" [(ngModel)]="user.email" required />
+
+
+  <input class="border-2 border-black w-2/6" #password="ngModel" type="password" id="password" name="password"
+    placeholder="*****" [(ngModel)]="user.password" required />
+  <div class="form-group mb-0">
+    <button class="bg-blue-700 rounded p-1 w-2/6" type="submit">
+      Sign up
+    </button>
+    @if(signUpError) {
+    <p class="text-danger">{{signUpError}}</p>
+    } @else if (validSignup){
+    <p class="text-success">User registered, please go to login</p>
+    }
+  </div>
+  <a href="/login" class="bg-blue-700 rounded p-1 w-2/6">Go Login</a>
+</form>
