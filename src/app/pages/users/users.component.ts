@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { UserListComponent } from '../../components/user/user-list/user-list.component';
 import { UserFormComponent } from '../../components/user/user-form/user-form.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
@@ -26,8 +26,10 @@ export class UsersComponent {
   public userService: UserService = inject(UserService);
   public modalService: ModalService = inject(ModalService);
   @ViewChild('addUsersModal') public addUsersModal: any;
-  public title: string = 'Users';
+  public title: string = 'Usuarios';
   public fb: FormBuilder = inject(FormBuilder);
+  @Output() callCustomSearchMethod = new EventEmitter();
+
   userForm = this.fb.group({
     id: [''],
     email: ['', [Validators.required, Validators.email]],
@@ -64,5 +66,12 @@ export class UsersComponent {
   openModal() {
     this.modalService.displayModal('md', this.addUsersModal);
     this.userForm.reset();
+  }
+
+  search(event: Event) {
+    let input = (event.target as HTMLInputElement).value.trim().toLocaleLowerCase();
+    this.userService.search.page = 1;
+    this.userService.search.search = input;
+    this.userService.getAll();
   }
 }

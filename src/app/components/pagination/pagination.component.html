@@ -1,33 +1,58 @@
-<div class="d-flex align-items-center justify-content-center my-3">
-  <nav aria-label="pagination">
-    <ul class="pagination">
-      <li class="page-item">
-        <button (click)="onPage(1)" [disabled]="service.search.pageNumber === 1" class="page-link" >
-          <i class="fas fa-angles-left"></i>
+<div class="flex items-center justify-between py-3">
+  <div class="sm:flex sm:flex-1 sm:items-center sm:justify-between">
+    <div>
+      <p class="text-base font-base text-crater-brown">
+        Mostrando de
+        <span>{{((service.search.pageNumber-1)*5)+1}}</span>
+        a
+        <span>{{
+          service.search.pageNumber !== service.totalItems.length ? service.search.pageNumber*5
+          : (service.search.pageNumber-1)*5 +(service.search.totalElements%5)
+          }}</span>
+        de
+        <span>{{service.search.totalElements}}</span>
+        resultados
+      </p>
+    </div>
+    <div>
+      <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+        <button (click)="onPage(1)" [disabled]="service.search.pageNumber === 1"
+          class="text-bisque rounded-l-md px-2 py-2 border-r-2 border-zorba  bg-crater-brown disabled:text-zorba ">
+          <span class="material-symbols-rounded text-lg">
+            keyboard_double_arrow_left
+          </span>
         </button>
-      </li>
-      <li class="page-item">
-        <button (click)="onPage(service.search.pageNumber - 1)" [disabled]="service.search.pageNumber === 1" class="page-link">
-          <i class="fas fa-angle-left"></i>
+        <button (click)="onPage(service.search.pageNumber-1)" [disabled]="service.search.pageNumber === 1"
+          class="text-bisque px-2 py-2 border-r-2 border-zorba bg-crater-brown disabled:text-zorba">
+          <span class="material-symbols-rounded text-lg">
+            chevron_left
+          </span>
         </button>
-      </li>
-      @for (item of service.totalItems; track $index) {
-        @if (service.search.pageNumber - 2 <= item && item <= service.search.pageNumber + 2) {
-          <li class="page-item">
-            <button [disabled]="service.search.pageNumber === item" (click)="onPage(item)" class="page-link">{{item}}</button>
-          </li>
-        }
-      }
-      <li class="page-item">
-        <button (click)="onPage(service.search.pageNumber + 1)" [disabled]="service.search.pageNumber === service.totalItems.length" class="page-link">
-          <i class="fas fa-angle-right"></i>
-        </button>
-      </li>
-      <li class="page-item">
-        <button (click)="onPage(service.totalItems.length)" [disabled]="service.search.pageNumber === service.totalItems.length" class="page-link">
-          <i class="fas fa-angles-right"></i>
-        </button>
-      </li>
-    </ul>
-  </nav>
+
+        @for (item of service.totalItems; track $index) {
+        @if (service.search.pageNumber - 2 <= item && item <=service.search.pageNumber + 2) { <button
+          [disabled]="service.search.pageNumber === item" (click)="onPage(item)" aria-current="page"
+          class="text-bisque px-4 py-2 border-r-2 border-zorba"
+          [ngClass]="{ 'bg-zorba': service.search.pageNumber === item, 'bg-crater-brown': service.search.pageNumber !== item }">
+          {{item}}</button>
+          }
+          }
+
+          <button (click)="onPage(service.search.pageNumber + 1)"
+            [disabled]="service.search.pageNumber === service.totalItems.length"
+            class="text-bisque px-2 py-2 bg-crater-brown border-r-2 border-zorba disabled:text-zorba">
+            <span class="material-symbols-rounded text-lg">
+              chevron_right
+            </span>
+          </button>
+          <button (click)="onPage(service.totalItems.length)"
+            [disabled]="service.search.pageNumber === service.totalItems.length"
+            class="text-bisque rounded-r-md px-2 py-2 bg-crater-brown disabled:text-zorba">
+            <span class="material-symbols-rounded text-lg">
+              keyboard_double_arrow_right
+            </span>
+          </button>
+      </nav>
+    </div>
+  </div>
 </div>

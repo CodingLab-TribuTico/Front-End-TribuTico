@@ -40,7 +40,6 @@ export class SidebarComponent {
       this.userName = JSON.parse(user)?.name;
       this.role = JSON.parse(user)?.role.name;
     }
-    console.log(this.role);
   }
 
   logout() {

@@ -52,10 +52,12 @@ export interface IRole {
 }
 
 export interface ISearch {
+  query?: string;
   page?: number;
   size?: number;
   pageNumber?: number;
   pageSize?: number;
   totalElements?: number;
   totalPages?: number;
+  search?: string;
 }
