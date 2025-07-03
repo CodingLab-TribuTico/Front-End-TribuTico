@@ -35,8 +35,8 @@ export class UsersComponent {
     email: ['', [Validators.required, Validators.email]],
     name: ['', Validators.required],
     lastname: ['', Validators.required],
-    password: ['', Validators.required],
-    updatedAt: ['', Validators.required],
+    password: [''],
+    role: ['']
   })
 
   constructor() {
@@ -54,8 +54,7 @@ export class UsersComponent {
     this.userForm.controls['email'].setValue(user.email ? user.email : '');
     this.userForm.controls['name'].setValue(user.name ? user.name : '');
     this.userForm.controls['lastname'].setValue(user.lastname ? user.lastname : '');
-    this.userForm.controls['password'].setValue(user.password ? user.password : '');
-    this.modalService.displayModal('md', this.addUsersModal);
+    this.modalService.displayModal(this.addUsersModal);
   }
 
   updateUser(user: IUser) {
@@ -63,15 +62,15 @@ export class UsersComponent {
     this.modalService.closeAll();
   }
 
-  openModal() {
-    this.modalService.displayModal('md', this.addUsersModal);
-    this.userForm.reset();
-  }
-
   search(event: Event) {
     let input = (event.target as HTMLInputElement).value.trim().toLocaleLowerCase();
     this.userService.search.page = 1;
     this.userService.search.search = input;
     this.userService.getAll();
+  }
+
+  cancelUpdate() {
+    this.userForm.reset();
+    this.modalService.closeAll();
   }
 }

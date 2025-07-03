@@ -1,9 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Route, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { routes } from '../../../../app.routes';
 import { MatIconModule } from '@angular/material/icon';
+import { ModalService } from '../../../../services/modal.service';
+import { ModalComponent } from '../../../modal/modal.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,11 +14,14 @@ import { MatIconModule } from '@angular/material/icon';
     CommonModule,
     RouterLink,
     RouterLinkActive,
-    MatIconModule
+    MatIconModule,
+    ModalComponent
   ],
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
+  @ViewChild('addUsersModal') public addUsersModal: any;
+  public modalService: ModalService = inject(ModalService);
   public width: any = window.innerWidth;
   public authService = inject(AuthService);
   public permittedRoutes: Route[] = [];
@@ -43,7 +48,17 @@ export class SidebarComponent {
   }
 
   logout() {
+    this.modalService.displayModal(this.addUsersModal);
     this.service.logout();
     this.router.navigateByUrl('/login');
+    this.modalService.closeAll();
+  }
+
+  callConfirmation() {
+    this.modalService.displayModal(this.addUsersModal);
+  }
+
+  hideModal() {
+    this.modalService.closeAll();
   }
 }

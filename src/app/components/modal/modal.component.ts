@@ -2,32 +2,34 @@ import { Component, inject, Input, ViewChild, OnInit, Output, EventEmitter, CUST
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderComponent } from '../loader/loader.component';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
   imports: [
     LoaderComponent,
-    CommonModule
+    CommonModule,
+    MatIconModule
   ],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModalComponent {
-  @Input() title?: string;
+  @Input() title: string = '';
   @Input() confirmAction: string = '';
   @Input() cancelAction: string = '';
+  @Input() icon: string = '';
   @Input() customValidation: boolean = false;
+  @Input() textCenter: boolean = false;
   @Input() isLoading: boolean = false;
   @Input() loadingConfirmationMethod: boolean = false;
   @Input() hideConfirmAction: boolean = false;
   @Input() useCustomBackGround: boolean = false;
+  @Input() customBackGround: string = '';
   @Input() hideCancelOption: boolean = false;
   @Input() hideFooter: boolean = false;
-  @Input() modalBodyClass: string = "modal-body";
-  @Input() modalFooterClass: string = "modal-footer";
-  @Input() modalContentClass: string = "modal-content";
   @Output() callCancelMethod = new EventEmitter();
   @Output() callConfirmationMethod = new EventEmitter();
 
@@ -41,5 +43,4 @@ export class ModalComponent {
     this.hide();
     this.callCancelMethod.emit();
   }
-
 }

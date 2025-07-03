@@ -1,43 +1,52 @@
-<form [formGroup]="userForm" class="row">
+<form [formGroup]="userForm" class="max-w-sm mx-auto">
   <div>
-    <h2 class="mb-0">Add User</h2>
+    <h1 class="text-bisque text-xl font-bold">Añadir usuario</h1>
   </div>
   <div class="mb-2">
-    <label class="mb-1" for="email">Email*</label>
-    <input id="email" formControlName="email" type="email" class="form-control">
+    <label class="block my-2 text-base font-bold text-bisque" for="email">Email<span
+        class="text-burnt-umber">*</span></label>
+    <input id="email" formControlName="email" type="email"
+      class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold"
+      placeholder="ejemplo@example.com">
+
     @if (userForm.controls['email'].invalid && (userForm.controls['email'].dirty || userForm.controls['email'].touched))
     {
-    <p class="text-danger my-1">Email is required</p>
+    <p class="text-burnt-umber my-1">Email is required</p>
     }
     @if (userForm.controls['email'].errors?.['email'] && (userForm.controls['email'].dirty ||
     userForm.controls['email'].touched)) {
-    <p class="text-danger my-1">Invalid Email</p>
+    <p class="text-burnt my-1">Invalid Email</p>
     }
   </div>
+
   <div class="mb-2">
-    <label class="mb-1" for="name">Name*</label>
-    <input id="name" formControlName="name" type="text" class="form-control">
+    <label class="block my-2 text-base font-bold text-bisque" for="name">Name<span
+        class="text-burnt-umber">*</span></label>
+    <input id="name" formControlName="name" type="text"
+      class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold">
     @if (userForm.controls['name'].invalid && (userForm.controls['name'].dirty || userForm.controls['name'].touched)) {
-    <p class="text-danger my-1">Name is required</p>
+    <p class="text-burnt-umber my-1">Name is required</p>
     }
   </div>
   <div class="mb-2">
-    <label class="mb-1" for="lastname">Lastname*</label>
-    <input id="lastname" formControlName="lastname" type="text" class="form-control">
+    <label class="block my-2 text-base font-bold text-bisque" for="lastname">Lastname<span
+        class="text-burnt-umber">*</span></label>
+    <input id="lastname" formControlName="lastname" type="text"
+      class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold">
     @if (userForm.controls['lastname'].invalid && (userForm.controls['lastname'].dirty ||
     userForm.controls['lastname'].touched)) {
-    <p class="text-danger my-1">Lastname is required</p>
+    <p class="text-burnt-umber my-1">Lastname is required</p>
     }
   </div>
-  <div class="mb-2">
-    <label class="mb-1" for="password">Password*</label>
-    <input id="password" formControlName="password" type="password" class="form-control">
-    @if (userForm.controls['password'].invalid && (userForm.controls['password'].dirty ||
-    userForm.controls['password'].touched)) {
-    <p class="text-danger my-1">Password is required</p>
+
+  <div class="flex justify-center">
+    <button (click)="callSave()" [disabled]="userForm.invalid"
+      class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed font-bold"
+      type="button">Guardar</button>
+    @if (cancelOption) {
+    <button (click)="callCancel()"
+      class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer ml-2 font-bold"
+      type="button">Cancelar</button>
     }
-  </div>
-  <div class="d-flex justify-content-end">
-    <button (click)="callSave()" [disabled]="userForm.invalid" class="btn btn-primary" type="button">Save</button>
   </div>
 </form>

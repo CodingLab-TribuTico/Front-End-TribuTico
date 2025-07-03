@@ -26,8 +26,8 @@
 <ng-template #addUsersModal>
   <app-modal [hideFooter]="true">
     <div>
-      <app-user-form [userForm]="userForm" (callSaveMethod)="saveUser($event)"
-        (callUpdateMethod)="updateUser($event)" />
+      <app-user-form [userForm]="userForm" (callSaveMethod)="saveUser($event)" (callUpdateMethod)="updateUser($event)"
+        [cancelOption]="true" (callCancelMethod)="cancelUpdate()" />
     </div>
   </app-modal>
 </ng-template>

@@ -7,9 +7,8 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 export class ModalService {
   private ngbModalService: NgbModal = inject(NgbModal);
 
-  displayModal(size: string, modalInstance: any) {
+  displayModal(modalInstance: any) {
     const modalRef = this.ngbModalService.open(modalInstance, {
-      size: size ? size : 'sm',
       centered: true,
       backdrop: 'static',
       keyboard: false
@@ -19,5 +18,5 @@ export class ModalService {
   closeAll() {
     this.ngbModalService.dismissAll();
   }
-   
+
 }
