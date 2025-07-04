@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { IUser, IFeedbackStatus } from '../../../interfaces';
+import { IUser } from '../../../interfaces';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, NgForm, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-form',
@@ -23,9 +23,12 @@ export class UserFormComponent {
 
   callSave() {
     let user: IUser = {
-      email: this.userForm.controls['email'].value,
+      identification: this.userForm.controls['identification'].value,
       name: this.userForm.controls['name'].value,
       lastname: this.userForm.controls['lastname'].value,
+      birthDate: this.userForm.controls['birthDate'].value,
+      email: this.userForm.controls['email'].value,
+      status: this.userForm.controls['status'].value,
     }
 
     if (this.userForm.controls['id'].value) {

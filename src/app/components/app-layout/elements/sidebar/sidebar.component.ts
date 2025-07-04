@@ -39,7 +39,7 @@ export class SidebarComponent {
   ) {
     this.appRoutes = routes.filter(route => route.path == 'app')[0];
     this.permittedRoutes = this.authService.getPermittedRoutes(this.appRoutes.children);
-
+    console.log(this.permittedRoutes);
     let user = localStorage.getItem('auth_user');
     if (user) {
       this.userName = JSON.parse(user)?.name;

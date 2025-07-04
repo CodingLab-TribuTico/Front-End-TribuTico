@@ -10,6 +10,7 @@ export class UserService extends BaseService<IUser> {
   protected override source: string = 'users';
   private userListSignal = signal<IUser[]>([]);
   get users$() {
+
     return this.userListSignal;
   }
   public search: ISearch = {
@@ -41,7 +42,7 @@ export class UserService extends BaseService<IUser> {
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred adding the user', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error al agregar el usuario', 'center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
@@ -54,7 +55,7 @@ export class UserService extends BaseService<IUser> {
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred updating the user', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar el usuario', 'center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
@@ -67,7 +68,7 @@ export class UserService extends BaseService<IUser> {
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred deleting the user', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error eliminando al usuario', 'center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });

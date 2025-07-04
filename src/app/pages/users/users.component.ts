@@ -32,9 +32,12 @@ export class UsersComponent {
 
   userForm = this.fb.group({
     id: [''],
-    email: ['', [Validators.required, Validators.email]],
+    identification: ['', Validators.required],
     name: ['', Validators.required],
     lastname: ['', Validators.required],
+    birthDate: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    status: ['', Validators.required],
     password: [''],
     role: ['']
   })
@@ -51,9 +54,12 @@ export class UsersComponent {
 
   callEdition(user: IUser) {
     this.userForm.controls['id'].setValue(user.id ? JSON.stringify(user.id) : '');
-    this.userForm.controls['email'].setValue(user.email ? user.email : '');
+    this.userForm.controls['identification'].setValue(user.identification ? user.identification : '');
     this.userForm.controls['name'].setValue(user.name ? user.name : '');
     this.userForm.controls['lastname'].setValue(user.lastname ? user.lastname : '');
+    this.userForm.controls['birthDate'].setValue(user.birthDate ? user.birthDate : '');
+    this.userForm.controls['email'].setValue(user.email ? user.email : '');
+    this.userForm.controls['status'].setValue(String(user.status));
     this.modalService.displayModal(this.addUsersModal);
   }
 

@@ -1,52 +1,113 @@
-<form [formGroup]="userForm" class="max-w-sm mx-auto">
+<form [formGroup]="userForm" class="max-w-2xl mx-auto">
   <div>
     <h1 class="text-bisque text-xl font-bold">Añadir usuario</h1>
   </div>
-  <div class="mb-2">
-    <label class="block my-2 text-base font-bold text-bisque" for="email">Email<span
-        class="text-burnt-umber">*</span></label>
-    <input id="email" formControlName="email" type="email"
-      class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold"
-      placeholder="ejemplo@example.com">
+  <div class="grid grid-cols-2">
+    <div class="w-full">
+      <div class="mb-2">
+        <label class="block my-2 text-base font-bold text-bisque" for="identification">Cédula<span
+            class="text-burnt-umber">*</span></label>
+        <input id="identification" formControlName="identification" type="text"
+          class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold"
+          placeholder="305490740">
 
-    @if (userForm.controls['email'].invalid && (userForm.controls['email'].dirty || userForm.controls['email'].touched))
-    {
-    <p class="text-burnt-umber my-1">Email is required</p>
-    }
-    @if (userForm.controls['email'].errors?.['email'] && (userForm.controls['email'].dirty ||
-    userForm.controls['email'].touched)) {
-    <p class="text-burnt my-1">Invalid Email</p>
-    }
+        @if (userForm.controls['identification'].invalid && (userForm.controls['identification'].dirty ||
+        userForm.controls['identification'].touched))
+        {
+        <p class="text-burnt-umber my-1">Cédula es obligatoria</p>
+        }
+        @if (userForm.controls['identification'].errors?.['identification'] &&
+        (userForm.controls['identification'].dirty ||
+        userForm.controls['identification'].touched)) {
+        <p class="text-burnt my-1">Cédula invalida</p>
+        }
+      </div>
+
+      <div class="mb-2">
+        <label class="block my-2 text-base font-bold text-bisque" for="lastname">Apellido<span
+            class="text-burnt-umber">*</span></label>
+        <input id="lastname" formControlName="lastname" type="text"
+          class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold">
+        @if (userForm.controls['lastname'].invalid && (userForm.controls['lastname'].dirty ||
+        userForm.controls['lastname'].touched)) {
+        <p class="text-burnt-umber my-1">Apellido es obligatorio</p>
+        }
+      </div>
+
+      <div class="mb-2">
+        <label class="block my-2 text-base font-bold text-bisque" for="email">Correo electrónico<span
+            class="text-burnt-umber">*</span></label>
+        <input id="email" formControlName="email" type="email"
+          class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold"
+          placeholder="ejemplo@example.com">
+
+        @if (userForm.controls['email'].invalid && (userForm.controls['email'].dirty ||
+        userForm.controls['email'].touched))
+        {
+        <p class="text-burnt-umber my-1">Correo electrónico es requerido</p>
+        }
+        @if (userForm.controls['email'].errors?.['email'] && (userForm.controls['email'].dirty ||
+        userForm.controls['email'].touched)) {
+        <p class="text-burnt my-1">Correo electrónico invalido</p>
+        }
+      </div>
+    </div>
+    <div class="ml-2">
+      <div class="mb-2">
+        <label class="block my-2 text-base font-bold text-bisque" for="name">Nombre<span
+            class="text-burnt-umber">*</span></label>
+        <input id="name" formControlName="name" type="text"
+          class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold">
+        @if (userForm.controls['name'].invalid && (userForm.controls['name'].dirty ||
+        userForm.controls['name'].touched)) {
+        <p class="text-burnt-umber my-1">Nombre es obligatorio</p>
+        }
+      </div>
+      <div class="mb-2">
+        <label class="block my-2 text-base font-bold text-bisque" for="birthDate">Fecha de nacimiento<span
+            class="text-burnt-umber">*</span></label>
+        <input id="birthDate" formControlName="birthDate" type="date"
+          class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold"
+          placeholder="ejemplo@example.com">
+
+        @if (userForm.controls['birthDate'].invalid && (userForm.controls['birthDate'].dirty ||
+        userForm.controls['birthDate'].touched))
+        {
+        <p class="text-burnt-umber my-1">Fecha de nacimiento es obligatoria</p>
+        }
+      </div>
+
+      <div class="mb-2">
+        <label class="block my-2 text-base font-bold text-bisque" for="status">Estatus<span
+            class="text-burnt-umber">*</span></label>
+        <select id="status" formControlName="status"
+          class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2.5 font-bold placeholder:text-zorba placeholder:font-bold">
+          <option value="">
+            Seleccione un estatus
+          </option>
+          <option value="true">
+            Activo
+          </option>
+          <option value="false">
+            Bloqueado
+          </option>
+        </select>
+        @if (userForm.controls['status'].invalid && (userForm.controls['status'].dirty ||
+        userForm.controls['status'].touched)) {
+        <p class="text-burnt-umber my-1">Estatus es requerido</p>
+        }
+      </div>
+    </div>
+    <div class="col-span-2 flex justify-center items-center w-full">
+      <button (click)="callSave()" [disabled]="userForm.invalid"
+        class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed font-bold"
+        type="button">Guardar</button>
+      @if (cancelOption) {
+      <button (click)="callCancel()"
+        class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer ml-2 font-bold"
+        type="button">Cancelar</button>
+      }
+    </div>
   </div>
 
-  <div class="mb-2">
-    <label class="block my-2 text-base font-bold text-bisque" for="name">Name<span
-        class="text-burnt-umber">*</span></label>
-    <input id="name" formControlName="name" type="text"
-      class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold">
-    @if (userForm.controls['name'].invalid && (userForm.controls['name'].dirty || userForm.controls['name'].touched)) {
-    <p class="text-burnt-umber my-1">Name is required</p>
-    }
-  </div>
-  <div class="mb-2">
-    <label class="block my-2 text-base font-bold text-bisque" for="lastname">Lastname<span
-        class="text-burnt-umber">*</span></label>
-    <input id="lastname" formControlName="lastname" type="text"
-      class="bg-crater-brown border-2 border-zorba text-zorba text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold">
-    @if (userForm.controls['lastname'].invalid && (userForm.controls['lastname'].dirty ||
-    userForm.controls['lastname'].touched)) {
-    <p class="text-burnt-umber my-1">Lastname is required</p>
-    }
-  </div>
-
-  <div class="flex justify-center">
-    <button (click)="callSave()" [disabled]="userForm.invalid"
-      class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed font-bold"
-      type="button">Guardar</button>
-    @if (cancelOption) {
-    <button (click)="callCancel()"
-      class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer ml-2 font-bold"
-      type="button">Cancelar</button>
-    }
-  </div>
 </form>

@@ -3,28 +3,31 @@
     <thead>
       <tr class="text-center border border-crater-brown bg-crater-brown text-bisque">
         <th class="p-3" scope="col">ID</th>
-        <th class="p-3" scope="col">Name</th>
-        <th class="p-3" scope="col">Lastname</th>
-        <th class="p-3" scope="col">Email</th>
-        <th class="p-3" scope="col">Created</th>
-        <th class="p-3" scope="col">Updated</th>
-        <th class="p-3" scope="col">Actions</th>
+        <th class="p-3" scope="col">Cédula</th>
+        <th class="p-3" scope="col">Nombre</th>
+        <th class="p-3" scope="col">Apellido</th>
+        <th class="p-3" scope="col">Fecha de nacimiento</th>
+        <th class="p-3" scope="col">Correo electrónico </th>
+        <th class="p-3" scope="col">Estatus</th>
+        <th class="p-3" scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (item of users; track item.id) {
       <tr class="text-center text-crater-brown font-semibold border-t border-crater-brown">
         <td class="p-3" scope="row">{{item.id}}</td>
+        <td class="p-3" scope="row">{{item.identification}}</td>
         <td class="p-3" scope="row">{{item.name}}</td>
         <td class="p-3" scope="row">{{item.lastname}}</td>
+        <td class="p-3" scope="row">{{item.birthDate | date: 'dd/MM/yyyy'}}</td>
         <td class="p-3" scope="row">{{item.email}}</td>
-        <td class="p-3" scope="row">{{item.createdAt | date: 'dd/MM/yyyy HH:mm'}}</td>
-        <td class="p-3" scope="row">{{item.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
-        <td>
+        <th class="p-3" scope="col">{{(item.status ? "Activo" : "Bloqueado")}}</th>
+        <td class="p-3">
           <button (click)="callModalAction.emit(item);" class="bg-flamenco px-2 p-0.5 rounded-md" type="button">
             <span class="material-symbols-rounded text-lg text-bisque">
               edit
-            </span></button>
+            </span>
+          </button>
           <button (click)="callDeleteAction.emit(item)" [disabled]="(item.id == idUser)" class="btn btn-danger"
             type="button"> <span class="material-symbols-rounded text-crater-brown">
               delete
@@ -34,9 +37,9 @@
       </tr>
       } @empty {
       <tr>
-        <td colspan="7">
+        <td colspan="8">
           <div class="flex justify-center items-center w-full">
-            <p class="p-3 text-crater-brown font-bold">There are not users</p>
+            <p class="p-3 text-crater-brown font-bold">No hay usuarios</p>
           </div>
         </td>
       </tr>
