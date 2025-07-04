@@ -1,10 +1,10 @@
 <div class="min-h-screen flex">
   <div class="w-1/2 flex flex-col justify-center items-center bg-crater-brown px-16 py-8">
     <div class="w-full max-w-md">
-      <img src="../../../../../assets/img/sidebar/TribuTico.png" alt="imagenTribuTico">
+      <img class="absolute top-6 left-8 w-32" src="../../../../../assets/img/sidebar/TribuTico.png" alt="imagenTribuTico">
 
-      <h2 class="text-bisque text-2xl font-bold mb-1 mt-8">Bienvenido</h2>
-      <p class="text-zorba mb-8">Ingresa tus credenciales para acceder a tu cuenta</p>
+      <h2 class="text-bisque text-2xl font-bold mb-1 mt-8 text-center mb-8">Bienvenido</h2>
+      <p class="text-zorba mb-8 text-center">Ingresa tus credenciales para acceder a tu cuenta</p>
       <form (ngSubmit)="handleLogin($event)" autocomplete="off" #frm="ngForm" class="flex flex-col space-y-4">
         <label for="email" class="text-bisque font-semibold">Correo electrónico</label>
         <input #email="ngModel" type="text"
@@ -13,7 +13,7 @@
             'border-flamenco': email.invalid && email.touched,
             'border-golden-glow': email.valid && email.touched
           }" required />
-        <div *ngIf="email.invalid && email.touched" class="text-flamenco text-sm mt-1">
+        <div *ngIf="email.invalid && email.touched" class="text-burnt-umber text-sm mt-1">
           El correo electrónico es obligatorio.
         </div>
 
@@ -24,7 +24,7 @@
             'border-flamenco': password.invalid && password.touched,
             'border-golden-glow': password.valid && password.touched
           }" required />
-        <div *ngIf="password.invalid && password.touched" class="text-flamenco text-sm mt-1">
+        <div *ngIf="password.invalid && password.touched" class="text-burnt-umber text-sm mt-1">
           La contraseña es obligatoria.
         </div>
 

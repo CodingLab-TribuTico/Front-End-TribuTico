@@ -13,10 +13,11 @@ export interface IUser {
   id?: number;
   name?: string;
   lastname?: string;
+  lastname2?: string;
   email?: string;
   password?: string;
   active?: boolean;
-  cedula?: string;
+  identification?: string;
   birthDate?: string | Date;
   createdAt?: string;
   updatedAt?: string;

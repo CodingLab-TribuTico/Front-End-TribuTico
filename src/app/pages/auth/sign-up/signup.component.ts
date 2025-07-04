@@ -17,11 +17,13 @@ export class SigUpComponent {
   public validSignup!: boolean;
   @ViewChild('name') nameModel!: NgModel;
   @ViewChild('lastname') lastnameModel!: NgModel;
+  @ViewChild('lastname2') lastname2Model!: NgModel;
   @ViewChild('email') emailModel!: NgModel;
-  @ViewChild('cedula') cedulaModel!: NgModel;
+  @ViewChild('identification') identificationModel!: NgModel;
   @ViewChild('birthDate') birthDateModel!: NgModel;
   @ViewChild('password') passwordModel!: NgModel;
-  
+  public confirmPassword: string = '';
+  public confirmPasswordTouched: boolean = false;
 
   public user: IUser = {};
 
@@ -29,15 +31,22 @@ export class SigUpComponent {
     private authService: AuthService
   ) {}
 
+  get passwordsMatch(): boolean {
+    return this.user.password === this.confirmPassword;
+  }
+
   public handleSignup(event: Event) {
     event.preventDefault();
+
+    this.confirmPasswordTouched = true;
 
     [
       this.nameModel,
       this.lastnameModel,
+      this.lastname2Model,
       this.emailModel,
       this.passwordModel,
-      this.cedulaModel,
+      this.identificationModel,
       this.birthDateModel
     ].forEach(model => {
       if (!model.valid) model.control.markAsTouched();
@@ -46,10 +55,12 @@ export class SigUpComponent {
     if (
       this.nameModel.valid &&
       this.lastnameModel.valid &&
+      this.lastname2Model.valid &&
       this.emailModel.valid &&
       this.passwordModel.valid &&
-      this.cedulaModel.valid &&
-      this.birthDateModel.valid
+      this.identificationModel.valid &&
+      this.birthDateModel.valid &&
+      this.passwordsMatch
     ) {
       this.authService.signup(this.user).subscribe({
         next: () => this.validSignup = true,
