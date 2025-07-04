@@ -1,26 +1,89 @@
-<form (ngSubmit)="handleSignup($event)" autocomplete="off" #frm="ngForm"
-  class="grid grid-rows-1 items-center space-y-3">
-  <input class="border-2 border-black w-2/6" #name="ngModel" type="text" id="name" name="name" placeholder="User"
-    [(ngModel)]="user.name" required />
-
-  <input class="border-2 border-black w-2/6" #lastname="ngModel" type="text" id="lastname" name="lastname"
-    placeholder="demo" [(ngModel)]="user.lastname" required />
-
-  <input class="border-2 border-black w-2/6" #email="ngModel" type="text" id="email" name="email"
-    placeholder="agent@gmail.com" [(ngModel)]="user.email" required />
-
-
-  <input class="border-2 border-black w-2/6" #password="ngModel" type="password" id="password" name="password"
-    placeholder="*****" [(ngModel)]="user.password" required />
-  <div class="form-group mb-0">
-    <button class="bg-blue-700 rounded p-1 w-2/6" type="submit">
-      Sign up
-    </button>
-    @if(signUpError) {
-    <p class="text-danger">{{signUpError}}</p>
-    } @else if (validSignup){
-    <p class="text-success">User registered, please go to login</p>
-    }
+<div class="min-h-screen flex">
+  <div class="w-1/2 flex flex-col justify-center items-center bg-isabelline px-16 py-8">
+    <div class="absolute top-6 left-8 w-32">
+      <img src="../../../../../assets/img/sidebar/TribuTico.png" alt="imagenTribuTico">
+    </div>
+    <div class="w-full max-w-md">
+      <p class="ng-crater-brown mb-8">Crea tu cuenta en minutos y empieza optimar tu gestión fiscal. <br>
+        Completa tus datos y únete a nuestra comunidad
+      </p>
+    </div>
   </div>
-  <a href="/login" class="bg-blue-700 rounded p-1 w-2/6">Go Login</a>
-</form>
+
+  <div class="w-1/2 flex flex-col justify-center items-center bg-crater-brown px-16 py-8">
+    <div>
+      <h2 class="text-bisque text-3xl mb-2">Crea tu cuenta</h2>
+      <p class="text-bisque mb-8">Regístrate y empieza a simplificar tu gestión tributaria desde hoy.</p>
+    </div>
+    <form (ngSubmit)="handleSignup($event)" autocomplete="off" #frm="ngForm"
+      class="grid grid-rows-1 items-center space-y-3">
+
+      <label class="text-bisque font-semibold" for="name">Nombre</label>
+      <input
+        class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 focus:outline-none focus:border-golden-glow"
+        #name="ngModel" type="text" id="name" name="name" placeholder="Nombre" [(ngModel)]="user.name" required />
+      <div *ngIf="name.invalid && name.touched" class="text-flamenco text-sm mt-1">
+        El nombre es obligatorio.
+      </div>
+
+      <label class="text-bisque font-semibold" for="lastname">Apellido</label>
+      <input
+        class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 focus:outline-none focus:border-golden-glow"
+        #lastname="ngModel" type="text" id="lastname" name="lastname" placeholder="Apellido" [(ngModel)]="user.lastname"
+        required />
+      <div *ngIf="lastname.invalid && lastname.touched" class="text-flamenco text-sm mt-1">
+        El apellido es obligatorio.
+      </div>
+
+      <label class="text-bisque font-semibold" for="email">Correo electrónico</label>
+      <input
+        class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 focus:outline-none focus:border-golden-glow"
+        #email="ngModel" type="text" id="email" name="email" placeholder="Correo electrónico" [(ngModel)]="user.email"
+        required />
+      <div *ngIf="email.invalid && email.touched" class="text-flamenco text-sm mt-1">
+        El correo electrónico es obligatorio.
+      </div>
+
+      <label for="text" class="text-bisque font-semibold">Cédula</label>
+      <input
+        class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 focus:outline-none focus:border-golden-glow"
+        #cedula="ngModel" type="text" id="cedula" name="cedula" placeholder="Cédula" [(ngModel)]="user.cedula"
+        required />
+      <div *ngIf="cedula.invalid && cedula.touched" class="text-flamenco text-sm mt-1">
+        La cédula es obligatoria.
+      </div>
+
+      <label for="date" class="text-bisque font-semibold">Fecha de nacimiento</label>
+      <input
+        class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 focus:outline-none focus:border-golden-glow"
+        #birthDate="ngModel" type="date" id="birthDate" name="birthDate" [(ngModel)]="user.birthDate" required />
+      <div *ngIf="birthDate.invalid && birthDate.touched" class="text-flamenco text-sm mt-1">
+        La fecha de nacimiento es obligatoria.
+      </div>
+
+      <label for="password" class="text-bisque font-semibold">Contraseña</label>
+      <input
+        class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 focus:outline-none focus:border-golden-glow"
+        #password="ngModel" type="password" id="password" name="password" placeholder="*************"
+        [(ngModel)]="user.password" required />
+      <div *ngIf="password.invalid && password.touched" class="text-flamenco text-sm mt-1">
+        La contraseña es obligatoria.
+      </div>
+      <div class="form-group mb-0">
+        <button
+          class="bg-flamenco text-bisque font-bold rounded-lg py-3 w-full text-2xl mt-4 mb-6 hover:bg-golden-glow hover:text-flamenco transition-colors"
+          type="submit">
+          Registrarse
+        </button>
+        @if(signUpError) {
+          <p class="text-danger">{{signUpError}}</p>
+        } @else if (validSignup){
+          <p class="text-golden-glow font-bold text-center">Usuario registrado, por favor ve a iniciar sesión</p>
+        }
+      </div>
+      <p class="text-zorba text-center text-xl font-semibold">
+        Ya tienes cuenta?
+        <a href="/login" class="text-flamenco font-bold hover:underline ml-1">Iniciar sesión</a>
+      </p>
+    </form>
+  </div>

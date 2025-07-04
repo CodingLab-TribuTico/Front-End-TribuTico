@@ -18,7 +18,10 @@ export class SigUpComponent {
   @ViewChild('name') nameModel!: NgModel;
   @ViewChild('lastname') lastnameModel!: NgModel;
   @ViewChild('email') emailModel!: NgModel;
+  @ViewChild('cedula') cedulaModel!: NgModel;
+  @ViewChild('birthDate') birthDateModel!: NgModel;
   @ViewChild('password') passwordModel!: NgModel;
+  
 
   public user: IUser = {};
 
@@ -28,19 +31,26 @@ export class SigUpComponent {
 
   public handleSignup(event: Event) {
     event.preventDefault();
-    if (!this.nameModel.valid) {
-      this.nameModel.control.markAsTouched();
-    }
-    if (!this.lastnameModel.valid) {
-      this.lastnameModel.control.markAsTouched();
-    }
-    if (!this.emailModel.valid) {
-      this.emailModel.control.markAsTouched();
-    }
-    if (!this.passwordModel.valid) {
-      this.passwordModel.control.markAsTouched();
-    }
-    if (this.emailModel.valid && this.passwordModel.valid) {
+
+    [
+      this.nameModel,
+      this.lastnameModel,
+      this.emailModel,
+      this.passwordModel,
+      this.cedulaModel,
+      this.birthDateModel
+    ].forEach(model => {
+      if (!model.valid) model.control.markAsTouched();
+    });
+
+    if (
+      this.nameModel.valid &&
+      this.lastnameModel.valid &&
+      this.emailModel.valid &&
+      this.passwordModel.valid &&
+      this.cedulaModel.valid &&
+      this.birthDateModel.valid
+    ) {
       this.authService.signup(this.user).subscribe({
         next: () => this.validSignup = true,
         error: (err: any) => (this.signUpError = err.description),

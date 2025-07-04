@@ -16,6 +16,8 @@ export interface IUser {
   email?: string;
   password?: string;
   active?: boolean;
+  cedula?: string;
+  birthDate?: string | Date;
   createdAt?: string;
   updatedAt?: string;
   authorities?: IAuthority[];
