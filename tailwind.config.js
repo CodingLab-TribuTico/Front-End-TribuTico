@@ -11,7 +11,7 @@ module.exports = {
         'bisque': '#FFF1C1',
         'golden-glow': '#FACF7D',
         'flamenco': '#EA804C',
-        'burnt-umber': '#b5473a',
+        'burnt-umber': '#B5473A',
         'goblin': '#3E885B',
         'isabelline': '#F2F1EC',
       },

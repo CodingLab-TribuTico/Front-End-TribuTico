@@ -12,6 +12,8 @@ export const handleErrorsInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: any): Observable<any> => {
       if ((error.status === 401 || error.status === 403) && !req.url.includes('auth')) {
         authService.logout();
+        authService.tokenIsExpired = true;
+
         router.navigateByUrl('/login');
         return of({ status: false });
       }
