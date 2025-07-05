@@ -26,6 +26,7 @@ export class UserFormComponent {
       identification: this.userForm.controls['identification'].value,
       name: this.userForm.controls['name'].value,
       lastname: this.userForm.controls['lastname'].value,
+      lastname2: this.userForm.controls['lastname2'].value,
       birthDate: this.userForm.controls['birthDate'].value,
       email: this.userForm.controls['email'].value,
       status: this.userForm.controls['status'].value,

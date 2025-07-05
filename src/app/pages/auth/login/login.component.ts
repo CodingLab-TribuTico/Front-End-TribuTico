@@ -29,10 +29,8 @@ export class LoginComponent {
     private router: Router,
     private authService: AuthService
   ) {
-    console.log(this.authService.tokenIsExpired);
     if (this.authService.tokenIsExpired) {
       setTimeout(() => {
-        console.log('Token expirado, mostrando modal');
         this.openModal();
       });
     }

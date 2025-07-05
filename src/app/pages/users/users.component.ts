@@ -32,9 +32,10 @@ export class UsersComponent {
 
   userForm = this.fb.group({
     id: [''],
-    identification: ['', Validators.required],
+    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
     lastname: ['', Validators.required],
+    lastname2: [''],
     birthDate: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     status: ['', Validators.required],
@@ -57,6 +58,7 @@ export class UsersComponent {
     this.userForm.controls['identification'].setValue(user.identification ? user.identification : '');
     this.userForm.controls['name'].setValue(user.name ? user.name : '');
     this.userForm.controls['lastname'].setValue(user.lastname ? user.lastname : '');
+    this.userForm.controls['lastname2'].setValue(user.lastname2 ? user.lastname2 : '');
     this.userForm.controls['birthDate'].setValue(user.birthDate ? user.birthDate : '');
     this.userForm.controls['email'].setValue(user.email ? user.email : '');
     this.userForm.controls['status'].setValue(String(user.status));

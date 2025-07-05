@@ -14,6 +14,7 @@ export interface IUser {
   identification?: string;
   name?: string;
   lastname?: string;
+  lastname2?: string;
   birthDate?: string;
   email?: string;
   password?: string;
