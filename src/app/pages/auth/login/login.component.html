@@ -18,3 +18,12 @@
   </button>
   <a href="/signup" class="bg-blue-700 rounded p-1 w-2/6 text-center">Go SignUp</a>
 </form>
+
+<ng-template #expiredTokenModal>
+  <app-modal (callConfirmationMethod)="hideModal()" [confirmAction]="'Cerrar'" [title]="'¡Ups! Tu sesión ha expirado.'"
+    [textCenter]="true" [icon]="'report'">
+    <p class="text-bisque text-base max-w-lg">
+      Por favor, inicia sesión nuevamente para continuar.
+    </p>
+  </app-modal>
+</ng-template>

@@ -1,16 +1,17 @@
 <div class="flex flex-col px-3 justify-between h-screen bg-crater-brown pt-5">
   <div>
     <div class="flex justify-center w-full">
-      <img class="w-40" src=" ../../../../../assets/img/sidebar/TribuTico.png" alt="" />
+      <img class="w-40" src=" ../../../../../assets/img/sidebar/TribuTico.png"
+        alt="Logo de la aplición web TribuTico" />
     </div>
 
     <nav class="flex-1 space-y-2 mt-4">
       @for (route of permittedRoutes; track $index) {
       @if (route.data && route.data['showInSidebar']) {
       <a routerLink="{{route.path}}" routerLinkActive="bg-zorba"
-        class="flex items-center px-2 py-2.5 text-base font-medium transition-all duration-200 text-bisque rounded-lg hover:bg-zorba group">
+        class="flex items-center px-2 py-2.5 text-base font-medium transition-all duration-200 text-bisque rounded-md hover:bg-zorba group">
         <div class="flex items-center justify-center">
-          <span class="material-icons-outlined">{{iconsDictionary[route.data['name']]}}</span>
+          <span class="material-symbols-rounded">{{iconsDictionary[route.data['name']]}}</span>
           <span class="pl-2">{{route.data['name']}}</span>
         </div>
       </a>
@@ -26,12 +27,23 @@
   </div>
 
   <div class="pb-5">
-    <button type="button" (click)="logout()"
-      class="flex items-center justify-between w-full px-4 py-3 text-base font-medium text-bisque transition-all duration-200 rounded-lg hover:bg-zorba">
+    <button type="button" (click)="callConfirmation()"
+      class="flex items-center justify-between w-full px-4 py-3 text-base font-medium text-bisque transition-all duration-200 rounded-md hover:bg-zorba">
       <div class="flex items-center justify-center">
-        <mat-icon class="material-icons-outlined">logout</mat-icon>
+        <span class="material-symbols-rounded">logout</span>
         <span class="pl-2">Salir</span>
       </div>
     </button>
   </div>
 </div>
+
+<ng-template #addUsersModal>
+  <app-modal (callConfirmationMethod)="logout()" (callCancelMethod)="hideModal()" [cancelAction]="'Cancelar'"
+    [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'" [textCenter]="true"
+    [icon]="'error'">
+    <p class="text-bisque text-base max-w-lg">Esta acción cerrará tu acceso al sistema y deberás volver a iniciar sesión
+      para
+      continuar.
+    </p>
+  </app-modal>
+</ng-template>
