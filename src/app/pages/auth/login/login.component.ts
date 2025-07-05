@@ -26,6 +26,8 @@ export class LoginComponent {
     private authService: AuthService
   ) { }
 
+    public showPassword: boolean = false; 
+
   public handleLogin(event: Event) {
     event.preventDefault();
     if (!this.emailModel.valid) {

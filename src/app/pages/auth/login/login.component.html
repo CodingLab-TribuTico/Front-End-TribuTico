@@ -18,12 +18,26 @@
         </div>
 
         <label for="password" class="text-bisque font-semibold">Contraseña</label>
-        <input #password="ngModel" type="password"
-          class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 focus:outline-none focus:border-golden-glow"
-          id="password" name="password" placeholder="********" [(ngModel)]="loginForm.password" [ngClass]="{
-            'border-flamenco': password.invalid && password.touched,
-            'border-golden-glow': password.valid && password.touched
-          }" required />
+        <div class="relative">
+          <input #password="ngModel"
+            [type]="showPassword ? 'text' : 'password'"
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 pr-10 focus:outline-none focus:border-golden-glow w-full"
+            id="password" name="password" placeholder="********" [(ngModel)]="loginForm.password"
+            [ngClass]="{
+              'border-flamenco': password.invalid && password.touched,
+              'border-golden-glow': password.valid && password.touched
+            }"
+            required
+          />
+          <button type="button"
+            class="absolute right-2 top-1/2 -translate-y-1/2 mt-[2px] text-zorba"
+            (click)="showPassword = !showPassword"
+            tabindex="-1">
+            <span class="material-symbols-outlined select-none">
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
         <div *ngIf="password.invalid && password.touched" class="text-burnt-umber text-sm mt-1">
           La contraseña es obligatoria.
         </div>
@@ -40,7 +54,7 @@
       </div>
       <button
         class="flex items-center justify-center border-2 border-zorba rounded py-2 w-full mb-2 hover:bg-zorba transition-colors">
-        <img src="" alt="Google" class="w-5 h-5 mr-2" />
+        <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" class="w-5 h-5 mr-2" />
         <span class="text-bisque">Google</span>
       </button>
       <p class="text-zorba text-center mt-4">
@@ -53,7 +67,7 @@
     </div>
   </div>
   <div class="w-1/2 flex flex-col justify-center items-center bg-isabelline">
-    <img src="" alt="Ilustración" class="w-2/3 mb-8" />
+    <img src="../../../../../assets/img/login.png" alt="Ilustración" class="w-50 mb-8" />
     <p class="text-crater-brown text-center font-semibold px-8">
       Simplifica la gestión de tus impuestos y mantén el control de tus finanzas en un solo lugar. Ingresa para
       comenzar.

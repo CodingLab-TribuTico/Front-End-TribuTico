@@ -35,6 +35,10 @@ export class SigUpComponent {
     return this.user.password === this.confirmPassword;
   }
 
+      public showPassword: boolean = false;
+      public showConfirmPassword: boolean = false;
+
+
   public handleSignup(event: Event) {
     event.preventDefault();
 
