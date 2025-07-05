@@ -20,7 +20,7 @@ import { ModalComponent } from '../../../modal/modal.component';
   templateUrl: './sidebar.component.html',
 })
 export class SidebarComponent {
-  @ViewChild('addUsersModal') public addUsersModal: any;
+  @ViewChild('exitModal') public exitModal: any;
   public modalService: ModalService = inject(ModalService);
   public width: any = window.innerWidth;
   public authService = inject(AuthService);
@@ -39,7 +39,6 @@ export class SidebarComponent {
   ) {
     this.appRoutes = routes.filter(route => route.path == 'app')[0];
     this.permittedRoutes = this.authService.getPermittedRoutes(this.appRoutes.children);
-    console.log(this.permittedRoutes);
     let user = localStorage.getItem('auth_user');
     if (user) {
       this.userName = JSON.parse(user)?.name;
@@ -48,14 +47,14 @@ export class SidebarComponent {
   }
 
   logout() {
-    this.modalService.displayModal(this.addUsersModal);
+    this.modalService.displayModal(this.exitModal);
     this.service.logout();
     this.router.navigateByUrl('/login');
     this.modalService.closeAll();
   }
 
-  callConfirmation() {
-    this.modalService.displayModal(this.addUsersModal);
+  openModal() {
+    this.modalService.displayModal(this.exitModal);
   }
 
   hideModal() {

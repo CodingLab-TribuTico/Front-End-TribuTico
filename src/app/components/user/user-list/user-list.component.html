@@ -24,14 +24,15 @@
         <td class="p-3" scope="row">{{item.birthDate | date: 'dd/MM/yyyy'}}</td>
         <td class="p-3" scope="row">{{item.email}}</td>
         <th class="p-3" scope="col">{{(item.status ? "Activo" : "Bloqueado")}}</th>
-        <td class="p-3">
+        <td class="p-3 space-x-1">
           <button (click)="callModalAction.emit(item);" class="bg-flamenco px-2 p-0.5 rounded-md" type="button">
             <span class="material-symbols-rounded text-lg text-bisque">
               edit
             </span>
           </button>
-          <button (click)="callDeleteAction.emit(item)" [disabled]="(item.id == idUser)" class="btn btn-danger"
-            type="button"> <span class="material-symbols-rounded text-crater-brown">
+          <button (click)="openModal(item)" [disabled]="(item.id == idUser)"
+            class="bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed" type="button">
+            <span class="material-symbols-rounded text-lg text-crater-brown">
               delete
             </span>
           </button>
@@ -49,3 +50,11 @@
     </tbody>
   </table>
 </div>
+
+<ng-template #confirmationModal>
+  <app-modal (callConfirmationMethod)="deleteUser(selectedUser?.id!)" (callCancelMethod)="hideModal()"
+    [cancelAction]="'Cancelar'" [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'"
+    [textCenter]="true" [icon]="'error'">
+    <p class="text-bisque text-base max-w-lg">Esta acción eliminará al usuario permanentemente.</p>
+  </app-modal>
+</ng-template>

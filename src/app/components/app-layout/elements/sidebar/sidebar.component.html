@@ -27,7 +27,7 @@
   </div>
 
   <div class="pb-5">
-    <button type="button" (click)="callConfirmation()"
+    <button type="button" (click)="openModal()"
       class="flex items-center justify-between w-full px-4 py-3 text-base font-medium text-bisque transition-all duration-200 rounded-md hover:bg-zorba">
       <div class="flex items-center justify-center">
         <span class="material-symbols-rounded">logout</span>
@@ -37,7 +37,7 @@
   </div>
 </div>
 
-<ng-template #addUsersModal>
+<ng-template #exitModal>
   <app-modal (callConfirmationMethod)="logout()" (callCancelMethod)="hideModal()" [cancelAction]="'Cancelar'"
     [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'" [textCenter]="true"
     [icon]="'error'">
