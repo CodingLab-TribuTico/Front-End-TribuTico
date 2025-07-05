@@ -5,7 +5,8 @@
         <th class="p-3" scope="col">ID</th>
         <th class="p-3" scope="col">Cédula</th>
         <th class="p-3" scope="col">Nombre</th>
-        <th class="p-3" scope="col">Apellido</th>
+        <th class="p-3" scope="col">Apellido 1</th>
+        <th class="p-3" scope="col">Apellido 2</th>
         <th class="p-3" scope="col">Fecha de nacimiento</th>
         <th class="p-3" scope="col">Correo electrónico </th>
         <th class="p-3" scope="col">Estatus</th>
@@ -19,6 +20,7 @@
         <td class="p-3" scope="row">{{item.identification}}</td>
         <td class="p-3" scope="row">{{item.name}}</td>
         <td class="p-3" scope="row">{{item.lastname}}</td>
+        <td class="p-3" scope="row">{{item.lastname2}}</td>
         <td class="p-3" scope="row">{{item.birthDate | date: 'dd/MM/yyyy'}}</td>
         <td class="p-3" scope="row">{{item.email}}</td>
         <th class="p-3" scope="col">{{(item.status ? "Activo" : "Bloqueado")}}</th>

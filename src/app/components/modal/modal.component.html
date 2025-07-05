@@ -47,10 +47,12 @@
               }
             </button>
             }
+            @if (cancelAction != '') {
             <button type="button" [disabled]="loadingConfirmationMethod === true" (click)="callCancelMethod.emit()"
               class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer font-bold"
               data-dismiss="modal">{{cancelAction}}
             </button>
+            }
           </div>
           }
         </div>
