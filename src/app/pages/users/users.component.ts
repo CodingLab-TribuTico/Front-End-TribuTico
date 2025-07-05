@@ -35,7 +35,7 @@ export class UsersComponent {
     identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
     lastname: ['', Validators.required],
-    lastname2: ['', Validators.required],
+    lastname2: [''],
     birthDate: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     status: ['', Validators.required],

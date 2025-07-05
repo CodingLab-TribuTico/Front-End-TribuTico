@@ -72,18 +72,12 @@
       </div>
 
       <div class="mb-2">
-        <label class="block my-2 text-base font-bold text-bisque" for="lastname2">Apellido 2<span
-            class="text-burnt-umber">*</span></label>
+        <label class="block my-2 text-base font-bold text-bisque" for="lastname2">Apellido 2</label>
         <input id="lastname2" formControlName="lastname2" type="text"
           class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold"
           placeholder="Smith">
 
-        <div class="min-h-[1.5rem]">
-          @if (userForm.controls['lastname2'].invalid && (userForm.controls['lastname2'].dirty ||
-          userForm.controls['lastname2'].touched)) {
-          <p class="text-burnt-umber">Apellido 2 es obligatorio</p>
-          }
-        </div>
+        <div class="min-h-[1.5rem]"></div>
       </div>
 
       <div class="mb-2">
