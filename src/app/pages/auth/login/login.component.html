@@ -27,3 +27,13 @@
     </p>
   </app-modal>
 </ng-template>
+
+<ng-template #blockedUserModal>
+  <app-modal (callConfirmationMethod)="hideModal()" [confirmAction]="'Cerrar'"
+    [title]="'Cuenta bloqueada por seguridad.'" [textCenter]="true" [icon]="'dangerous'">
+    <p class="text-bisque text-base max-w-lg">
+      Has excedido el número máximo de intentos fallidos (3) para ingresar tu contraseña. Por favor, contacta al
+      administrador para restablecer el acceso.
+    </p>
+  </app-modal>
+</ng-template>

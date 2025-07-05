@@ -18,7 +18,11 @@ export class LoginComponent {
   @ViewChild('email') emailModel!: NgModel;
   @ViewChild('password') passwordModel!: NgModel;
   @ViewChild('expiredTokenModal') public expiredTokenModal: any;
+  @ViewChild('blockedUserModal') public blockedUserModal: any;
   public modalService: ModalService = inject(ModalService);
+  private previousEmail: string = '';
+  private actualEmail: string = '';
+  private numberOfAttempts: number = 0;
 
   public loginForm: { email: string; password: string } = {
     email: '',
@@ -45,9 +49,42 @@ export class LoginComponent {
       this.passwordModel.control.markAsTouched();
     }
     if (this.emailModel.valid && this.passwordModel.valid) {
+
       this.authService.login(this.loginForm).subscribe({
-        next: () => this.router.navigateByUrl('/app/home'),
-        error: (err: any) => (this.loginError = err.error.description),
+        next: () => {
+          if (this.authService.userStatus) {
+            this.router.navigateByUrl('/app/home');
+          } else {
+            this.modalService.displayModal(this.blockedUserModal);
+            this.authService.logout();
+          }
+        },
+        error: (err: any) => {
+          if (err.status === 401) {
+            this.actualEmail = this.loginForm.email;
+            if (this.previousEmail === this.actualEmail) {
+              this.numberOfAttempts++;
+            } else {
+              this.numberOfAttempts = 1;
+            }
+
+            if (this.numberOfAttempts >= 3) {
+              this.authService.blockUser({ email: this.actualEmail }).subscribe({
+                next: () => {
+                  this.modalService.displayModal(this.blockedUserModal);
+                },
+                error: (err: any) => {
+                  this.loginError = err.description;
+                  return;
+                }
+              });
+            }
+
+            this.previousEmail = this.actualEmail;
+          }
+
+          this.loginError = err.description;
+        },
       });
     }
   }
@@ -58,6 +95,5 @@ export class LoginComponent {
 
   hideModal() {
     this.modalService.closeAll();
-    this.authService.tokenIsExpired = false;
   }
 }
