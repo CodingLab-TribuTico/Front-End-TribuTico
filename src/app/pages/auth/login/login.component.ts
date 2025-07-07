@@ -36,6 +36,8 @@ export class LoginComponent {
     }
   }
 
+    public showPassword: boolean = false; 
+
   public handleLogin(event: Event) {
     event.preventDefault();
     if (!this.emailModel.valid) {
@@ -47,7 +49,7 @@ export class LoginComponent {
     if (this.emailModel.valid && this.passwordModel.valid) {
       this.authService.login(this.loginForm).subscribe({
         next: () => this.router.navigateByUrl('/app/home'),
-        error: (err: any) => (this.loginError = err.error.description),
+        error: (err: any) => (this.loginError = "El usuario o contraseña incorrectos"),
       });
     }
   }
