@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { ModalService } from '../../../services/modal.service';
 import { ModalComponent } from '../../../components/modal/modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -39,6 +39,8 @@ export class LoginComponent {
       });
     }
   }
+
+  public showPassword: boolean = false;
 
   public handleLogin(event: Event) {
     event.preventDefault();
