@@ -92,13 +92,13 @@
           (userForm.controls["email"].dirty || userForm.controls["email"].touched))
           {
           <p class="text-burnt-umber text-sm">Correo electrónico es obligatorio</p>
-          } @else if (userForm.controls["email"].errors?.["email"] &&
+          }
+          @else if (userForm.controls["email"].errors?.["pattern"] &&
           (userForm.controls["email"].dirty || userForm.controls["email"].touched))
           {
           <p class="text-burnt-umber text-sm">Correo electrónico inválido</p>
           }
         </div>
-
       </div>
     </div>
 
