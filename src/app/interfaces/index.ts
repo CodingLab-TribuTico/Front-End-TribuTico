@@ -11,13 +11,14 @@ export interface IResponse<T> {
 
 export interface IUser {
   id?: number;
+  identification?: string;
   name?: string;
   lastname?: string;
+  lastname2?: string;
+  birthDate?: string;
   email?: string;
   password?: string;
-  cedula?: string;
-  birthDate?: string;
-  active?: boolean;
+  status?: boolean;
   createdAt?: string;
   updatedAt?: string;
   authorities?: IAuthority[];
@@ -55,10 +56,12 @@ export interface IRole {
 }
 
 export interface ISearch {
+  query?: string;
   page?: number;
   size?: number;
   pageNumber?: number;
   pageSize?: number;
   totalElements?: number;
   totalPages?: number;
+  search?: string;
 }
