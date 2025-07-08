@@ -4,12 +4,13 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { ModalService } from '../../../services/modal.service';
 import { ModalComponent } from '../../../components/modal/modal.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { GoogleAuthComponent } from '../../../components/google-auth/google-auth.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalComponent],
+  imports: [CommonModule, FormsModule, RouterLink, GoogleAuthComponent, ModalComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -30,6 +31,7 @@ export class LoginComponent {
   };
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService
   ) {
@@ -41,6 +43,19 @@ export class LoginComponent {
   }
 
   public showPassword: boolean = false;
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const token = params['token'];
+      const expiresIn = params['expires_in'];
+      const email = params['email'];
+
+      if (token && expiresIn) {
+        this.authService.setOAuthLogin(token, expiresIn,email);
+      }
+      
+    });
+  }
 
   public handleLogin(event: Event) {
     event.preventDefault();

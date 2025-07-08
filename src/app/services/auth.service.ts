@@ -36,7 +36,35 @@ export class AuthService {
     if (exp) this.expiresIn = JSON.parse(exp);
     const user = localStorage.getItem('auth_user');
     if (user) this.user = JSON.parse(user);
+
+    console.log(this.accessToken);
+    console.log(this.expiresIn);
+    console.log(this.user);
   }
+
+  public setOAuthLogin(token: string, expiresIn: number, email: string): void {
+    const userEmail = email;
+    this.accessToken = token;
+    this.expiresIn = Number(expiresIn);
+
+    this.http.get<IUser>(`auth/me/${userEmail}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).subscribe({
+    next: (userData) => {
+      this.user = userData;
+      this.save();
+      window.location.reload();
+    },
+    error: (err) => {
+      console.error('Error al cargar el usuario:', err);
+    }
+  });
+  }
+
+  
+
 
   public getUser(): IUser | undefined {
     return this.user;
