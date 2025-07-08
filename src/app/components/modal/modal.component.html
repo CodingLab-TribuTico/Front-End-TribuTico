@@ -39,7 +39,7 @@
             @if (!hideConfirmAction) {
             <button type="button" [disabled]="customValidation || loadingConfirmationMethod === true"
               (click)="callConfirmationMethod.emit()"
-              class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer font-bold">
+              class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
               @if (loadingConfirmationMethod === true) {
               <app-loader />
               } @else {
@@ -49,7 +49,7 @@
             }
             @if (cancelAction != '') {
             <button type="button" [disabled]="loadingConfirmationMethod === true" (click)="callCancelMethod.emit()"
-              class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer font-bold"
+              class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer font-bold hover:bg-bisque transition-colors"
               data-dismiss="modal">{{cancelAction}}
             </button>
             }

@@ -37,7 +37,7 @@ export class UsersComponent {
     lastname: ['', Validators.required],
     lastname2: [''],
     birthDate: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
     status: ['', Validators.required],
     password: [''],
     role: ['']

@@ -1,48 +1,44 @@
 <div class="min-h-screen flex">
   <div class="w-1/2 flex flex-col justify-center items-center bg-crater-brown px-16 py-8">
     <div class="w-full max-w-md">
-      <img class="absolute top-6 left-8 w-32" src="../../../../../assets/img/sidebar/TribuTico.png" alt="imagenTribuTico">
+      <img class="absolute top-6 left-8 w-32" src="../../../../../assets/img/general/TribuTico.png"
+        alt="imagenTribuTico">
 
-      <h2 class="text-bisque text-2xl font-bold mb-1 mt-8 text-center mb-8">Bienvenido</h2>
+      <h2 class="text-bisque text-2xl font-bold mt-8 text-center mb-8">Bienvenido</h2>
       <p class="text-zorba mb-8 text-center">Ingresa tus credenciales para acceder a tu cuenta</p>
       <form (ngSubmit)="handleLogin($event)" autocomplete="off" #frm="ngForm" class="flex flex-col space-y-4">
         <label for="email" class="text-bisque font-semibold">Correo electrónico</label>
         <input #email="ngModel" type="text"
-          class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 focus:outline-none focus:border-golden-glow"
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba items-center rounded-md p-2 focus:outline-none focus:border-golden-glow"
           id="email" name="email" placeholder="nombre@correo.com" [(ngModel)]="loginForm.email" [ngClass]="{
             'border-flamenco': email.invalid && email.touched,
             'border-golden-glow': email.valid && email.touched
           }" required />
-        <div *ngIf="email.invalid && email.touched" class="text-burnt-umber text-sm mt-1">
+        <div *ngIf="email.invalid && email.touched" class="text-burnt-umber text-sm">
           El correo electrónico es obligatorio.
         </div>
 
         <label for="password" class="text-bisque font-semibold">Contraseña</label>
         <div class="relative">
-          <input #password="ngModel"
-            [type]="showPassword ? 'text' : 'password'"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder-zorba rounded px-4 py-2 pr-10 focus:outline-none focus:border-golden-glow w-full"
-            id="password" name="password" placeholder="********" [(ngModel)]="loginForm.password"
-            [ngClass]="{
+          <input #password="ngModel" [type]="showPassword ? 'text' : 'password'"
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba items-center rounded-md p-2 pr-10 focus:outline-none focus:border-golden-glow w-full"
+            id="password" name="password" placeholder="********" [(ngModel)]="loginForm.password" [ngClass]="{
               'border-flamenco': password.invalid && password.touched,
               'border-golden-glow': password.valid && password.touched
-            }"
-            required
-          />
-          <button type="button"
-            class="absolute right-2 top-1/2 -translate-y-1/2 mt-[2px] text-zorba"
-            (click)="showPassword = !showPassword"
-            tabindex="-1">
+            }" required />
+          <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 mt-[2px] text-zorba"
+            (click)="showPassword = !showPassword" tabindex="-1">
             <span class="material-symbols-rounded select-none">
               {{ showPassword ? 'visibility_off' : 'visibility' }}
             </span>
           </button>
         </div>
-        <div *ngIf="password.invalid && password.touched" class="text-burnt-umber text-sm mt-1">
+        <div *ngIf="password.invalid && password.touched" class="text-burnt-umber text-sm">
           La contraseña es obligatoria.
         </div>
 
-        <button class="bg-flamenco text-bisque font-semibold rounded py-2 mt-4 hover:bg-golden-glow transition-colors"
+        <button
+          class="bg-flamenco text-bisque font-semibold rounded-md py-2 mt-4 hover:bg-golden-glow hover:text-flamenco transition-colors"
           type="submit">
           Iniciar sesión
         </button>
@@ -53,7 +49,7 @@
         <hr class="flex-grow border-zorba" />
       </div>
       <button
-        class="flex items-center justify-center border-2 border-zorba rounded py-2 w-full mb-2 hover:bg-zorba transition-colors">
+        class="flex items-center justify-center border-2 border-zorba rounded-md py-2 w-full mb-2 hover:bg-zorba transition-colors">
         <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" class="w-5 h-5 mr-2" />
         <span class="text-bisque">Google</span>
       </button>
@@ -67,10 +63,29 @@
     </div>
   </div>
   <div class="w-1/2 flex flex-col justify-center items-center bg-isabelline">
-    <img src="../../../../../assets/img/login.png" alt="Ilustración" class="w-50 mb-8" />
+    <img src="../../../../assets/img/login/login.png" alt="Ilustración" class="w-50 mb-8" />
     <p class="text-crater-brown text-center font-semibold px-8">
       Simplifica la gestión de tus impuestos y mantén el control de tus finanzas en un solo lugar. Ingresa para
       comenzar.
     </p>
   </div>
 </div>
+
+<ng-template #expiredTokenModal>
+  <app-modal (callConfirmationMethod)="hideModal()" [confirmAction]="'Cerrar'" [title]="'¡Ups! Tu sesión ha expirado.'"
+    [textCenter]="true" [icon]="'report'">
+    <p class="text-bisque text-base max-w-lg">
+      Por favor, inicia sesión nuevamente para continuar.
+    </p>
+  </app-modal>
+</ng-template>
+
+<ng-template #blockedUserModal>
+  <app-modal (callConfirmationMethod)="hideModal()" [confirmAction]="'Cerrar'"
+    [title]="'Cuenta bloqueada por seguridad.'" [textCenter]="true" [icon]="'dangerous'">
+    <p class="text-bisque text-base max-w-lg">
+      Has excedido el número máximo de intentos fallidos (3) para ingresar tu contraseña. Por favor, contacta al
+      administrador para restablecer el acceso.
+    </p>
+  </app-modal>
+</ng-template>

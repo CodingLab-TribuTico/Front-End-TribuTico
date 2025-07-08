@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../interfaces';
-import { Observable, firstValueFrom, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -12,6 +12,7 @@ export class AuthService {
   private user: IUser = { email: '', authorities: [] };
   private http: HttpClient = inject(HttpClient);
   public tokenIsExpired: boolean = false;
+  public userStatus: boolean = true;
 
   constructor() {
     this.load();
@@ -25,6 +26,7 @@ export class AuthService {
 
     if (this.expiresIn)
       localStorage.setItem('expiresIn', JSON.stringify(this.expiresIn));
+    this.tokenIsExpired = false;
   }
 
   private load(): void {
@@ -34,7 +36,6 @@ export class AuthService {
     if (exp) this.expiresIn = JSON.parse(exp);
     const user = localStorage.getItem('auth_user');
     if (user) this.user = JSON.parse(user);
-    this.tokenIsExpired = false;
   }
 
   public getUser(): IUser | undefined {
@@ -63,9 +64,16 @@ export class AuthService {
         this.user.email = credentials.email;
         this.expiresIn = response.expiresIn;
         this.user = response.authUser;
+        this.userStatus = this.user.status ? this.user.status : false;
         this.save();
       })
     );
+  }
+
+  public blockUser(credentials: {
+    email: string;
+  }): Observable<IResponse<IUser>> {
+    return this.http.put<IResponse<IUser>>('auth/block', credentials);
   }
 
   public hasRole(role: string): boolean {
