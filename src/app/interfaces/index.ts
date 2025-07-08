@@ -47,11 +47,11 @@ export enum IRoleType {
 }
 
 export interface IRole {
-  createdAt: string;
-  description: string;
-  id: number;
-  name: string;
-  updatedAt: string;
+  createdAt?: string;
+  description?: string;
+  id?: number;
+  name?: string;
+  updatedAt?: string;
 }
 
 export interface ISearch {
