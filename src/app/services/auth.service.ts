@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../interfaces';
-import { Observable, firstValueFrom, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -64,6 +64,10 @@ export class AuthService {
         this.save();
       })
     );
+  }
+
+  changePassword(userId: number, password: { currentPassword: string; newPassword: string }) {
+  return this.http.patch(`users/change-password/${userId}`, password);
   }
 
   public hasRole(role: string): boolean {

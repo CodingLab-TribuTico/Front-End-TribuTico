@@ -72,4 +72,19 @@ export class UserService extends BaseService<IUser> {
       }
     });
   }
+
+  updatePatch(user: IUser): Observable<any> {
+    return this.patchCustomSource(`${user.id}`, user).pipe(
+      tap((response: any) => {
+        const message = 'Usuario modificado exitosamente';
+        this.alertService.displayAlert('success', message, 'center', 'top', ['success-snackbar']);
+        this.getAll(); 
+      }),
+      catchError((err: any) => {
+        this.alertService.displayAlert('error', 'Error al modificar usuario', 'center', 'top', ['error-snackbar']);
+        console.error('error', err);
+        return throwError(() => err);
+      })
+    );
+  }
 }

@@ -1,0 +1,214 @@
+<div class="py-10">
+  <div class="max-w-3xl mx-auto rounded-md bg-crater-brown p-8 text-bisque">
+    <div>
+      <h1 class="text-bisque text-xl font-bold">Perfil del usuario</h1>
+    </div>
+    <form [formGroup]="userForm" class="space-y-10 mt-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-14 mb-14">
+        <div class="pb-1 border-b border-zorba">
+          <label class="block my-2 text-base font-bold text-bisque" for="name"
+            >Nombre</label
+          >
+          <input
+            *ngIf="isEditing"
+            formControlName="name"
+            class="bg-crater-brown text-bisque text-base w-full font-bold bg-transparent border-none outline-none"
+            type="text"
+          />
+          <div
+            *ngIf="
+              isEditing &&
+              userForm.get('name')?.invalid &&
+              userForm.get('name')?.touched
+            "
+            class="text-burnt-umber"
+          >
+            <span *ngIf="userForm.get('name')?.errors?.['required']"
+              >Este campo es obligatorio</span
+            >
+          </div>
+          <p class="text-base font-bold" *ngIf="!isEditing">
+            {{ currentUser.name ?? "No disponible" }}
+          </p>
+        </div>
+
+        <div class="pb-1 border-b border-zorba">
+          <label
+            class="block my-2 text-base font-bold text-bisque"
+            for="lastname"
+            >Primer Apellido</label
+          >
+          <input
+            *ngIf="isEditing"
+            formControlName="lastname"
+            class="bg-crater-brown text-bisque text-base w-full font-bold bg-transparent border-none outline-none"
+            type="text"
+          />
+          <div
+            *ngIf="
+              isEditing &&
+              userForm.get('lastname')?.invalid &&
+              userForm.get('lastname')?.touched
+            "
+            class="text-burnt-umber"
+          >
+            <span *ngIf="userForm.get('lastname')?.errors?.['required']"
+              >Este campo es obligatorio</span
+            >
+          </div>
+          <p class="text-base font-bold" *ngIf="!isEditing">
+            {{ currentUser.lastname ?? "No disponible" }}
+          </p>
+        </div>
+
+        <div class="pb-1 border-b border-zorba">
+          <label
+            class="block my-2 text-base font-bold text-bisque"
+            for="lastname"
+            >Primer Apellido</label
+          >
+          <input
+            *ngIf="isEditing"
+            formControlName="lastname"
+            class="bg-crater-brown text-bisque text-base w-full font-bold bg-transparent border-none outline-none"
+            type="text"
+          />
+          <div
+            *ngIf="
+              isEditing &&
+              userForm.get('lastname')?.invalid &&
+              userForm.get('lastname')?.touched
+            "
+            class="text-burnt-umber"
+          >
+            <span *ngIf="userForm.get('lastname')?.errors?.['required']"
+              >Este campo es obligatorio</span
+            >
+          </div>
+          <p class="text-base font-bold" *ngIf="!isEditing">
+            {{ currentUser.lastname ?? "No disponible" }}
+          </p>
+        </div>
+
+        <div class="pb-1 border-b border-zorba">
+          <label class="block my-2 text-base font-bold text-bisque" for="cedula"
+            >Cédula</label
+          >
+          <input
+            *ngIf="isEditing"
+            formControlName="cedula"
+            class="bg-crater-brown text-bisque text-base w-full font-bold bg-transparent border-none outline-none"
+            type="text"
+          />
+          <div
+            *ngIf="
+              isEditing &&
+              userForm.get('cedula')?.invalid &&
+              userForm.get('cedula')?.touched
+            "
+            class="text-burnt-umber"
+          >
+            <span *ngIf="userForm.get('cedula')?.errors?.['required']"
+              >Este campo es obligatorio</span
+            >
+          </div>
+          <p class="text-base font-bold" *ngIf="!isEditing">
+            {{ currentUser.cedula ?? "No disponible" }}
+          </p>
+        </div>
+
+        <div class="pb-1 border-b border-zorba">
+          <label
+            class="block my-2 text-base font-bold text-bisque"
+            for="birthDate"
+            >Fecha de nacimiento</label
+          >
+          <input
+            *ngIf="isEditing"
+            formControlName="birthDate"
+            class="bg-crater-brown text-bisque text-base w-full font-bold bg-transparent border-none outline-none"
+            type="date"
+          />
+          <div
+            *ngIf="
+              isEditing &&
+              userForm.get('birthDate')?.invalid &&
+              userForm.get('birthDate')?.touched
+            "
+            class="text-burnt-umber"
+          >
+            <span *ngIf="userForm.get('birthDate')?.errors?.['required']"
+              >Este campo es obligatorio</span
+            >
+          </div>
+          <p class="text-base font-bold" *ngIf="!isEditing">
+            {{ currentUser.birthDate ?? "No disponible" }}
+          </p>
+        </div>
+
+        <div class="pb-1 border-b border-zorba">
+          <label class="block my-2 text-base font-bold text-bisque" for="email"
+            >Correo electrónico</label
+          >
+          <input
+            *ngIf="isEditing"
+            formControlName="email"
+            class="bg-crater-brown text-bisque text-base w-full font-bold bg-transparent border-none outline-none"
+            type="email"
+          />
+          <div
+            *ngIf="
+              isEditing &&
+              userForm.get('email')?.invalid &&
+              userForm.get('email')?.touched
+            "
+            class="text-burnt-umber"
+          >
+            <span *ngIf="userForm.get('email')?.errors?.['required']"
+              >Este campo es obligatorio</span
+            >
+          </div>
+          <p class="text-base font-bold" *ngIf="!isEditing">
+            {{ currentUser.email ?? "No disponible" }}
+          </p>
+        </div>
+      </div>
+
+      <div class="flex justify-center items-center gap-4">
+        <button
+          class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed font-bold"
+          *ngIf="!isEditing"
+          type="button"
+          (click)="editForm()"
+        >
+          Editar
+        </button>
+        <div
+          class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed font-bold"
+          *ngIf="!isEditing"
+        >
+          <a routerLink="/app/reset-password"> Cambiar contraseña</a>
+        </div>
+        <button
+          *ngIf="isEditing"
+          id="crear"
+          class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed font-bold"
+          type="button"
+          (click)="saveChanges()"
+          [disabled]="userForm.invalid"
+        >
+          Guardar
+        </button>
+        <button
+          *ngIf="isEditing"
+          id="cancelar"
+          class="px-3 py-1 bg-bisque text-crater-brown rounded-md disabled:opacity-80 disabled:cursor-not-allowed font-bold"
+          type="button"
+          (click)="cancelChanges()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

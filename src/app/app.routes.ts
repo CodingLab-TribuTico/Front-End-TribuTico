@@ -9,6 +9,8 @@ import { AdminRoleGuard } from './guards/admin-role.guard';
 import { GuestGuard } from './guards/guest.guard';
 import { IRoleType } from './interfaces';
 import { HomeComponent } from './pages/home/home.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 export const routes: Routes = [
   {
@@ -63,6 +65,30 @@ export const routes: Routes = [
           ],
           name: 'Inicio',
           showInSidebar: true
+        }
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+        data: {
+          authorities: [
+            IRoleType.superAdmin,
+            IRoleType.user
+          ],
+          name: 'Profile',
+          showInSidebar: false
+        }
+      },
+      {
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+        data: {
+          authorities: [
+            IRoleType.superAdmin,
+            IRoleType.user 
+          ],
+          name: 'Restablecer Contraseña',
+          showInSidebar: false 
         }
       },
     ],

@@ -15,11 +15,14 @@ export interface IUser {
   lastname?: string;
   email?: string;
   password?: string;
+  cedula?: string;
+  birthDate?: string;
   active?: boolean;
   createdAt?: string;
   updatedAt?: string;
   authorities?: IAuthority[];
   role?: IRole
+
 }
 
 export interface IAuthority {
