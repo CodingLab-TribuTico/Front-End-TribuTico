@@ -32,9 +32,10 @@ export class ProfileComponent {
     this.userForm = this.fb.group({
       id: [''],
       name: ['', Validators.required], 
-      lastname: ['', Validators.required], 
+      lastname: ['', Validators.required],
+      lastname2: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]], 
-      cedula: ['', Validators.required], 
+      identification: ['', Validators.required], 
       birthDate: ['', Validators.required] 
     });
     this.profileService.getUserInfoSignal();
@@ -49,8 +50,9 @@ export class ProfileComponent {
       id: user.id,
       name: user.name,
       lastname: user.lastname,
+      lastname2: user.lastname2,
       email: user.email,
-      cedula: user.cedula,
+      identification: user.identification,
       birthDate: user.birthDate
     });
     this.originalInfoUser = { ...user };

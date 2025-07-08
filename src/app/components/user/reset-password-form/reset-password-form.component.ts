@@ -23,6 +23,10 @@ export class ResetPasswordFormComponent {
  
   public user?: IUser;
   public passwordError!: string;
+  
+  showCurrentPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
 
   constructor(
     private router: Router,

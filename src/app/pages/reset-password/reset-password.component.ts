@@ -5,7 +5,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { IUser } from '../../interfaces';
-import { ModalComponent } from '../../components/modal/modal.component';
 import { CommonModule } from '@angular/common';
 import { ProfileComponent } from '../profile/profile.component';
 
@@ -14,7 +13,6 @@ import { ProfileComponent } from '../profile/profile.component';
   templateUrl: './reset-password.component.html',
    standalone: true,
   imports: [
-    ModalComponent,
     ResetPasswordFormComponent,
     CommonModule,
     ProfileComponent
