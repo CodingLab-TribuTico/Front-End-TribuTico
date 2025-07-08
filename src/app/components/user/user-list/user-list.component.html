@@ -1,41 +1,48 @@
-<div>
-  <table class="table-auto border-collapse border border-crater-brown w-full">
+<div class="overflow-hidden rounded-md border border-crater-brown">
+  <table class="w-full border-collapse p-3">
     <thead>
-      <tr class="text-center border border-crater-brown bg-crater-brown rounded-sm">
-        <th scope="col">ID</th>
-        <th scope="col">Name</th>
-        <th scope="col">Lastname</th>
-        <th scope="col">Email</th>
-        <th scope="col">Created</th>
-        <th scope="col">Updated</th>
-        <th class="text-center" scope="col">Actions</th>
+      <tr class="text-center border border-crater-brown bg-crater-brown text-bisque">
+        <th class="p-3" scope="col">ID</th>
+        <th class="p-3" scope="col">Cédula</th>
+        <th class="p-3" scope="col">Nombre</th>
+        <th class="p-3" scope="col">Apellido 1</th>
+        <th class="p-3" scope="col">Apellido 2</th>
+        <th class="p-3" scope="col">Fecha de nacimiento</th>
+        <th class="p-3" scope="col">Correo electrónico </th>
+        <th class="p-3" scope="col">Estatus</th>
+        <th class="p-3" scope="col">Acciones</th>
       </tr>
     </thead>
     <tbody>
       @for (item of users; track item.id) {
-      <tr class="text-center border border-crater-brown">
-        <th scope="row">{{item.id}}</th>
-        <td>{{item.name}}</td>
-        <td>{{item.lastname}}</td>
-        <td>{{item.email}}</td>
-        <td>{{item.createdAt | date: 'dd/MM/yyyy HH:mm'}}</td>
-        <td>{{item.updatedAt | date: 'dd/MM/yyyy HH:mm'}}</td>
-        <td>
-          <button (click)="callModalAction.emit(item);" class="btn btn-warning me-2" type="button">
-            <mat-icon class="material-symbols-outlined text-crater-brown">
+      <tr class="text-center text-crater-brown font-semibold border-t border-crater-brown">
+        <td class="p-3" scope="row">{{item.id}}</td>
+        <td class="p-3" scope="row">{{item.identification}}</td>
+        <td class="p-3" scope="row">{{item.name}}</td>
+        <td class="p-3" scope="row">{{item.lastname}}</td>
+        <td class="p-3" scope="row">{{item.lastname2}}</td>
+        <td class="p-3" scope="row">{{item.birthDate | date: 'dd/MM/yyyy'}}</td>
+        <td class="p-3" scope="row">{{item.email}}</td>
+        <th class="p-3" scope="col">{{(item.status ? "Activo" : "Bloqueado")}}</th>
+        <td class="p-3 space-x-1">
+          <button (click)="callModalAction.emit(item);" class="bg-flamenco px-2 p-0.5 rounded-md" type="button">
+            <span class="material-symbols-rounded text-lg text-bisque">
               edit
-            </mat-icon></button>
-          <button (click)="callDeleteAction.emit(item)" [disabled]="(item.id == idUser)" class="btn btn-danger"
-            type="button"> <mat-icon class="material-symbols-outlined text-crater-brown">
+            </span>
+          </button>
+          <button (click)="openModal(item)" [disabled]="(item.id == idUser)"
+            class="bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed" type="button">
+            <span class="material-symbols-rounded text-lg text-crater-brown">
               delete
-            </mat-icon></button>
+            </span>
+          </button>
         </td>
       </tr>
       } @empty {
       <tr>
-        <td colspan="7">
-          <div class="d-flex justify-content-center align-items-center w-100">
-            <p class="mb-0">There are not users</p>
+        <td colspan="9">
+          <div class="flex justify-center items-center w-full">
+            <p class="p-3 text-crater-brown font-bold">No hay usuarios</p>
           </div>
         </td>
       </tr>
@@ -43,3 +50,11 @@
     </tbody>
   </table>
 </div>
+
+<ng-template #confirmationModal>
+  <app-modal (callConfirmationMethod)="deleteUser(selectedUser?.id!)" (callCancelMethod)="hideModal()"
+    [cancelAction]="'Cancelar'" [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'"
+    [textCenter]="true" [icon]="'error'">
+    <p class="text-bisque text-base max-w-lg">Esta acción eliminará al usuario permanentemente.</p>
+  </app-modal>
+</ng-template>

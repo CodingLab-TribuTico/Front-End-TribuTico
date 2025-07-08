@@ -1,3 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Fondo */
+.success-snackbar .mdc-snackbar__surface {
+  background-color: #3E885B !important;
+}
+
+/* Color del texto principal */
+.success-snackbar .mdc-snackbar__label {
+  color: #FFF1C1 !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: bold !important;
+}
+
+/* Color del botón "Cerrar" */
+.success-snackbar .mdc-button__label {
+  color: #FACF7D !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: bold !important;
+}
+
+/* Fondo */
+.error-snackbar .mdc-snackbar__surface {
+  background-color: #B5473A !important;
+}
+
+/* Color del texto principal */
+.error-snackbar .mdc-snackbar__label {
+  color: #FFF1C1 !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: bold !important;
+}
+
+/* Color del botón "Cerrar" */
+.error-snackbar .mdc-button__label {
+  color: #FACF7D !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: bold !important;
+}
