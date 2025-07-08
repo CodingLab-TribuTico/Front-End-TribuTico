@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
 import { ISearch, IUser } from '../interfaces';
 import { AlertService } from './alert.service';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -72,5 +73,20 @@ export class UserService extends BaseService<IUser> {
         console.error('error', err);
       }
     });
+  }
+
+  updatePatch(user: IUser): Observable<any> {
+    return this.patchCustomSource(`${user.id}`, user).pipe(
+      tap((response: any) => {
+        const message = 'Usuario modificado exitosamente';
+        this.alertService.displayAlert('success', message, 'center', 'top', ['success-snackbar']);
+        this.getAll(); 
+      }),
+      catchError((err: any) => {
+        this.alertService.displayAlert('error', 'Error al modificar usuario', 'center', 'top', ['error-snackbar']);
+        console.error('error', err);
+        return throwError(() => err);
+      })
+    );
   }
 }

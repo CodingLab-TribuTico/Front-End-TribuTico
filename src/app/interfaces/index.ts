@@ -23,6 +23,7 @@ export interface IUser {
   updatedAt?: string;
   authorities?: IAuthority[];
   role?: IRole
+
 }
 
 export interface IAuthority {

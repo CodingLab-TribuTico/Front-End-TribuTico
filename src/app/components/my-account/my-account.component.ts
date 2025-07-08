@@ -12,12 +12,15 @@ import { AuthService } from "../../services/auth.service";
 })
 export class MyAccountComponent implements OnInit {
   public userName: string = '';
+  public lastname: string = '';
   private service = inject(AuthService);
 
   constructor(public router: Router) {
     let user = localStorage.getItem('auth_user');
     if(user) {
       this.userName = JSON.parse(user)?.name;
+      this.lastname = JSON.parse(user)?.lastname;
+
     } 
   }
 

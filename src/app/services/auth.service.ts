@@ -98,6 +98,9 @@ export class AuthService {
     );
   }
 
+  changePassword(userId: number, password: { currentPassword: string; newPassword: string }) {
+  return this.http.patch(`users/change-password/${userId}`, password);
+  }
   public blockUser(credentials: {
     email: string;
   }): Observable<IResponse<IUser>> {
