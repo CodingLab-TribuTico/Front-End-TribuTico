@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../interfaces';
-import { Observable, firstValueFrom, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -8,9 +8,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
   private accessToken!: string;
-  private expiresIn! : number;
-  private user: IUser = {email: '', authorities: []};
+  private expiresIn!: number;
+  private user: IUser = { email: '', authorities: [] };
   private http: HttpClient = inject(HttpClient);
+  public tokenIsExpired: boolean = false;
+  public userStatus: boolean = true;
 
   constructor() {
     this.load();
@@ -23,7 +25,8 @@ export class AuthService {
       localStorage.setItem('access_token', JSON.stringify(this.accessToken));
 
     if (this.expiresIn)
-      localStorage.setItem('expiresIn',JSON.stringify(this.expiresIn));
+      localStorage.setItem('expiresIn', JSON.stringify(this.expiresIn));
+    this.tokenIsExpired = false;
   }
 
   private load(): void {
@@ -33,7 +36,35 @@ export class AuthService {
     if (exp) this.expiresIn = JSON.parse(exp);
     const user = localStorage.getItem('auth_user');
     if (user) this.user = JSON.parse(user);
+
+    console.log(this.accessToken);
+    console.log(this.expiresIn);
+    console.log(this.user);
   }
+
+  public setOAuthLogin(token: string, expiresIn: number, email: string): void {
+    const userEmail = email;
+    this.accessToken = token;
+    this.expiresIn = Number(expiresIn);
+
+    this.http.get<IUser>(`auth/me/${userEmail}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).subscribe({
+    next: (userData) => {
+      this.user = userData;
+      this.save();
+      window.location.reload();
+    },
+    error: (err) => {
+      console.error('Error al cargar el usuario:', err);
+    }
+  });
+  }
+
+  
+
 
   public getUser(): IUser | undefined {
     return this.user;
@@ -44,7 +75,7 @@ export class AuthService {
   }
 
   public check(): boolean {
-    if (!this.accessToken){
+    if (!this.accessToken) {
       return false;
     } else {
       return true;
@@ -61,17 +92,27 @@ export class AuthService {
         this.user.email = credentials.email;
         this.expiresIn = response.expiresIn;
         this.user = response.authUser;
+        this.userStatus = this.user.status ? this.user.status : false;
         this.save();
       })
     );
   }
 
+  changePassword(userId: number, password: { currentPassword: string; newPassword: string }) {
+  return this.http.patch(`users/change-password/${userId}`, password);
+  }
+  public blockUser(credentials: {
+    email: string;
+  }): Observable<IResponse<IUser>> {
+    return this.http.put<IResponse<IUser>>('auth/block', credentials);
+  }
+
   public hasRole(role: string): boolean {
-    return this.user.authorities ?  this.user?.authorities.some(authority => authority.authority == role) : false;
+    return this.user.authorities ? this.user?.authorities.some(authority => authority.authority == role) : false;
   }
 
   public isSuperAdmin(): boolean {
-    return this.user.authorities ?  this.user?.authorities.some(authority => authority.authority == IRoleType.superAdmin) : false;
+    return this.user.authorities ? this.user?.authorities.some(authority => authority.authority == IRoleType.superAdmin) : false;
   }
 
   public hasAnyRole(roles: any[]): boolean {
@@ -81,10 +122,10 @@ export class AuthService {
   public getPermittedRoutes(routes: any[]): any[] {
     let permittedRoutes: any[] = [];
     for (const route of routes) {
-      if(route.data && route.data.authorities) {
+      if (route.data && route.data.authorities) {
         if (this.hasAnyRole(route.data.authorities)) {
           permittedRoutes.unshift(route);
-        } 
+        }
       }
     }
     return permittedRoutes;
@@ -101,11 +142,11 @@ export class AuthService {
     localStorage.removeItem('auth_user');
   }
 
-  public getUserAuthorities (): IAuthority[] | undefined {
+  public getUserAuthorities(): IAuthority[] | undefined {
     return this.getUser()?.authorities ? this.getUser()?.authorities : [];
   }
 
-  public areActionsAvailable(routeAuthorities: string[]): boolean  {
+  public areActionsAvailable(routeAuthorities: string[]): boolean {
     // definición de las variables de validación
     let allowedUser: boolean = false;
     let isAdmin: boolean = false;
@@ -113,7 +154,7 @@ export class AuthService {
     let userAuthorities = this.getUserAuthorities();
     // se valida que sea una ruta permitida para el usuario
     for (const authority of routeAuthorities) {
-      if (userAuthorities?.some(item => item.authority == authority) ) {
+      if (userAuthorities?.some(item => item.authority == authority)) {
         allowedUser = userAuthorities?.some(item => item.authority == authority)
       }
       if (allowedUser) break;
@@ -121,7 +162,9 @@ export class AuthService {
     // se valida que el usuario tenga un rol de administración
     if (userAuthorities?.some(item => item.authority == IRoleType.admin || item.authority == IRoleType.superAdmin)) {
       isAdmin = userAuthorities?.some(item => item.authority == IRoleType.admin || item.authority == IRoleType.superAdmin);
-    }          
+    }
     return allowedUser && isAdmin;
   }
+
+
 }

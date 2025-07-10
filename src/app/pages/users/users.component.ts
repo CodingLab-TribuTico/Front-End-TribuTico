@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { UserListComponent } from '../../components/user/user-list/user-list.component';
 import { UserFormComponent } from '../../components/user/user-form/user-form.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
@@ -26,15 +26,21 @@ export class UsersComponent {
   public userService: UserService = inject(UserService);
   public modalService: ModalService = inject(ModalService);
   @ViewChild('addUsersModal') public addUsersModal: any;
-  public title: string = 'Users';
+  public title: string = 'Usuarios';
   public fb: FormBuilder = inject(FormBuilder);
+  @Output() callCustomSearchMethod = new EventEmitter();
+
   userForm = this.fb.group({
     id: [''],
-    email: ['', [Validators.required, Validators.email]],
+    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
     lastname: ['', Validators.required],
-    password: ['', Validators.required],
-    updatedAt: ['', Validators.required],
+    lastname2: [''],
+    birthDate: ['', Validators.required],
+    email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+    status: ['', Validators.required],
+    password: [''],
+    role: ['']
   })
 
   constructor() {
@@ -49,11 +55,14 @@ export class UsersComponent {
 
   callEdition(user: IUser) {
     this.userForm.controls['id'].setValue(user.id ? JSON.stringify(user.id) : '');
-    this.userForm.controls['email'].setValue(user.email ? user.email : '');
+    this.userForm.controls['identification'].setValue(user.identification ? user.identification : '');
     this.userForm.controls['name'].setValue(user.name ? user.name : '');
     this.userForm.controls['lastname'].setValue(user.lastname ? user.lastname : '');
-    this.userForm.controls['password'].setValue(user.password ? user.password : '');
-    this.modalService.displayModal('md', this.addUsersModal);
+    this.userForm.controls['lastname2'].setValue(user.lastname2 ? user.lastname2 : '');
+    this.userForm.controls['birthDate'].setValue(user.birthDate ? user.birthDate : '');
+    this.userForm.controls['email'].setValue(user.email ? user.email : '');
+    this.userForm.controls['status'].setValue(String(user.status));
+    this.modalService.displayModal(this.addUsersModal);
   }
 
   updateUser(user: IUser) {
@@ -61,8 +70,15 @@ export class UsersComponent {
     this.modalService.closeAll();
   }
 
-  openModal() {
-    this.modalService.displayModal('md', this.addUsersModal);
+  search(event: Event) {
+    let input = (event.target as HTMLInputElement).value.trim().toLocaleLowerCase();
+    this.userService.search.page = 1;
+    this.userService.search.search = input;
+    this.userService.getAll();
+  }
+
+  cancelUpdate() {
     this.userForm.reset();
+    this.modalService.closeAll();
   }
 }

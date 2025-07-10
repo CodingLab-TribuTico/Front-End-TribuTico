@@ -11,15 +11,19 @@ export interface IResponse<T> {
 
 export interface IUser {
   id?: number;
+  identification?: string;
   name?: string;
   lastname?: string;
+  lastname2?: string;
+  birthDate?: string;
   email?: string;
   password?: string;
-  active?: boolean;
+  status?: boolean;
   createdAt?: string;
   updatedAt?: string;
   authorities?: IAuthority[];
   role?: IRole
+
 }
 
 export interface IAuthority {
@@ -44,18 +48,20 @@ export enum IRoleType {
 }
 
 export interface IRole {
-  createdAt: string;
-  description: string;
-  id: number;
-  name: string;
-  updatedAt: string;
+  createdAt?: string;
+  description?: string;
+  id?: number;
+  name?: string;
+  updatedAt?: string;
 }
 
 export interface ISearch {
+  query?: string;
   page?: number;
   size?: number;
   pageNumber?: number;
   pageSize?: number;
   totalElements?: number;
   totalPages?: number;
+  search?: string;
 }

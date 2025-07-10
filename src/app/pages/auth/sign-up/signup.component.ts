@@ -4,11 +4,12 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { IUser } from '../../../interfaces';
+import { GoogleAuthComponent } from "../../../components/google-auth/google-auth.component";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, GoogleAuthComponent],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
@@ -17,8 +18,13 @@ export class SigUpComponent {
   public validSignup!: boolean;
   @ViewChild('name') nameModel!: NgModel;
   @ViewChild('lastname') lastnameModel!: NgModel;
+  @ViewChild('lastname2') lastname2Model!: NgModel;
   @ViewChild('email') emailModel!: NgModel;
+  @ViewChild('identification') identificationModel!: NgModel;
+  @ViewChild('birthDate') birthDateModel!: NgModel;
   @ViewChild('password') passwordModel!: NgModel;
+  public confirmPassword: string = '';
+  public confirmPasswordTouched: boolean = false;
 
   public user: IUser = {};
 
@@ -26,21 +32,41 @@ export class SigUpComponent {
     private authService: AuthService
   ) {}
 
+  get passwordsMatch(): boolean {
+    return this.user.password === this.confirmPassword;
+  }
+
+      public showPassword: boolean = false;
+      public showConfirmPassword: boolean = false;
+
+
   public handleSignup(event: Event) {
     event.preventDefault();
-    if (!this.nameModel.valid) {
-      this.nameModel.control.markAsTouched();
-    }
-    if (!this.lastnameModel.valid) {
-      this.lastnameModel.control.markAsTouched();
-    }
-    if (!this.emailModel.valid) {
-      this.emailModel.control.markAsTouched();
-    }
-    if (!this.passwordModel.valid) {
-      this.passwordModel.control.markAsTouched();
-    }
-    if (this.emailModel.valid && this.passwordModel.valid) {
+
+    this.confirmPasswordTouched = true;
+
+    [
+      this.nameModel,
+      this.lastnameModel,
+      this.lastname2Model,
+      this.emailModel,
+      this.passwordModel,
+      this.identificationModel,
+      this.birthDateModel
+    ].forEach(model => {
+      if (!model.valid) model.control.markAsTouched();
+    });
+
+    if (
+      this.nameModel.valid &&
+      this.lastnameModel.valid &&
+      this.lastname2Model.valid &&
+      this.emailModel.valid &&
+      this.passwordModel.valid &&
+      this.identificationModel.valid &&
+      this.birthDateModel.valid &&
+      this.passwordsMatch
+    ) {
       this.authService.signup(this.user).subscribe({
         next: () => this.validSignup = true,
         error: (err: any) => (this.signUpError = err.description),

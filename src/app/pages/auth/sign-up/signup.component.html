@@ -1,26 +1,136 @@
-<form (ngSubmit)="handleSignup($event)" autocomplete="off" #frm="ngForm"
-  class="grid grid-rows-1 items-center space-y-3">
-  <input class="border-2 border-black w-2/6" #name="ngModel" type="text" id="name" name="name" placeholder="User"
-    [(ngModel)]="user.name" required />
-
-  <input class="border-2 border-black w-2/6" #lastname="ngModel" type="text" id="lastname" name="lastname"
-    placeholder="demo" [(ngModel)]="user.lastname" required />
-
-  <input class="border-2 border-black w-2/6" #email="ngModel" type="text" id="email" name="email"
-    placeholder="agent@gmail.com" [(ngModel)]="user.email" required />
-
-
-  <input class="border-2 border-black w-2/6" #password="ngModel" type="password" id="password" name="password"
-    placeholder="*****" [(ngModel)]="user.password" required />
-  <div class="form-group mb-0">
-    <button class="bg-blue-700 rounded p-1 w-2/6" type="submit">
-      Sign up
-    </button>
-    @if(signUpError) {
-    <p class="text-danger">{{signUpError}}</p>
-    } @else if (validSignup){
-    <p class="text-success">User registered, please go to login</p>
-    }
+<div class="min-h-screen flex">
+  <div class="w-1/2 flex flex-col justify-center items-center bg-isabelline px-16 py-8">
+    <img src="../../../../../assets/img/signup/signup.png" alt="imagenTribuTico" class="mb-8 w-[300px] h-auto" />
+    <p class="text-center text-crater-brown mb-8 font-bold">
+      Crea tu cuenta en minutos y empieza a optimar tu gestión fiscal.<br>
+      Completa tus datos y únete a nuestra comunidad.
+    </p>
   </div>
-  <a href="/login" class="bg-blue-700 rounded p-1 w-2/6">Go Login</a>
-</form>
+
+  <div class="w-1/2 flex flex-col justify-center items-center bg-crater-brown px-16 py-8">
+    <div class="text-center mb-8">
+      <h2 class="text-bisque text-3xl mb-2">Crea tu cuenta</h2>
+      <p class="text-bisque mb-8">Regístrate y empieza a simplificar tu gestión tributaria desde hoy.</p>
+    </div>
+    <form (ngSubmit)="handleSignup($event)" autocomplete="off" #frm="ngForm"
+      class="grid grid-cols-2 gap-4 items-center w-full max-w-xl">
+
+      <div class="flex flex-col">
+        <label class="text-bisque font-semibold mb-1" for="name">Nombre</label>
+        <input
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
+          #name="ngModel" type="text" id="name" name="name" placeholder="Nombre" [(ngModel)]="user.name" required />
+        <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
+          <span *ngIf="name.invalid && name.touched">El nombre es obligatorio.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-bisque font-semibold mb-1" for="birthDate">Fecha de nacimiento</label>
+        <input
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
+          #birthDate="ngModel" type="date" id="birthDate" name="birthDate" [(ngModel)]="user.birthDate" required />
+        <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
+          <span *ngIf="birthDate.invalid && birthDate.touched">La fecha de nacimiento es obligatoria.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-bisque font-semibold mb-1" for="lastname">Primer apellido</label>
+        <input
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
+          #lastname="ngModel" type="text" id="lastname" name="lastname" placeholder="Primer apellido"
+          [(ngModel)]="user.lastname" required />
+        <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
+          <span *ngIf="lastname.invalid && lastname.touched">El apellido es obligatorio.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-bisque font-semibold mb-1" for="lastname2">Segundo apellido</label>
+        <input
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
+          #lastname2="ngModel" type="text" id="lastname2" name="lastname2" placeholder="Segundo apellido"
+          [(ngModel)]="user.lastname2" required />
+        <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
+          <span *ngIf="lastname2.invalid && lastname2.touched">El segundo apellido es obligatorio.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-bisque font-semibold mb-1" for="email">Correo electrónico</label>
+        <input
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
+          #email="ngModel" type="email" id="email" name="email" placeholder="nombre@correo.com" [(ngModel)]="user.email"
+          required />
+        <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
+          <span *ngIf="email.invalid && email.touched">El correo electrónico es obligatorio.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-bisque font-semibold mb-1" for="cedula">Cédula</label>
+        <input
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
+          #identification="ngModel" type="text" id="identification" name="identification" placeholder="123456789"
+          [(ngModel)]="user.identification" required />
+        <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
+          <span *ngIf="identification.invalid && identification.touched">La identificación es obligatoria.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col">
+        <label class="text-bisque font-semibold mb-1" for="password">Contraseña</label>
+        <div class="relative">
+          <input #password="ngModel" [type]="showPassword ? 'text' : 'password'"
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 w-full focus:outline-none focus:border-golden-glow"
+            id="password" name="password" placeholder="********" [(ngModel)]="user.password" required />
+          <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zorba"
+            (click)="showPassword = !showPassword" tabindex="-1">
+            <span class="material-symbols-rounded select-none text-2xl" style="font-size: 24px;">
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
+        <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
+          <span *ngIf="password.invalid && password.touched">La contraseña es obligatoria.</span>
+        </div>
+      </div>
+
+      <!-- Repetir contraseña -->
+      <div class="flex flex-col">
+        <label class="text-bisque font-semibold mb-1" for="confirmPassword">Repetir contraseña</label>
+        <div class="relative">
+          <input [type]="showConfirmPassword ? 'text' : 'password'"
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 w-full focus:outline-none focus:border-golden-glow"
+            id="confirmPassword" name="confirmPassword" placeholder="********" [(ngModel)]="confirmPassword" required />
+          <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zorba"
+            (click)="showConfirmPassword = !showConfirmPassword" tabindex="-1">
+            <span class="material-symbols-rounded select-none text-2xl" style="font-size: 24px;">
+              {{ showConfirmPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
+        <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
+          <span *ngIf="confirmPasswordTouched && !passwordsMatch">Las contraseñas no coinciden.</span>
+        </div>
+      </div>
+
+      <div class="col-span-2">
+        <button
+          class="bg-flamenco text-bisque font-bold rounded-lg py-3 w-full text-2xl mt-4 mb-6 hover:bg-golden-glow hover:text-flamenco transition-colors"
+          type="submit">
+          Registrarse
+        </button>
+        <div *ngIf="signUpError" class="text-danger text-center">{{signUpError}}</div>
+        <div *ngIf="validSignup" class="text-golden-glow font-bold text-center">
+          Usuario registrado, por favor ve a iniciar sesión
+        </div>
+        <p class="text-zorba text-center text-xl font-semibold mt-2">
+          Ya tienes cuenta?
+          <a href="/login" class="text-flamenco font-bold hover:underline ml-1">Iniciar sesión</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
