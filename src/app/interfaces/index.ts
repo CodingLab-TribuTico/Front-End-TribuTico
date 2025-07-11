@@ -65,3 +65,24 @@ export interface ISearch {
   totalPages?: number;
   search?: string;
 }
+export interface IDetailsBill {
+  id?: number;
+  detailCode: number;
+  detailDescription: string;
+  quantity: number;
+  unitPrice: number;
+  unit: number;
+  tax: number;
+  taxAmount: number;
+  total: number;
+  electronicBillId: number;
+}
+
+export interface IManualBill {
+  id?: number;
+  consecutive?: number;
+  code?: number;
+  issueDate?: string;
+  userId?: number;
+  details?: IDetailsBill[];
+}

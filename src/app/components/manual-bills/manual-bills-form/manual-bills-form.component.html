@@ -1,0 +1,62 @@
+<form [formGroup]="form" class="row-mb-4">
+<div class="min-h-screen flex flex-col items-center justify-center">
+  <h1 class="text-crater-brown text-3xl font-bold mb-8 mt-8 text-center">Registro Factura Manual</h1>
+  <form class="bg-crater-brown rounded-2xl p-10 w-full max-w-2xl flex flex-col gap-6 shadow-lg">
+    <div class="flex flex-col gap-2">
+      <label class="text-bisque font-bold" for="consecutive">Consecutivo</label>
+      <input id="consecutive" type="number" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="1205262060456206" />
+    </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="code">Code</label>
+        <input id="code" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"></input>
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="issueDate">Fecha</label>
+        <input id="issueDate" type="date" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" />
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="montoTotal">Nombre</label>
+        <input id="name" type="text" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="120,000" />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="totalIVA">Cédula</label>
+        <input id="identificación" type="text" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="15,600" />
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="tipoServicio">Apellido</label>
+        <input id="lastname" type="text" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="Comercio" />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="montoExento">Correo electrónico</label>
+        <input id="email" type="text" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="12,000" />
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="montoGravado">Código detalle</label>
+        <input id="detailCode" type="text" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="10,000" />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="tarifaIVA">Descripción</label>
+        <input id="detailDescription" type="text" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="eje: 1% o 13%" />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="tarifaIVA">Cantidad</label>
+        <input id="quantity" type="text" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="eje: 1% o 13%" />
+      </div>
+      <div class="flex flex-col gap-2 flex-1">
+        <label class="text-bisque font-bold" for="tarifaIVA">Descripción</label>
+        <input id="detailDescription" type="text" class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow" placeholder="eje: 1% o 13%" />
+      </div>
+    </div>
+    <div class="flex gap-4 justify-end mt-4">
+      <button type="submit" class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-flamenco/80 transition-colors">Registrar</button>
+      <button type="button" class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-golden-glow/80 transition-colors">Cancelar</button>
+    </div>
+  </form>
+</div>
+</form>
