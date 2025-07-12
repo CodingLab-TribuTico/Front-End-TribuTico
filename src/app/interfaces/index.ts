@@ -83,6 +83,6 @@ export interface IManualBill {
   consecutive?: number;
   code?: number;
   issueDate?: string;
-  userId?: number;
   details?: IDetailsBill[];
+  users?: IUser;
 }

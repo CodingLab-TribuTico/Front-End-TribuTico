@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IManualBill } from '../../../interfaces';
 
 @Component({
-  selector: 'app-manual-bills-form',
-  templateUrl: './manual-bills-form.component.html',
+  selector: "app-manual-bills-form",
+  templateUrl: "./manual-bills-form.component.html",
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -15,16 +15,22 @@ import { IManualBill } from '../../../interfaces';
 export class ManualBillsFormComponent {
     public fb: FormBuilder = inject(FormBuilder);
     @Input() form!: FormGroup;
-    @Output() callsavedMethod: EventEmitter<IManualBill> = new EventEmitter<IManualBill>();
+    @Output() callSavedMethod: EventEmitter<IManualBill> = new EventEmitter<IManualBill>();
 
     callSave(){
       let manualBill: IManualBill = {
-        consecutive: this.form.controls["consecutivo"].value,
+        consecutive: this.form.controls["consecutive"].value,
         code: this.form.controls["codigo"].value,
         issueDate: this.form.controls["issueDate"].value,
-        userId: this.form.controls[""].value,
-        details: this.form.controls["detalle"].value,
+        users: this.form.controls["users"].value,
+        details: this.form.controls["details"].value,
 
       };
+      if(this.form.controls["id"].value){
+        manualBill.id = this.form.controls["id"].value;
+      }
+      if(manualBill.id){
+        this.callSavedMethod.emit(manualBill);
+      }
     }
 }
