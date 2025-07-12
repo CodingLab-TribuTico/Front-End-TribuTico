@@ -12,6 +12,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
+import { ManualBillsComponent } from './pages/manual-bills/manual-bills.component';
 
 export const routes: Routes = [
   {
@@ -67,6 +68,17 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'manual-bills',
+        component: ManualBillsComponent,
+        data: {
+          authorities: [
+            IRoleType.user,
+          ],
+          name: 'Carga facturas',
+          showInSidebar: true
+        }
+      },
+      {
         path: 'home',
         component: HomeComponent,
         data: {
@@ -102,6 +114,7 @@ export const routes: Routes = [
           showInSidebar: false
         }
       },
+
     ],
   },
 ];

@@ -34,6 +34,8 @@ export class SidebarComponent {
     'Inicio': 'home',
     'Usuarios': 'group',
     'Cargar Facturas': 'add_notes',
+    'Usuarios': 'group',
+    'Carga facturas': 'add_notes',
   }
 
   constructor(public router: Router
