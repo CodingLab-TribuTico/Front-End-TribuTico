@@ -19,19 +19,23 @@ export class BaseService<T> {
   }
 
   public findAllWithParams(params: any = {}): Observable<IResponse<T[]>> {
-    return this.http.get<IResponse<T[]>>(this.source, {params: this.buildUrlParams(params)});
+    return this.http.get<IResponse<T[]>>(this.source, { params: this.buildUrlParams(params) });
   }
 
   public findAllWithParamsAndCustomSource(customUrlSource: string, params: any = {}): Observable<IResponse<T[]>> {
-    return this.http.get<IResponse<T[]>>(`${this.source}/${customUrlSource}`, {params: this.buildUrlParams(params)});
+    return this.http.get<IResponse<T[]>>(`${this.source}/${customUrlSource}`, { params: this.buildUrlParams(params) });
   }
 
   public add(data: {}): Observable<IResponse<T>> {
     return this.http.post<IResponse<T>>(this.source, data);
   }
 
+  public addFile(data: FormData): Observable<IResponse<T>> {
+    return this.http.post<IResponse<T>>(this.source, data);
+  }
+
   public addWithParams(params: any = {}, data: {}): Observable<IResponse<T>> {
-    return this.http.post<IResponse<T>>(this.source, data, {params: this.buildUrlParams(params)});
+    return this.http.post<IResponse<T>>(this.source, data, { params: this.buildUrlParams(params) });
   }
 
   public addCustomSource(customUrlSource: string, data: {}): Observable<IResponse<T>> {
@@ -43,13 +47,13 @@ export class BaseService<T> {
   }
 
   public editCustomSource(customUrlSource: string, data: {}): Observable<IResponse<T>> {
-    return this.http.put<IResponse<T>>(`${this.source}${customUrlSource ? '/' + customUrlSource: ''}`, data);
+    return this.http.put<IResponse<T>>(`${this.source}${customUrlSource ? '/' + customUrlSource : ''}`, data);
   }
 
   public del(id: any): Observable<IResponse<T>> {
     return this.http.delete<IResponse<T>>(this.source + '/' + id);
   }
-  
+
   public delCustomSource(customUrlSource: string): Observable<IResponse<T>> {
     return this.http.delete<IResponse<T>>(`${this.source}/${customUrlSource}`);
   }
@@ -62,7 +66,7 @@ export class BaseService<T> {
     return this.http.patch<IResponse<T>>(`${this.source}/${customUrlSource}`, data);
   }
 
-  public buildUrlParams (params: any = {}) {
+  public buildUrlParams(params: any = {}) {
     let queryParams = new HttpParams();
     Object.keys(params).forEach(key => {
       queryParams = queryParams.append(key, params[key]);

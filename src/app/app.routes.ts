@@ -11,6 +11,7 @@ import { IRoleType } from './interfaces';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
 
 export const routes: Routes = [
   {
@@ -43,12 +44,22 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
+        path: 'upload-invoices',
+        component: UploadInvoicesComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Cargar Facturas',
+          showInSidebar: true
+        }
+      },
+      {
         path: 'users',
         component: UsersComponent,
         canActivate: [AdminRoleGuard],
         data: {
           authorities: [
-            IRoleType.admin,
             IRoleType.superAdmin
           ],
           name: 'Usuarios',
@@ -85,10 +96,10 @@ export const routes: Routes = [
         data: {
           authorities: [
             IRoleType.superAdmin,
-            IRoleType.user 
+            IRoleType.user
           ],
           name: 'Restablecer Contraseña',
-          showInSidebar: false 
+          showInSidebar: false
         }
       },
     ],

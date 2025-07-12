@@ -1,0 +1,32 @@
+<form class="max-w-lg w-full">
+    @if (!selectedFile) {
+    <div>
+        <input type="file" name="file" id="file" class="sr-only" (change)="onFileSelected($event)"
+            accept="application/pdf, text/xml" />
+        <label for="file"
+            class="relative flex items-center justify-center rounded-md border-2 border-dashed border-zorba p-20 text-center cursor-pointer"
+            (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+            <div class="flex flex-col items-center justify-center space-y-2">
+                <span class="material-symbols-rounded text-zorba text-6xl"> upload_file </span>
+                <span class="block text-zorba text-base">
+                    <span class="font-bold">Clic para subir</span> o arrastrar y soltar<br />
+                    PDF o XML
+                </span>
+                <span class="text-zorba text-base border-2 border-zorba p-2 rounded-md"> Importar factura </span>
+            </div>
+        </label>
+    </div>
+    }
+    @if (selectedFile) {
+    <div class="rounded-md py-4 px-4 bg-zorba w-full max-w-full">
+        <div class="flex items-center space-x-2">
+            <p class="truncate flex-1 overflow-hidden whitespace-nowrap text-base font-medium text-crater-brown">
+                {{ selectedFile.name }}
+            </p>
+            <button type="button" (click)="openModal()">
+                <span class="material-symbols-rounded text-crater-brown text-base"> close </span>
+            </button>
+        </div>
+    </div>
+    }
+</form>
