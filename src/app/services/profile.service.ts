@@ -39,7 +39,8 @@ export class ProfileService extends BaseService<IUser> {
 updateUserInfo(user: IUser) {
   this.userService.updatePatch(user).subscribe({
     next: (response: any) => {
-      this.userSignal.set(response.data); 
+      this.userSignal.set(response.data);
+      localStorage.setItem('auth_user', JSON.stringify(response.data));
     },
     error: (error: any) => {
       this.snackBar.open(`Error actualizando el perfil: ${error.message}`, 'Cerrar', {
