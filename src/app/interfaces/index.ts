@@ -65,3 +65,35 @@ export interface ISearch {
   totalPages?: number;
   search?: string;
 }
+export interface IDetailInvoice {
+  cabys?: string;
+  quantity?: number;
+  unit?: string;
+  unitPrice?: number;
+  discount?: number;
+  tax?: number;
+  taxAmount?: number;
+  category?: string;
+  total?: number;
+  description?: string;
+}
+
+export interface IPerson {
+  identification?: string;
+  name?: string;
+  lastname?: string;
+  phone?: string;
+  email?: string;
+}
+
+export interface IManualInvoice {
+  id?: number;
+  type?: string;
+  consecutive?: string;
+  key?: string;
+  issueDate?: string;
+  issuer?: IPerson;
+  receiver?: IPerson;
+  details?: IDetailInvoice[];
+  users?: IUser;
+}

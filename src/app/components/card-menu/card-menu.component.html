@@ -15,14 +15,14 @@
             @if(firtButtonText != "") {
             <button
                 [ngClass]="[firstButtonBackgroundColor, firstButtonTextColor, 'px-4 py-2 rounded-md font-bold text-lg']"
-                routerLink="{{'/app/'+ firstButtonRoute}}">
+                [routerLink]="firstButtonRoute ? ['/app', firstButtonRoute] : null">
                 {{firtButtonText}}
             </button>
             }
             @if(secondButtonText != "") {
             <button
                 [ngClass]="[secondButtonBackgroundColor, secondButtonTextColor, 'px-4 py-2 rounded-md font-bold text-lg']"
-                routerLink="{{'/app/'+ secondButtonRoute}}">
+                [routerLink]="secondButtonRoute ? ['/app', secondButtonRoute] : null">
                 {{secondButtonText}}
             </button>
             }

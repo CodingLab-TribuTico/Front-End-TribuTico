@@ -32,7 +32,8 @@ export class SidebarComponent {
 
   public iconsDictionary: Record<string, string> = {
     'Inicio': 'home',
-    'Usuarios': 'group'
+    'Usuarios': 'group',
+    'Cargar Facturas': 'add_notes',
   }
 
   constructor(public router: Router
