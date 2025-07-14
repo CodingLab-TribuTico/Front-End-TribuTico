@@ -65,24 +65,35 @@ export interface ISearch {
   totalPages?: number;
   search?: string;
 }
-export interface IDetailsBill {
-  id?: number;
-  detailCode: number;
-  detailDescription: string;
-  quantity: number;
-  unitPrice: number;
-  unit: number;
-  tax: number;
-  taxAmount: number;
-  total: number;
-  electronicBillId: number;
+export interface IDetailInvoice {
+  cabys?: string;
+  quantity?: number;
+  unit?: string;
+  unitPrice?: number;
+  discount?: number;
+  tax?: number;
+  taxAmount?: number;
+  category?: string;
+  total?: number;
+  description?: string;
 }
 
-export interface IManualBill {
+export interface IPerson {
+  identification?: string;
+  name?: string;
+  lastname?: string;
+  phone?: string;
+  email?: string;
+}
+
+export interface IManualInvoice {
   id?: number;
-  consecutive?: number;
-  code?: number;
+  type?: string;
+  consecutive?: string;
+  key?: string;
   issueDate?: string;
-  details?: IDetailsBill[];
+  issuer?: IPerson;
+  receiver?: IPerson;
+  details?: IDetailInvoice[];
   users?: IUser;
 }

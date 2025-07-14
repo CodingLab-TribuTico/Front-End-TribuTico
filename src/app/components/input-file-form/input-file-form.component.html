@@ -1,10 +1,10 @@
-<form class="max-w-lg w-full">
+<form [ngClass]="['w-full py-2', selectedFile ? 'h-fit' : 'h-full']">
     @if (!selectedFile) {
-    <div>
+    <div class="h-full w-full">
         <input type="file" name="file" id="file" class="sr-only" (change)="onFileSelected($event)"
             accept="application/pdf, text/xml" />
         <label for="file"
-            class="relative flex items-center justify-center rounded-md border-2 border-dashed border-zorba p-20 text-center cursor-pointer"
+            class="relative flex items-center justify-center rounded-md border-2 border-dashed border-zorba p-20 text-center cursor-pointer h-full w-full"
             (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
             <div class="flex flex-col items-center justify-center space-y-2">
                 <span class="material-symbols-rounded text-zorba text-6xl"> upload_file </span>
@@ -18,7 +18,7 @@
     </div>
     }
     @if (selectedFile) {
-    <div class="rounded-md py-4 px-4 bg-zorba w-full max-w-full">
+    <div class="rounded-md py-4 px-4 bg-zorba">
         <div class="flex items-center space-x-2">
             <p class="truncate flex-1 overflow-hidden whitespace-nowrap text-base font-medium text-crater-brown">
                 {{ selectedFile.name }}

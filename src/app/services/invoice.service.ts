@@ -1,32 +1,32 @@
-import { inject, Injectable, signal  } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import { BaseService } from "./base-service";
-import { IResponse, ISearch, IManualBill, IDetailsBill, IUser } from "../interfaces";
+import { IResponse, ISearch, IManualInvoice } from "../interfaces";
 import { AlertService } from "./alert.service";
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class BillsService extends BaseService<IManualBill> {
-    protected override source: string = 'electronic-bill';
-    private billsList = signal<IManualBill[]>([]);
-    get bills$() {
-        return this.billsList;
-    }
-    public search: ISearch = {
-        page: 1, 
-        size: 5
-    }
+export class InvoiceService extends BaseService<IManualInvoice> {
+  protected override source: string = 'electronic-bill';
+  private invoicesList = signal<IManualInvoice[]>([]);
+  get invoices$() {
+    return this.invoicesList;
+  }
+  public search: ISearch = {
+    page: 1,
+    size: 5
+  }
 
-    public totalItems: any =[];
-    private alertService: AlertService = inject(AlertService);
+  public totalItems: any = [];
+  private alertService: AlertService = inject(AlertService);
 
-    getAll () {
+  getAll() {
     this.findAllWithParams({ page: this.search.page, size: this.search.size }).subscribe({
-      next: (response: IResponse<IManualBill[]>) => {
+      next: (response: IResponse<IManualInvoice[]>) => {
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-        this.billsList.set(response.data);
+        this.invoicesList.set(response.data);
       },
       error: (err: any) => {
         console.error('error', err);
@@ -34,9 +34,9 @@ export class BillsService extends BaseService<IManualBill> {
     });
   }
 
-  save(item: IManualBill) {
+  save(item: IManualInvoice) {
     this.add(item).subscribe({
-      next: (response: IResponse<IManualBill>) => {
+      next: (response: IResponse<IManualInvoice>) => {
         this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
         this.getAll();
       },
@@ -47,9 +47,9 @@ export class BillsService extends BaseService<IManualBill> {
     });
   }
 
-  update(item: IManualBill) {
+  update(item: IManualInvoice) {
     this.edit(item.id, item).subscribe({
-      next: (response: IResponse<IManualBill>) => {
+      next: (response: IResponse<IManualInvoice>) => {
         this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
         this.getAll();
       },
@@ -60,9 +60,9 @@ export class BillsService extends BaseService<IManualBill> {
     });
   }
 
-  delete(item: IManualBill) {
+  delete(item: IManualInvoice) {
     this.del(item.id).subscribe({
-      next: (response: IResponse<IManualBill>) => {
+      next: (response: IResponse<IManualInvoice>) => {
         this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
         this.getAll();
       },

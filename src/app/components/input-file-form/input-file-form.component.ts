@@ -1,10 +1,11 @@
 import { Component, effect, ElementRef, EventEmitter, inject, Input, Output, Signal, ViewChild } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-input-file-form',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './input-file-form.component.html',
   styleUrl: './input-file-form.component.scss'
 })

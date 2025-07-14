@@ -17,14 +17,14 @@ export class MyAccountComponent implements OnInit {
 
   constructor(public router: Router) {
     let user = localStorage.getItem('auth_user');
-    if(user) {
+    if (user) {
       this.userName = JSON.parse(user)?.name;
       this.lastname = JSON.parse(user)?.lastname;
 
-    } 
+    }
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   logout() {
     this.service.logout();
