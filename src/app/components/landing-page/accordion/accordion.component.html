@@ -1,0 +1,17 @@
+<div class="bg-golden-glow rounded-md shadow-md py-1 px-5 w-full mx-auto">
+    <button (click)="toggleAccordion(index)" class="w-full flex justify-between items-center py-5">
+        <h1 class="text-crater-brown font-bold">{{ title }}</h1>
+        <span id="icon-1" class="text-crater-brown transition-transform duration-300">
+            @if(icon){
+            <span class="material-symbols-rounded text-2xl">add</span>
+            }@else {
+            <span class="material-symbols-rounded text-2xl">remove</span>
+            }
+        </span>
+    </button>
+    <div id="content-{{index}}" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+        <div class="pb-5 text-base text-justify text-crater-brown">
+            {{ description }}
+        </div>
+    </div>
+</div>

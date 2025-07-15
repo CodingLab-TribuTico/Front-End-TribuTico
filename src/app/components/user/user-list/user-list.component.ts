@@ -14,7 +14,6 @@ import { ModalService } from '../../../services/modal.service';
     ModalComponent
   ],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss'
 })
 export class UserListComponent {
   public idUser: number | null = Number(JSON.parse(localStorage.getItem('auth_user') || 'null')?.id) || null;
