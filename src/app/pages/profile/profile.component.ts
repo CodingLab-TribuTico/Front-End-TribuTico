@@ -1,13 +1,11 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { IUser } from '../../interfaces';
 import { ProfileService } from '../../services/profile.service';
 import { FormBuilder, Validators } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { AuthService } from '../../services/auth.service';
-
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -86,7 +84,4 @@ export class ProfileComponent {
     this.userForm.markAsPristine();
   }
 
-  hasErrors(controlName: string, errorType: string) {
-    return this.userForm.get(controlName)?.hasError(errorType) && this.userForm.get(controlName)?.touched
-  }
 }

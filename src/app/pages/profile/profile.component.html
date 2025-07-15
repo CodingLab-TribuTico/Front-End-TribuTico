@@ -14,7 +14,7 @@
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
             />
           <div class="min-h-[1rem]">
-            @if (hasErrors('name', 'required')) {
+            @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
               <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
             }
           </div>
@@ -36,7 +36,7 @@
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
             />
           <div class="min-h-[1rem]">
-            @if (hasErrors('lastname', 'required')) {
+            @if (userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched) {
               <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
             }
           </div>
@@ -58,7 +58,7 @@
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
             />
           <div class="min-h-[1rem]">
-            @if (hasErrors('lastname2', 'required')) {
+            @if (userForm.get('lastname2')?.invalid && userForm.get('lastname2')?.touched) {
               <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
             }
           </div>
@@ -80,10 +80,10 @@
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
             />
           <div class="min-h-[1rem]">
-            @if (hasErrors('identification', 'required')) {
+            @if (userForm.get('identification')?.errors?.['required'] && userForm.get('identification')?.touched) {
               <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
-            }
-            @if (hasErrors('identification', 'minlength') || hasErrors('identification', 'maxlength')) {
+            } 
+            @if (userForm.get('identification')?.errors?.['minlength'] || userForm.get('identification')?.errors?.['maxlength']) {
               <p class="text-burnt-umber text-sm">Cédula inválida</p>
             }
           </div>
@@ -105,7 +105,7 @@
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
             />
           <div class="min-h-[1rem]">
-            @if (hasErrors('birthDate', 'required')) {
+            @if (userForm.get('birthDate')?.invalid && userForm.get('birthDate')?.touched) {
               <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
             }
           </div>
@@ -127,10 +127,10 @@
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
             />
           <div class="min-h-[1rem]">
-            @if (hasErrors('email', 'required')) {
+            @if (userForm.get('email')?.errors?.['required'] && userForm.get('email')?.touched) {
               <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
             }
-            @if (hasErrors('email', 'pattern')) {
+            @if (userForm.get('email')?.errors?.['pattern']) {
               <p class="text-burnt-umber text-sm">Correo electrónico inválido</p>
             }
           </div>
@@ -144,19 +144,22 @@
       </div>
 
       <div class="flex justify-center items-center gap-4 mt-10">
-        <button *ngIf="!isEditing"
+        <button 
+          *ngIf="!isEditing"
           type="button"
           (click)="updateUser(profileService.user$())"
           class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
           Editar
         </button>
 
-        <div *ngIf="!isEditing"
+        <div 
+          *ngIf="!isEditing"
           class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
           <a routerLink="/app/reset-password">Cambiar contraseña</a>
         </div>
 
-        <button *ngIf="isEditing"
+        <button 
+          *ngIf="isEditing"
           type="button"
           (click)="saveChanges(userForm.value)"
           [disabled]="userForm.invalid || !userForm.dirty"
@@ -164,7 +167,8 @@
           Guardar
         </button>
 
-        <button *ngIf="isEditing"
+        <button 
+          *ngIf="isEditing"
           type="button"
           (click)="cancelChanges()"
           class="bg-golden-glow text-crater-brown py-2 px-4 rounded-md font-bold hover:bg-bisque transition-colors">

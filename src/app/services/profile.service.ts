@@ -41,6 +41,7 @@ updateUserInfo(user: IUser) {
     next: (response: any) => {
       this.userSignal.set(response.data);
       localStorage.setItem('auth_user', JSON.stringify(response.data));
+      window.dispatchEvent(new Event('user-updated'));
     },
     error: (error: any) => {
       this.snackBar.open(`Error actualizando el perfil: ${error.message}`, 'Cerrar', {
