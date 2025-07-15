@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CardMenuComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   public role: string = '';

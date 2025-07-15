@@ -16,7 +16,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
   standalone: true,
   imports: [LlamaLoaderComponent, CommonModule, ModalComponent, ReactiveFormsModule, ManualInvoicesFormComponent, InputFileFormComponent],
   templateUrl: './upload-invoices.component.html',
-  styleUrl: './upload-invoices.component.scss'
 })
 export class UploadInvoicesComponent {
   public invoicesService: InvoiceService = inject(InvoiceService);
