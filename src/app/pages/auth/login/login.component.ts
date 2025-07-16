@@ -90,7 +90,7 @@ export class LoginComponent {
                   this.modalService.displayModal(this.blockedUserModal);
                 },
                 error: (err: any) => {
-                  this.loginError = err.description;
+                  this.loginError = err.message;
                   return;
                 }
               });
@@ -99,7 +99,7 @@ export class LoginComponent {
             this.previousEmail = this.actualEmail;
           }
 
-          this.loginError = err.description;
+          this.loginError = err.message;
         },
       });
     }

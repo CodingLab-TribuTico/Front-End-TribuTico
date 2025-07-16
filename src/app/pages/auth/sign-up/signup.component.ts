@@ -37,7 +37,6 @@ export class SignUpComponent {
   public showPassword: boolean = false;
   public showConfirmPassword: boolean = false;
 
-
   public handleSignup(event: Event) {
     event.preventDefault();
 
@@ -58,16 +57,21 @@ export class SignUpComponent {
     if (
       this.nameModel.valid &&
       this.lastnameModel.valid &&
-      this.lastname2Model.valid &&
-      this.emailModel.valid &&
+      this.emailModel.valid && !this.emailModel.errors?.['email'] &&
       this.passwordModel.valid &&
-      this.identificationModel.valid &&
+      this.identificationModel.valid && this.identificationModel.value.length === 9 &&
       this.birthDateModel.valid &&
       this.passwordsMatch
     ) {
       this.authService.signup(this.user).subscribe({
-        next: () => this.validSignup = true,
-        error: (err: any) => (this.signUpError = err.description),
+        next: () => {
+          this.signUpError = '';
+          this.validSignup = true;
+          setTimeout(() => {
+            this.router.navigateByUrl('/login');
+          }, 1000);
+        },
+        error: (err: any) => (this.signUpError = err),
       });
     }
   }
