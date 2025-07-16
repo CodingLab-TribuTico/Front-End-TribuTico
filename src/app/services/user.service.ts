@@ -56,7 +56,7 @@ export class UserService extends BaseService<IUser> {
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar el usuario', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', err.message, 'center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
@@ -78,12 +78,11 @@ export class UserService extends BaseService<IUser> {
   updatePatch(user: IUser): Observable<any> {
     return this.patchCustomSource(`${user.id}`, user).pipe(
       tap((response: any) => {
-        const message = 'Usuario modificado exitosamente';
-        this.alertService.displayAlert('success', message, 'center', 'top', ['success-snackbar']);
-        this.getAll(); 
+        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.getAll();
       }),
       catchError((err: any) => {
-        this.alertService.displayAlert('error', 'Error al modificar usuario', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', err.message, 'center', 'top', ['error-snackbar']);
         console.error('error', err);
         return throwError(() => err);
       })
