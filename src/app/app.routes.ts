@@ -12,6 +12,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
+import { InvoiceComponent } from './pages/invoice/invoice.component';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,18 @@ export const routes: Routes = [
         path: 'app',
         redirectTo: 'users',
         pathMatch: 'full',
+      },
+      {
+        path: 'invoice',
+        component: InvoiceComponent,
+        data: {
+          authorities: [
+            IRoleType.superAdmin,
+            IRoleType.user
+          ],
+          name: 'Facturas',
+          showInSidebar: true
+        }
       },
       {
         path: 'upload-invoices',
@@ -101,7 +114,7 @@ export const routes: Routes = [
           name: 'Restablecer Contraseña',
           showInSidebar: false
         }
-      },
+      }
     ],
   },
 ];

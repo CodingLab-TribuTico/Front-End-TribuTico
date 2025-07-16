@@ -34,6 +34,7 @@ export class SidebarComponent {
     'Inicio': 'home',
     'Usuarios': 'group',
     'Cargar Facturas': 'add_notes',
+    'Facturas': 'list_alt',
   }
 
   constructor(public router: Router
