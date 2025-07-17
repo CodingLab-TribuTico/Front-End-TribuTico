@@ -5,7 +5,6 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './card-detail.component.html',
-  styleUrl: './card-detail.component.scss'
 })
 export class CardDetailComponent {
   @Input() cabys: string = '';

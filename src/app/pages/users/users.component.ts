@@ -20,7 +20,6 @@ import { IUser } from '../../interfaces';
     UserFormComponent
   ],
   templateUrl: './users.component.html',
-  styleUrl: './users.component.scss'
 })
 export class UsersComponent {
   public userService: UserService = inject(UserService);

@@ -8,7 +8,6 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterLink],
   templateUrl: './card-menu.component.html',
-  styleUrl: './card.component.scss'
 })
 export class CardMenuComponent {
   @Input() icons: string[] = [];

@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './input-file-form.component.html',
-  styleUrl: './input-file-form.component.scss'
 })
 export class InputFileFormComponent {
   private alertService: AlertService = inject(AlertService);
