@@ -75,7 +75,7 @@ export interface IDetailInvoice {
   taxAmount?: number;
   category?: string;
   total?: number;
-  detailDescription?: string;
+  description?: string;
 }
 
 export interface IPerson {
@@ -89,7 +89,7 @@ export interface IPerson {
 export interface IManualInvoice {
   id?: number;
   type?: string;
-  consecutive?: number;
+  consecutive?: string;
   key?: string;
   issueDate?: string;
   issuer?: IPerson;

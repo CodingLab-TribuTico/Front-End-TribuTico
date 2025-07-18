@@ -7,7 +7,6 @@ import { ModalComponent } from "../../components/modal/modal.component";
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice } from '../../interfaces';
 import { InvoiceService } from '../../services/invoice.service';
-import { AuthService } from '../../services/auth.service';
 import { ManualInvoicesFormComponent } from "../../components/manual-invoices/manual-invoices-form/manual-invoices-form.component";
 import { InputFileFormComponent } from "../../components/input-file-form/input-file-form.component";
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -20,7 +19,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class UploadInvoicesComponent {
   public invoicesService: InvoiceService = inject(InvoiceService);
-  public authService: AuthService = inject(AuthService);
   public hideImportInvoicesVar: boolean = true;
   public importInvoicesText: string = "Ocultar importar";
   public importInvoicesIcon: string = "receipt_long_off";
@@ -52,7 +50,7 @@ export class UploadInvoicesComponent {
     tax: ['', [Validators.required, Validators.min(0)]],
     total: [{ value: '', disabled: true }, Validators.required],
     category: ['', Validators.required],
-    detailDescription: ['', Validators.required]
+    description: ['', Validators.required]
   });
 
 
@@ -82,33 +80,8 @@ export class UploadInvoicesComponent {
   }
 
   saveInvoice(item: IManualInvoice) {
-    const userId = this.authService.getCurrentUserId();
-    
-    if (!userId) {
-      console.error('No se pudo obtener el ID del usuario');
-      // Aquí podrías mostrar un mensaje de error o redirigir al login
-      return;
-    }
-
-    // Validar que el item tenga los campos requeridos
-    if (!item.type || !item.consecutive || !item.key) {
-      console.error('Faltan campos requeridos en la factura');
-      return;
-    }
-
-    this.invoicesService.saveWithUserId(item, userId).subscribe({
-      next: (response) => {
-        console.log('Factura guardada exitosamente:', response);
-        // Aquí puedes agregar lógica adicional como:
-        // - Limpiar el formulario
-        // - Navegar a la lista de facturas
-        // - Mostrar un mensaje de éxito
-      },
-      error: (error) => {
-        console.error('Error al guardar la factura:', error);
-        // El error ya se maneja en el servicio con alertas
-      }
-    });
+    console.log(item);
+    //this.invoicesService.save(item);
   }
 
   changeType(type: string) {

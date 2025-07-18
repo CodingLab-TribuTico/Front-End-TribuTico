@@ -16,5 +16,5 @@ export class CardDetailComponent {
   @Input() taxAmount: Number = 0;
   @Input() category: string = '';
   @Input() total: Number = 0;
-  @Input() detailDescription: string = '';
+  @Input() description: string = '';
 }

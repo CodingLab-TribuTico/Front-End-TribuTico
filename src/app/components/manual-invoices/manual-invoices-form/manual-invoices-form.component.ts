@@ -121,7 +121,7 @@ export class ManualInvoicesFormComponent {
       taxAmount: (this.detailForm.controls["quantity"].value * this.detailForm.controls["unitPrice"].value * this.detailForm.controls["tax"].value) / 100,
       category: this.detailForm.controls["category"].value,
       total: this.detailForm.controls["total"].value,
-      detailDescription: this.detailForm.controls["detailDescription"].value,
+      description: this.detailForm.controls["description"].value,
     };
 
     this.details.push(detail);
