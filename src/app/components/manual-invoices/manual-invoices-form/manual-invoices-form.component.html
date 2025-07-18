@@ -119,7 +119,7 @@
         <app-card-detail [cabys]="detail.cabys || '0'" [quantity]="detail.quantity || 0" [unit]="detail.unit || ''"
           [unitPrice]="detail.unitPrice || 0" [discount]="detail.discount || 0" [tax]="detail.tax || 0"
           [taxAmount]="detail.taxAmount || 0" [category]="detail.category || ''" [total]="detail.total || 0"
-          [description]="detail.description || ''"></app-card-detail>
+          [detailDescription]="detail.detailDescription || ''"></app-card-detail>
         }
       </div>
       }
@@ -236,13 +236,13 @@
     </div>
 
     <div class="flex flex-col gap-2 flex-wrap">
-      <label class="text-bisque font-bold" for="description">Descripcion<span class="text-burnt-umber">*</span></label>
-      <textarea id="description" formControlName="description" type="text"
+      <label class="text-bisque font-bold" for="detailDescription">Descripción<span class="text-burnt-umber">*</span></label>
+      <textarea id="detailDescription" formControlName="detailDescription" type="text"
         class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow resize-none"
-        placeholder="Descripcion"></textarea>
-      @if (detailForm.controls['description'].invalid && (detailForm.controls['description'].dirty ||
-      detailForm.controls['description'].touched)) {
-      <div class="text-burnt-umber text-sm">La descripcion es obligatoria.</div>
+        placeholder="Descripción"></textarea>
+      @if (detailForm.controls['detailDescription'].invalid && (detailForm.controls['detailDescription'].dirty ||
+      detailForm.controls['detailDescription'].touched)) {
+      <div class="text-burnt-umber text-sm">La descripción es obligatoria.</div>
       }
     </div>
 
