@@ -89,8 +89,10 @@ export class ManualInvoicesFormComponent {
       consecutive: this.invoiceForm.controls["consecutive"].value,
       key: this.invoiceForm.controls["key"].value,
       issueDate: this.invoiceForm.controls["issueDate"].value,
-      receiver: type === "ingreso" ? person : user,
-      issuer: type === "gasto" ? person : user,
+      name: this.invoiceForm.controls["name"].value,
+      lastname: this.invoiceForm.controls["lastname"].value,
+      email: this.invoiceForm.controls["email"].value,
+      identification: this.invoiceForm.controls["identification"].value,
       details: this.details,
     };
 

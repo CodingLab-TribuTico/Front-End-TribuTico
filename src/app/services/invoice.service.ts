@@ -2,12 +2,14 @@ import { inject, Injectable, signal } from "@angular/core";
 import { BaseService } from "./base-service";
 import { IResponse, ISearch, IManualInvoice } from "../interfaces";
 import { AlertService } from "./alert.service";
+import { Observable } from "rxjs";
+import { tap, catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
 })
 export class InvoiceService extends BaseService<IManualInvoice> {
-  protected override source: string = "electronic-bill";
+  protected override source: string = 'invoice';
   private invoicesList = signal<IManualInvoice[]>([]);
   get invoices$() {
     return this.invoicesList;
@@ -65,6 +67,20 @@ export class InvoiceService extends BaseService<IManualInvoice> {
         console.error("error", err);
       },
     });
+  }
+
+  saveWithUserId(item: IManualInvoice, userId: number): Observable<IResponse<IManualInvoice>> {
+    return this.http.post<IResponse<IManualInvoice>>(`${this.source}/${userId}`, item).pipe(
+      tap((response) => {
+        this.alertService.displayAlert('success', response.message || 'Factura guardada correctamente!', 'center', 'top', ['success-snackbar']);
+        this.getAll(); // Refrescar la lista
+      }),
+      catchError((error) => {
+        this.alertService.displayAlert('error', 'Error al guardar la factura', 'center', 'top', ['error-snackbar']);
+        console.error('Error al guardar la factura:', error);
+        throw error;
+      })
+    );
   }
 
   update(item: IManualInvoice) {

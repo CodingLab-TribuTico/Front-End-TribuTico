@@ -77,22 +77,17 @@ export interface IDetailInvoice {
   description?: string;
 }
 
-export interface IPerson {
-  identification?: string;
-  name?: string;
-  lastname?: string;
-  phone?: string;
-  email?: string;
-}
 
 export interface IManualInvoice {
   id?: number;
+  name?: string;
+  lastname?: string;
+  email?: string;
+  identification?: string;
   type?: string;
-  consecutive?: string;
+  consecutive?: number;
   key?: string;
   issueDate?: string;
-  issuer?: IPerson;
-  receiver?: IPerson;
   details?: IDetailInvoice[];
   user?: IUser;
 }
