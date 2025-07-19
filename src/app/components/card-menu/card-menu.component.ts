@@ -7,10 +7,9 @@ import { RouterLink } from '@angular/router';
   selector: 'app-card',
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterLink],
-  templateUrl: './card.component.html',
-  styleUrl: './card.component.scss'
+  templateUrl: './card-menu.component.html',
 })
-export class CardComponent {
+export class CardMenuComponent {
   @Input() icons: string[] = [];
   @Input() title: string = "";
   @Input() description: string = "";

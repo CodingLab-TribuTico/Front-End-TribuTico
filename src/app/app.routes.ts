@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
-import { SigUpComponent } from './pages/auth/sign-up/signup.component';
+import { SignUpComponent } from './pages/auth/sign-up/signup.component';
 import { UsersComponent } from './pages/users/users.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
@@ -11,8 +11,15 @@ import { IRoleType } from './interfaces';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 
 export const routes: Routes = [
+  {
+    path: 'landing-page',
+    component: LandingPageComponent,
+    canActivate: [GuestGuard],
+  },
   {
     path: 'login',
     component: LoginComponent,
@@ -20,7 +27,7 @@ export const routes: Routes = [
   },
   {
     path: 'signup',
-    component: SigUpComponent,
+    component: SignUpComponent,
     canActivate: [GuestGuard],
   },
   {
@@ -29,7 +36,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'landing-page',
     pathMatch: 'full',
   },
   {
@@ -43,12 +50,22 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
+        path: 'upload-invoices',
+        component: UploadInvoicesComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Cargar Facturas',
+          showInSidebar: true
+        }
+      },
+      {
         path: 'users',
         component: UsersComponent,
         canActivate: [AdminRoleGuard],
         data: {
           authorities: [
-            IRoleType.admin,
             IRoleType.superAdmin
           ],
           name: 'Usuarios',
@@ -85,10 +102,10 @@ export const routes: Routes = [
         data: {
           authorities: [
             IRoleType.superAdmin,
-            IRoleType.user 
+            IRoleType.user
           ],
           name: 'Restablecer Contraseña',
-          showInSidebar: false 
+          showInSidebar: false
         }
       },
     ],

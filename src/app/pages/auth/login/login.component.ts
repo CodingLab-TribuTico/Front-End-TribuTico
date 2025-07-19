@@ -12,7 +12,6 @@ import { GoogleAuthComponent } from '../../../components/google-auth/google-auth
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, GoogleAuthComponent, ModalComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   public loginError!: string;
@@ -51,9 +50,9 @@ export class LoginComponent {
       const email = params['email'];
 
       if (token && expiresIn) {
-        this.authService.setOAuthLogin(token, expiresIn,email);
+        this.authService.setOAuthLogin(token, expiresIn, email);
       }
-      
+
     });
   }
 
@@ -91,7 +90,7 @@ export class LoginComponent {
                   this.modalService.displayModal(this.blockedUserModal);
                 },
                 error: (err: any) => {
-                  this.loginError = err.description;
+                  this.loginError = err.message;
                   return;
                 }
               });
@@ -100,7 +99,7 @@ export class LoginComponent {
             this.previousEmail = this.actualEmail;
           }
 
-          this.loginError = err.description;
+          this.loginError = err.message;
         },
       });
     }

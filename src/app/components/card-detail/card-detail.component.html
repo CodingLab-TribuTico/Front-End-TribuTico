@@ -1,0 +1,36 @@
+<div class="bg-golden-glow rounded-md border border-yellow-300 p-2 text-xs text-crater-brown shadow-sm leading-tight">
+    <div class="font-semibold mb-1">{{ description }}</div>
+
+    <table class="w-full text-left">
+        <tbody>
+            <tr>
+                <td class="pr-2 font-medium">Cabys:</td>
+                <td>{{ cabys }}</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">Cant:</td>
+                <td>{{ quantity }} {{ unit }}</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">P/U:</td>
+                <td>{{ unitPrice }}</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">Desc:</td>
+                <td>{{ discount }}</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">Imp:</td>
+                <td>{{ tax }}% ({{ taxAmount }})</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">Cat:</td>
+                <td>{{ category }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="border-t border-crater-brown/20 pt-1 mt-1 text-sm font-bold">
+        Total: {{ total }}
+    </div>
+</div>

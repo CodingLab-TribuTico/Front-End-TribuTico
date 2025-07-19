@@ -11,7 +11,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
   ],
   templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.scss'
 })
 export class UserFormComponent {
   public fb: FormBuilder = inject(FormBuilder);
