@@ -3,6 +3,7 @@ import { Component, effect, EventEmitter, inject, Input, Output, Signal } from '
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice } from '../../../interfaces';
 import { CardDetailComponent } from '../../card-detail/card-detail.component';
+import { ModalComponent } from '../../modal/modal.component';
 
 @Component({
   selector: "app-manual-invoices-form",
@@ -11,7 +12,8 @@ import { CardDetailComponent } from '../../card-detail/card-detail.component';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    CardDetailComponent
+    CardDetailComponent,
+    ModalComponent
   ],
 })
 export class ManualInvoicesFormComponent {
@@ -23,6 +25,10 @@ export class ManualInvoicesFormComponent {
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
   public type: string = 'ingreso';
+  
+  // Variables para el modal de confirmación
+  public showDeleteModal: boolean = false;
+  public indexToDelete: number = -1;
 
   constructor() {
     effect(() => {
@@ -184,5 +190,49 @@ export class ManualInvoicesFormComponent {
   changeType(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.type = selectElement.value;
+  }
+
+  // ✨ NUEVA FUNCIÓN: Editar detalle
+  editDetailItem(index: number) {
+    const detail = this.details[index];
+    
+    // Poner los datos del detalle en el formulario
+    this.detailForm.patchValue({
+      cabys: detail.cabys,
+      quantity: detail.quantity,
+      unit: detail.unit,
+      unitPrice: detail.unitPrice,
+      discount: detail.discount,
+      tax: detail.tax,
+      category: detail.category,
+      description: detail.description
+    });
+
+    // Eliminar el detalle de la lista ya que se va a editar
+    this.details.splice(index, 1);
+    
+    // Recalcular el total en el formulario
+    this.calculateTotal();
+  }
+
+  // ✨ NUEVA FUNCIÓN: Eliminar detalle
+  deleteDetailItem(index: number) {
+    this.indexToDelete = index;
+    this.showDeleteModal = true;
+  }
+
+  // Confirmar eliminación
+  confirmDelete() {
+    if (this.indexToDelete >= 0) {
+      this.details.splice(this.indexToDelete, 1);
+      this.indexToDelete = -1;
+    }
+    this.hideDeleteModal();
+  }
+
+  // Cancelar eliminación
+  hideDeleteModal() {
+    this.showDeleteModal = false;
+    this.indexToDelete = -1;
   }
 }

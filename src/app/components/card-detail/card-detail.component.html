@@ -30,7 +30,20 @@
         </tbody>
     </table>
 
-    <div class="border-t border-crater-brown/20 pt-1 mt-1 text-sm font-bold">
-        Total: {{ total }}
+    <div class="border-t border-crater-brown/20 pt-1 mt-1 text-sm font-bold flex justify-between items-center">
+        <span>Total: {{ total }}</span>
+        <!-- Botones de acción al lado del total -->
+        <div class="flex gap-2 ml-4">
+            <button (click)="onEdit()" 
+                    class="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold"
+                    title="Editar">
+                ✏️
+            </button>
+            <button (click)="onDelete()" 
+                    class="bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold"
+                    title="Eliminar">
+                🗑️
+            </button>
+        </div>
     </div>
 </div>
