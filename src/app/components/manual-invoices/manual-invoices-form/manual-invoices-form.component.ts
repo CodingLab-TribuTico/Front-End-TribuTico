@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, EventEmitter, inject, Input, Output, Signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IDetailInvoice, IManualInvoice } from '../../../interfaces';
+import { IDetailInvoice, IManualInvoice, IInvoiceUser } from '../../../interfaces';
 import { CardDetailComponent } from '../../card-detail/card-detail.component';
+import { ModalComponent } from '../../modal/modal.component';
 
 @Component({
   selector: "app-manual-invoices-form",
@@ -11,7 +12,8 @@ import { CardDetailComponent } from '../../card-detail/card-detail.component';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    CardDetailComponent
+    CardDetailComponent,
+    ModalComponent
   ],
 })
 export class ManualInvoicesFormComponent {
@@ -23,6 +25,10 @@ export class ManualInvoicesFormComponent {
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
   public type: string = 'ingreso';
+  
+  // Variables para el modal de confirmación
+  public showDeleteModal: boolean = false;
+  public indexToDelete: number = -1;
 
   constructor() {
     effect(() => {
@@ -69,32 +75,26 @@ export class ManualInvoicesFormComponent {
   callSave() {
     const type = this.invoiceForm.controls["type"].value;
 
-    const person = {
+    const invoiceUser: IInvoiceUser = {
       identification: this.invoiceForm.controls["identification"].value,
       name: this.invoiceForm.controls["name"].value,
-      lastname: this.invoiceForm.controls["lastname"].value,
+      lastName: this.invoiceForm.controls["lastName"].value,
       email: this.invoiceForm.controls["email"].value,
     };
-
-    const userLocal = localStorage.getItem("auth_user");
-    const user = {
-      identification: userLocal ? JSON.parse(userLocal).identification : null,
-      name: userLocal ? JSON.parse(userLocal).name : null,
-      lastname: userLocal ? JSON.parse(userLocal).lastname : null,
-      email: userLocal ? JSON.parse(userLocal).email : null,
-    }
 
     let manualInvoice: IManualInvoice = {
       type,
       consecutive: this.invoiceForm.controls["consecutive"].value,
       key: this.invoiceForm.controls["key"].value,
       issueDate: this.invoiceForm.controls["issueDate"].value,
-      name: this.invoiceForm.controls["name"].value,
-      lastname: this.invoiceForm.controls["lastname"].value,
-      email: this.invoiceForm.controls["email"].value,
-      identification: this.invoiceForm.controls["identification"].value,
       details: this.details,
     };
+
+    if (type === 'ingreso') {
+      manualInvoice.receiver = invoiceUser;
+    } else {
+      manualInvoice.issuer = invoiceUser;
+    }
 
     if (this.invoiceForm.controls["id"].value) {
       manualInvoice.id = this.invoiceForm.controls["id"].value;
@@ -149,7 +149,7 @@ export class ManualInvoicesFormComponent {
 
       this.invoiceForm.controls['identification'].setValue(person?.identification ?? '');
       this.invoiceForm.controls['name'].setValue(person?.name ?? '');
-      this.invoiceForm.controls['lastname'].setValue(person?.lastname ?? '');
+      this.invoiceForm.controls['lastName'].setValue(person?.lastName ?? '');
       this.invoiceForm.controls['email'].setValue(person?.email ?? '');
 
       this.details = data.details || [];
@@ -184,5 +184,44 @@ export class ManualInvoicesFormComponent {
   changeType(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.type = selectElement.value;
+  }
+
+  
+  editDetailItem(index: number) {
+    const detail = this.details[index];
+    
+    
+    this.detailForm.patchValue({
+      cabys: detail.cabys,
+      quantity: detail.quantity,
+      unit: detail.unit,
+      unitPrice: detail.unitPrice,
+      discount: detail.discount,
+      tax: detail.tax,
+      category: detail.category,
+      description: detail.description
+    });
+
+    this.details.splice(index, 1);
+    
+    this.calculateTotal();
+  }
+
+  deleteDetailItem(index: number) {
+    this.indexToDelete = index;
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete() {
+    if (this.indexToDelete >= 0) {
+      this.details.splice(this.indexToDelete, 1);
+      this.indexToDelete = -1;
+    }
+    this.hideDeleteModal();
+  }
+
+  hideDeleteModal() {
+    this.showDeleteModal = false;
+    this.indexToDelete = -1;
   }
 }

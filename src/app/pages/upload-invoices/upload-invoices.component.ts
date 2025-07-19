@@ -41,7 +41,7 @@ export class UploadInvoicesComponent {
     key: ['', Validators.required],
     identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
-    lastname: ['', Validators.required],
+    lastName: ['', Validators.required],
     email: ['', Validators.required],
   });
 
@@ -84,18 +84,10 @@ export class UploadInvoicesComponent {
   }
 
   saveInvoice(item: IManualInvoice) {
-    const userId = this.authService.getCurrentUserId();
-    
-    if (!userId) {
-      console.error('No se pudo obtener el ID del usuario');
-      this.alertService.displayAlert('error', 'No se pudo obtener el ID del usuario. Por favor, inicia sesión nuevamente.', 'center', 'top', ['error-snackbar']);
-      return;
-    }
-
     console.log('Enviando factura al backend:', item);
-    console.log('Usuario ID:', userId);
-
-    this.invoicesService.saveWithUserId(item, userId).subscribe({
+    
+    // El backend ahora obtiene el usuario del token JWT automáticamente
+    this.invoicesService.saveInvoice(item).subscribe({
       next: (response) => {
         console.log('Factura guardada exitosamente:', response);
       },
