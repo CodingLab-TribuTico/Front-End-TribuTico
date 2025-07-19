@@ -19,7 +19,7 @@ export class ManualInvoicesFormComponent {
   @Input() invoiceForm!: FormGroup;
   @Input() detailForm!: FormGroup;
   @Input() responseScan!: any;
-  public details: IDetailInvoice[] = [];
+  @Input() details: IDetailInvoice[] = [];
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
   public type: string = 'ingreso';

@@ -7,8 +7,8 @@ import {
 } from "@angular/core";
 import { InvoiceService } from "../../services/invoice.service";
 import { ModalService } from "../../services/modal.service";
-import { FormBuilder, Validators } from "@angular/forms";
-import { IManualInvoice } from "../../interfaces";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { IDetailInvoice, IManualInvoice } from "../../interfaces";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { ModalComponent } from "../../components/modal/modal.component";
 import { LoaderComponent } from "../../components/loader/loader.component";
@@ -33,24 +33,53 @@ export class InvoiceComponent {
   public modalService: ModalService = inject(ModalService);
   @ViewChild("addInvoiceModal") public addInvoiceModal: any;
   public title: string = "Facturas";
-  public fb: FormBuilder = inject(FormBuilder);
   @Output() callCustomSearchMethod = new EventEmitter();
+  public details: IDetailInvoice[] = [];
+  public fb: FormBuilder = inject(FormBuilder);
 
   invoiceForm = this.fb.group({
     id: [""],
+    name: ["", Validators.required],
+    lastname: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]],
+    identification: ["", Validators.required],
+    type: ["", Validators.required],
     consecutive: ["", Validators.required],
+    key: ["", Validators.required],
     issueDate: ["", Validators.required],
-    receiver: this.fb.group({
-      identification: ["", Validators.required],
-      name: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-    }),
-    user: this.fb.group({
-      birthDate: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-    }),
+    details: [[]]
   });
 
+  detailForm = this.fb.group({
+    cabys: ["", Validators.required],
+    quantity: ["", Validators.required],
+    unit: ["", Validators.required],
+    unitPrice: ["", Validators.required],
+    discount: ["", Validators.required],
+    tax: ["", Validators.required],
+    taxAmount: ["", Validators.required],
+    category: ["", Validators.required],
+    total: ["", Validators.required],
+    description: ["", Validators.required],
+  });
+
+  callEdition(invoice: IManualInvoice) {
+    this.invoiceForm.patchValue({
+      id: invoice.id?.toString() || '',
+      name: invoice.name,
+      lastname: invoice.lastname,
+      email: invoice.email,
+      identification: invoice.identification,
+      type: invoice.type,
+      consecutive: invoice.consecutive?.toString() || '',
+      key: invoice.key,
+      issueDate: invoice.issueDate
+    });
+    this.details = invoice.details ?? [];
+
+    this.modalService.displayModal(this.addInvoiceModal);
+  }
+  
   constructor() {
     this.invoiceService.search.page = 1;
     this.invoiceService.search.size = 10;
@@ -60,25 +89,6 @@ export class InvoiceComponent {
   saveInvoice(invoice: IManualInvoice) {
     this.invoiceService.save(invoice);
     this.modalService.closeAll();
-  }
-
-  callEdition(invoice: IManualInvoice) {
-    console.log("Editando factura:", invoice);
-    this.invoiceForm.patchValue({
-      id: invoice.id?.toString(),
-      consecutive: invoice.consecutive,
-      issueDate: invoice.issueDate,
-      receiver: {
-        identification: invoice.receiver?.identification,
-        name: invoice.receiver?.name,
-        email: invoice.receiver?.email,
-      },
-      user: {
-        birthDate: invoice.user?.birthDate,
-        email: invoice.user?.email,
-      },
-    });
-    this.modalService.displayModal(this.addInvoiceModal);
   }
 
   updateInvoice(invoice: IManualInvoice) {
@@ -100,3 +110,5 @@ export class InvoiceComponent {
     this.modalService.closeAll();
   }
 }
+
+ 

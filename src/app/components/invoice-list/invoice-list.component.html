@@ -17,7 +17,7 @@
                 <td class="p-3">{{item.id || 'N/A'}}</td>
                 <td class="p-3">{{item.consecutive || 'N/A'}}</td>
                 <td class="p-3">{{item.issueDate | date: 'dd/MM/yyyy'}}</td>
-                <td class="p-3">{{item.receiver?.name || 'N/A'}}</td>
+                <td class="p-3">{{item.name || 'N/A'}}</td>
                 <td class="p-3">{{calculateTotal(item.details) | currency}}</td>
                 <td class="p-3">{{item.user?.email}}</td>
                 <td class="p-3 space-x-1">
