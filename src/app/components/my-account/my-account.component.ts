@@ -11,20 +11,27 @@ import { AuthService } from "../../services/auth.service";
   templateUrl: "./my-account.component.html",
 })
 export class MyAccountComponent implements OnInit {
+  private service = inject(AuthService);
   public userName: string = '';
   public lastname: string = '';
-  private service = inject(AuthService);
 
-  constructor(public router: Router) {
-    let user = localStorage.getItem('auth_user');
-    if (user) {
-      this.userName = JSON.parse(user)?.name;
-      this.lastname = JSON.parse(user)?.lastname;
+  constructor(public router: Router) {}
 
-    }
+  ngOnInit() {
+    this.loadUser(); 
+    window.addEventListener('user-updated', () => {
+    this.loadUser();
+    });
   }
 
-  ngOnInit() { }
+  loadUser() {
+    const user = localStorage.getItem('auth_user');
+    if (user) {
+      const parse = JSON.parse(user);
+      this.userName = parse.name;
+      this.lastname = parse.lastname;
+    }
+  }
 
   logout() {
     this.service.logout();
