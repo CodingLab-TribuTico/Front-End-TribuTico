@@ -86,12 +86,12 @@
 
   <div class="flex gap-4 flex-wrap">
     <div class="flex flex-col gap-2 flex-1">
-      <label class="text-bisque font-bold" for="lastname">Apellido<span class="text-burnt-umber">*</span></label>
-      <input id="lastname" formControlName="lastname" type="text"
+      <label class="text-bisque font-bold" for="lastName">Apellido<span class="text-burnt-umber">*</span></label>
+      <input id="lastName" formControlName="lastName" type="text"
         class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
         placeholder="Apellido" />
-      @if (invoiceForm.controls['lastname'].invalid && (invoiceForm.controls['lastname'].dirty ||
-      invoiceForm.controls['lastname'].touched)) {
+      @if (invoiceForm.controls['lastName'].invalid && (invoiceForm.controls['lastName'].dirty ||
+      invoiceForm.controls['lastName'].touched)) {
       <div class="text-burnt-umber text-sm">El apellido es obligatorio.</div>
       }
     </div>
@@ -280,7 +280,6 @@
 
 </form>
 
-<!-- Modal de confirmación para eliminar detalle -->
 @if (showDeleteModal) {
 <app-modal 
   [title]="'Confirmar eliminación'" 
