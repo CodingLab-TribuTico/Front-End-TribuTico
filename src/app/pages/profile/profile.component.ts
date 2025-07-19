@@ -28,7 +28,7 @@ export class ProfileComponent {
     id: [''],
     name: ['', Validators.required], 
     lastname: ['', Validators.required],
-    lastname2: ['', Validators.required],
+    lastname2: [''],
     email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
     identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]], 
     birthDate: ['', Validators.required] 
