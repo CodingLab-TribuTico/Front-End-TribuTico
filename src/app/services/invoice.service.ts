@@ -64,11 +64,11 @@ export class InvoiceService extends BaseService<IManualInvoice> {
     });
   }
 
-  saveWithUserId(item: IManualInvoice, userId: number): Observable<IResponse<IManualInvoice>> {
-    return this.http.post<IResponse<IManualInvoice>>(`${this.source}/${userId}`, item).pipe(
+  saveInvoice(item: IManualInvoice): Observable<IResponse<IManualInvoice>> {
+    return this.http.post<IResponse<IManualInvoice>>(`${this.source}`, item).pipe(
       tap((response) => {
         this.alertService.displayAlert('success', response.message || 'Factura guardada correctamente!', 'center', 'top', ['success-snackbar']);
-        this.getAll(); // Refrescar la lista
+        this.getAll(); 
       }),
       catchError((error) => {
         this.alertService.displayAlert('error', 'Error al guardar la factura', 'center', 'top', ['error-snackbar']);
@@ -76,6 +76,10 @@ export class InvoiceService extends BaseService<IManualInvoice> {
         throw error;
       })
     );
+  }
+
+  saveWithUserId(item: IManualInvoice, userId: number): Observable<IResponse<IManualInvoice>> {
+    return this.saveInvoice(item); 
   }
 
   update(item: IManualInvoice) {

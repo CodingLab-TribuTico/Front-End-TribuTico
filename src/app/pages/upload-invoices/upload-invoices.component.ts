@@ -40,7 +40,7 @@ export class UploadInvoicesComponent {
     key: ['', Validators.required],
     identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
-    lastname: ['', Validators.required],
+    lastName: ['', Validators.required],
     email: ['', Validators.required],
   });
 
@@ -92,9 +92,9 @@ export class UploadInvoicesComponent {
     }
 
     console.log('Enviando factura al backend:', item);
-    console.log('Usuario ID:', userId);
 
-    this.invoicesService.saveWithUserId(item, userId).subscribe({
+    // El backend ahora obtiene el usuario del token JWT automáticamente
+    this.invoicesService.saveInvoice(item).subscribe({
       next: (response) => {
         console.log('Factura guardada exitosamente:', response);
       },

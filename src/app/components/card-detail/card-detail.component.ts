@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-card-detail',
@@ -17,4 +17,16 @@ export class CardDetailComponent {
   @Input() category: string = '';
   @Input() total: Number = 0;
   @Input() description: string = '';
+  @Input() index: number = 0; // Para identificar qué item editar/eliminar
+
+  @Output() editDetail = new EventEmitter<number>();
+  @Output() deleteDetail = new EventEmitter<number>();
+
+  onEdit() {
+    this.editDetail.emit(this.index);
+  }
+
+  onDelete() {
+    this.deleteDetail.emit(this.index);
+  }
 }
