@@ -1,0 +1,136 @@
+<div class="p-4 bg-bisque rounded-md shadow-md max-w-6xl mx-auto">
+
+    @if (invoice(); as invoiceData) {
+    <h2 class="text-2xl font-bold text-crater-brown mb-4">Detalle de Factura</h2>
+
+    <div class="grid grid-cols-3 gap-5 mb-6">
+        <div>
+            <p class="font-semibold text-crater-brown">ID:</p>
+            <p>{{invoiceData?.id || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Consecutivo:</p>
+            <p>{{invoiceData?.consecutive || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Fecha:</p>
+            <p>{{invoiceData?.issueDate | date: 'dd/MM/yyyy'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Tipo:</p>
+            <p>{{invoiceData?.type || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Key:</p>
+            <p>{{invoiceData?.key || 'N/A'}}</p>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold text-crater-brown mb-4">Datos del Cliente</h2>
+    <div class="grid grid-cols-3 gap-5 mb-6">
+        <div>
+            <p class="font-semibold text-crater-brown">Nombre:</p>
+            <p>{{invoiceData?.receiver?.name || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Identificación:</p>
+            <p>{{invoiceData?.receiver?.identification || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Correo:</p>
+            <p>{{invoiceData?.receiver?.email || 'N/A'}}</p>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold text-crater-brown mb-4">Datos del Proveedor</h2>
+    <div class="grid grid-cols-3 gap-5 mb-6">
+        <div>
+            <p class="font-semibold text-crater-brown">Nombre:</p>
+            <p>{{invoiceData?.issuer?.name || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Identificación:</p>
+            <p>{{invoiceData?.issuer?.identification || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Correo:</p>
+            <p>{{invoiceData?.issuer?.email || 'N/A'}}</p>
+        </div>
+    </div>
+
+    <h3 class="text-xl font-bold text-crater-brown mb-2">Detalles de Productos/Servicios</h3>
+    <table class="w-full border-collapse mb-6">
+        <thead>
+            <tr class="bg-crater-brown text-bisque">
+                <th class="p-2 text-left">Descripción</th>
+                <th class="p-2 text-left">Categoría</th>
+                <th class="p-2 text-left">Cabys</th>
+                <th class="p-2 text-right">Cantidad</th>
+                <th class="p-2 text-right">Precio Unitario</th>
+                <th class="p-2 text-right">Impuesto %</th>
+                <th class="p-2 text-right">Monto Impuesto</th>
+                <th class="p-2 text-right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of invoiceData?.details; track $index) {
+            <tr class="border-b border-crater-brown/20">
+                <td class="p-2">{{item.description || 'N/A'}}</td>
+                <td class="p-2">{{item.category || 'N/A'}}</td>
+                <td class="p-2">{{item.cabys || 'N/A'}}</td>
+                <td class="p-2 text-right">{{item.quantity || 0}}</td>
+                <td class="p-2 text-right">{{item.unitPrice | currency: 'CRC ': 'symbol':'1.2-2'}}</td>
+                <td class="p-2 text-right">{{item.tax || 0 | number}}%</td>
+                <td class="p-2 text-right">{{item.taxAmount | currency: 'CRC ': 'symbol':'1.2-2'}}</td>
+                <td class="p-2 text-right">{{item.total | currency: 'CRC ': 'symbol':'1.2-2'}}</td>
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="font-bold border-t-2 border-crater-brown">
+                <td colspan="7" class="p-2 text-right">Subtotal:</td>
+                <td class="p-2 text-right">{{calculateSubtotal(invoiceData?.details ?? []) | currency: 'CRC ':
+                    'symbol':'1.2-2'}}</td>
+                <td></td>
+            </tr>
+            <tr class="font-bold">
+                <td colspan="7" class="p-2 text-right">Total Impuestos:</td>
+                <td class="p-2 text-right">{{calculateTotalTaxes(invoiceData?.details ?? []) | currency: 'CRC ':
+                    'symbol':'1.2-2'}}</td>
+                <td></td>
+            </tr>
+            <tr class="font-bold border-t-2 border-crater-brown">
+                <td colspan="7" class="p-2 text-right">Total General:</td>
+                <td class="p-2 text-right">{{calculateTotal(invoiceData?.details ?? []) | currency: 'CRC ':
+                    'symbol':'1.2-2'}}
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="flex justify-between">
+        <div class="flex justify-end">
+            <button (click)="openDeleteModal()" class="bg-crater-brown px-2 p-0.5 rounded-md flex items-center">
+                <span class="material-symbols-rounded text-lg text-flamenco">delete</span>
+                <span class="text-bisque text-sm font-medium ml-2">Eliminar</span>
+            </button>
+        </div>
+
+        <div class="flex justify-start">
+            <button (click)="onBack()" class="bg-flamenco px-2 p-0.5 rounded-md flex items-center">
+                <span class="material-symbols-rounded text-lg text-bisque">
+                    arrow_left_alt
+                </span>
+                <span class="text-bisque text-sm font-medium ml-2">Volver</span>
+            </button>
+        </div>
+    </div>
+    } @else {
+    <p>No se ha seleccionado ninguna factura</p>
+    }
+
+</div>
+
+<ng-template #confirmationModal>
+
+</ng-template>
