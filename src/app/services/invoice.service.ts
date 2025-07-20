@@ -12,8 +12,12 @@ import { tap, catchError } from "rxjs/operators";
 export class InvoiceService extends BaseService<IManualInvoice> {
   protected override source: string = 'invoice';
   private invoicesList = signal<IManualInvoice[]>([]);
+  private invoicesByUserIdList = signal<IManualInvoice[]>([]);
   get invoices$() {
     return this.invoicesList;
+  }
+  get invoicesByUserId$() {
+    return this.invoicesByUserIdList;
   }
   public search: ISearch = {
     page: 1,
@@ -29,6 +33,17 @@ export class InvoiceService extends BaseService<IManualInvoice> {
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
         this.invoicesList.set(response.data);
+      },
+      error: (err: any) => {
+        console.error('error', err);
+      }
+    });
+  }
+
+  getByUserId(userId: number) {
+    this.findAllWithParams({ userId: userId }).subscribe({
+      next: (response: IResponse<IManualInvoice[]>) => {
+        this.invoicesByUserIdList.set(response.data);
       },
       error: (err: any) => {
         console.error('error', err);

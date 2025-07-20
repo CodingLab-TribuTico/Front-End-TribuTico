@@ -13,6 +13,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 
 export const routes: Routes = [
   {
@@ -48,6 +49,17 @@ export const routes: Routes = [
         path: 'app',
         redirectTo: 'users',
         pathMatch: 'full',
+      },
+      {
+        path: 'create-simulation',
+        component: CreateSimulationComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Crear Simulación',
+          showInSidebar: true
+        }
       },
       {
         path: 'upload-invoices',
