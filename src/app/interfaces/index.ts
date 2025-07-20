@@ -76,14 +76,15 @@ export interface IDetailInvoice {
   category?: string;
   total?: number;
   description?: string;
+  
 }
 
-export interface IPerson {
-  identification?: string;
+export interface IInvoiceUser {
+  id?: number;
   name?: string;
-  lastname?: string;
-  phone?: string;
+  lastName?: string;
   email?: string;
+  identification?: string;
 }
 
 export interface IManualInvoice {
@@ -92,8 +93,8 @@ export interface IManualInvoice {
   consecutive?: string;
   key?: string;
   issueDate?: string;
-  issuer?: IPerson;
-  receiver?: IPerson;
   details?: IDetailInvoice[];
+  receiver?: IInvoiceUser;  // Usuario que recibe la factura
+  issuer?: IInvoiceUser;    // Usuario que emite la factura
   users?: IUser;
 }

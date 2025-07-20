@@ -7,6 +7,8 @@ import { ModalComponent } from "../../components/modal/modal.component";
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice } from '../../interfaces';
 import { InvoiceService } from '../../services/invoice.service';
+import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../services/alert.service';
 import { ManualInvoicesFormComponent } from "../../components/manual-invoices/manual-invoices-form/manual-invoices-form.component";
 import { InputFileFormComponent } from "../../components/input-file-form/input-file-form.component";
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -19,6 +21,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class UploadInvoicesComponent {
   public invoicesService: InvoiceService = inject(InvoiceService);
+  public authService: AuthService = inject(AuthService);
+  public alertService: AlertService = inject(AlertService);
   public hideImportInvoicesVar: boolean = true;
   public importInvoicesText: string = "Ocultar importar";
   public importInvoicesIcon: string = "receipt_long_off";
@@ -37,7 +41,7 @@ export class UploadInvoicesComponent {
     key: ['', Validators.required],
     identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
-    lastname: ['', Validators.required],
+    lastName: ['', Validators.required],
     email: ['', Validators.required],
   });
 
@@ -80,8 +84,17 @@ export class UploadInvoicesComponent {
   }
 
   saveInvoice(item: IManualInvoice) {
-    console.log(item);
-    //this.invoicesService.save(item);
+    console.log('Enviando factura al backend:', item);
+    
+    // El backend ahora obtiene el usuario del token JWT automáticamente
+    this.invoicesService.saveInvoice(item).subscribe({
+      next: (response) => {
+        console.log('Factura guardada exitosamente:', response);
+      },
+      error: (error) => {
+        console.error('Error al guardar la factura:', error);
+      }
+    });
   }
 
   changeType(type: string) {
