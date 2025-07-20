@@ -11,7 +11,6 @@ import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { ManualInvoicesFormComponent } from "../../components/manual-invoices/manual-invoices-form/manual-invoices-form.component";
 import { InputFileFormComponent } from "../../components/input-file-form/input-file-form.component";
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-upload-invoices',
@@ -84,8 +83,16 @@ export class UploadInvoicesComponent {
   }
 
   saveInvoice(item: IManualInvoice) {
+    const userId = this.authService.getCurrentUserId();
+
+    if (!userId) {
+      console.error('No se pudo obtener el ID del usuario');
+      this.alertService.displayAlert('error', 'No se pudo obtener el ID del usuario. Por favor, inicia sesión nuevamente.', 'center', 'top', ['error-snackbar']);
+      return;
+    }
+
     console.log('Enviando factura al backend:', item);
-    
+
     // El backend ahora obtiene el usuario del token JWT automáticamente
     this.invoicesService.saveInvoice(item).subscribe({
       next: (response) => {
