@@ -94,7 +94,7 @@ export interface IManualInvoice {
   key?: string;
   issueDate?: string;
   details?: IDetailInvoice[];
-  receiver?: IInvoiceUser;  // Usuario que recibe la factura
-  issuer?: IInvoiceUser;    // Usuario que emite la factura
+  receiver?: IInvoiceUser;  
+  issuer?: IInvoiceUser;    
   users?: IUser;
 }
