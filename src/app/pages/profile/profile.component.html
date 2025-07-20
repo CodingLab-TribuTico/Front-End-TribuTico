@@ -6,135 +6,169 @@
       <div class="grid grid-cols-2 gap-10 gap-y-6">
         <div class="flex flex-col">
           <label class="text-base font-bold text-bisque" for="name">Nombre</label>
-          <input *ngIf="isEditing"
+          @if (isEditing) {
+          <input 
             formControlName="name"
             type="text"
             placeholder="Nombre"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" />
-          <div *ngIf="isEditing" class="text-burnt-umber min-h-[1rem]">
-            <span *ngIf="isEditing && userForm.get('name')?.invalid && userForm.get('name')?.touched">
-              Este campo es obligatorio
-            </span>
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
+            />
+          <div class="min-h-[1rem]">
+            @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
+              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            }
           </div>
-          <p *ngIf="!isEditing"
-             class="text-base font-bold text-bisque border-b border-zorba pb-2">
-            {{ currentUser.name ?? "No disponible" }}
-          </p>
+          }
+          @if (!isEditing) {
+            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
+              {{ profileService.user$().name ?? "No disponible" }}
+            </p>
+          }
         </div>
 
         <div class="flex flex-col">
           <label class="text-base font-bold text-bisque" for="name">Primer apellido</label>
-          <input *ngIf="isEditing"
+          @if (isEditing) {
+          <input 
             formControlName="lastname"
             type="text"
             placeholder="Primer apellido"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" />
-          <div *ngIf="isEditing" class="text-burnt-umber min-h-[1rem]">
-            <span *ngIf="isEditing && userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched">
-              Este campo es obligatorio
-            </span>
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
+            />
+          <div class="min-h-[1rem]">
+            @if (userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched) {
+              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            }
           </div>
-          <p *ngIf="!isEditing"
-             class="text-base font-bold text-bisque border-b border-zorba pb-2">
-            {{ currentUser.lastname ?? "No disponible" }}
-          </p>
+          }
+          @if (!isEditing) {
+            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
+              {{ profileService.user$().lastname ?? "No disponible" }}
+            </p>
+          }
         </div>
 
         <div class="flex flex-col">
           <label class="text-base font-bold text-bisque" for="name">Segundo apellido</label>
-          <input *ngIf="isEditing"
+          @if (isEditing) {
+          <input 
             formControlName="lastname2"
             type="text"
             placeholder="Segundo apellido"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" />
-          <div *ngIf="isEditing" class="text-burnt-umber min-h-[1rem]">
-            <span *ngIf="isEditing && userForm.get('lastname2')?.invalid && userForm.get('lastname2')?.touched">
-              Este campo es obligatorio
-            </span>
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
+            />
+          <div class="min-h-[1rem]">
+            @if (userForm.get('lastname2')?.invalid && userForm.get('lastname2')?.touched) {
+              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            }
           </div>
-          <p *ngIf="!isEditing"
-             class="text-base font-bold text-bisque border-b border-zorba pb-2">
-            {{ currentUser.lastname2 ?? "No disponible" }}
-          </p>
+          }
+          @if (!isEditing) {
+            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
+              {{ profileService.user$().lastname2 ?? "No disponible" }}
+            </p>
+          }
         </div>
 
         <div class="flex flex-col">
           <label class="text-base font-bold text-bisque" for="name">Cédula</label>
-          <input *ngIf="isEditing"
+          @if (isEditing) {
+          <input 
             formControlName="identification"
             type="text"
             placeholder="Cédula"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" />
-          <div *ngIf="isEditing" class="text-burnt-umber min-h-[1rem]">
-            <span *ngIf="isEditing && userForm.get('identification')?.invalid && userForm.get('identification')?.touched">
-              Este campo es obligatorio
-            </span>
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
+            />
+          <div class="min-h-[1rem]">
+            @if (userForm.get('identification')?.errors?.['required'] && userForm.get('identification')?.touched) {
+              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            } 
+            @if (userForm.get('identification')?.errors?.['minlength'] || userForm.get('identification')?.errors?.['maxlength']) {
+              <p class="text-burnt-umber text-sm">Cédula inválida</p>
+            }
           </div>
-          <p *ngIf="!isEditing"
-             class="text-base font-bold text-bisque border-b border-zorba pb-2">
-            {{ currentUser.identification ?? "No disponible" }}
-          </p>
+          }
+          @if (!isEditing) {
+            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
+              {{ profileService.user$().identification ?? "No disponible" }}
+            </p>
+          }
         </div>
 
         <div class="flex flex-col">
           <label class="text-base font-bold text-bisque" for="name">Fecha de nacimiento</label>
-          <input *ngIf="isEditing"
+          @if (isEditing) {
+          <input
             formControlName="birthDate"
             type="date"
             placeholder="Fecha de nacimiento"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" />
-          <div *ngIf="isEditing" class="text-burnt-umber min-h-[1rem]">
-            <span *ngIf="isEditing && userForm.get('birthDate')?.invalid && userForm.get('birthDate')?.touched">
-              Este campo es obligatorio
-            </span>
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
+            />
+          <div class="min-h-[1rem]">
+            @if (userForm.get('birthDate')?.invalid && userForm.get('birthDate')?.touched) {
+              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            }
           </div>
-          <p *ngIf="!isEditing"
-             class="text-base font-bold text-bisque border-b border-zorba pb-2">
-            {{ currentUser.birthDate ?? "No disponible" }}
-          </p>
+          }
+          @if (!isEditing) {
+            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
+              {{ profileService.user$().birthDate ?? "No disponible" }}
+            </p>
+          }
         </div>
 
         <div class="flex flex-col">
           <label class="text-base font-bold text-bisque" for="name">Correo electrónico</label>
-          <input *ngIf="isEditing"
+          @if (isEditing) {
+          <input 
             formControlName="email"
             type="text"
             placeholder="Correo electrónico"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" />
-          <div *ngIf="isEditing" class="text-burnt-umber min-h-[1rem]">
-            <span *ngIf="isEditing && userForm.get('email')?.invalid && userForm.get('email')?.touched">
-              Este campo es obligatorio
-            </span>
+            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
+            />
+          <div class="min-h-[1rem]">
+            @if (userForm.get('email')?.errors?.['required'] && userForm.get('email')?.touched) {
+              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            }
+            @if (userForm.get('email')?.errors?.['pattern']) {
+              <p class="text-burnt-umber text-sm">Correo electrónico inválido</p>
+            }
           </div>
-          <p *ngIf="!isEditing"
-             class="text-base font-bold text-bisque border-b border-zorba pb-2">
-            {{ currentUser.email ?? "No disponible" }}
-          </p>
+          }
+          @if (!isEditing) {
+            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
+              {{ profileService.user$().email ?? "No disponible" }}
+            </p>
+          }
         </div>
       </div>
 
       <div class="flex justify-center items-center gap-4 mt-10">
-        <button *ngIf="!isEditing"
+        <button 
+          *ngIf="!isEditing"
           type="button"
-          (click)="editForm()"
+          (click)="updateUser(profileService.user$())"
           class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
           Editar
         </button>
 
-        <div *ngIf="!isEditing"
+        <div 
+          *ngIf="!isEditing"
           class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
           <a routerLink="/app/reset-password">Cambiar contraseña</a>
         </div>
 
-        <button *ngIf="isEditing"
+        <button 
+          *ngIf="isEditing"
           type="button"
-          (click)="saveChanges()"
+          (click)="saveChanges(userForm.value)"
           [disabled]="userForm.invalid || !userForm.dirty"
           class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed">
           Guardar
         </button>
 
-        <button *ngIf="isEditing"
+        <button 
+          *ngIf="isEditing"
           type="button"
           (click)="cancelChanges()"
           class="bg-golden-glow text-crater-brown py-2 px-4 rounded-md font-bold hover:bg-bisque transition-colors">
@@ -144,3 +178,4 @@
     </div>
   </div>
 </form>
+
