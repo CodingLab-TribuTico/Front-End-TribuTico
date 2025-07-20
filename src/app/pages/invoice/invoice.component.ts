@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  Input,
   Output,
   ViewChild,
 } from "@angular/core";
@@ -36,18 +37,36 @@ export class InvoiceComponent {
   @Output() callCustomSearchMethod = new EventEmitter();
   public details: IDetailInvoice[] = [];
   public fb: FormBuilder = inject(FormBuilder);
+  public isEditing: boolean = false;
+
 
   invoiceForm = this.fb.group({
     id: [""],
-    name: ["", Validators.required],
-    lastname: ["", Validators.required],
-    email: ["", [Validators.required, Validators.email]],
-    identification: ["", Validators.required],
     type: ["", Validators.required],
     consecutive: ["", Validators.required],
-    key: ["", Validators.required],
     issueDate: ["", Validators.required],
-    details: [[]]
+    key: ["", Validators.required],
+    name: ["", Validators.required],
+    lastName: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]],
+    identification: ["", Validators.required]
+
+    /*
+    receiver: this.fb.group({
+      id: [""],
+      name: ["", Validators.required],
+      lastname: ["", Validators.required],
+      email: ["", [Validators.required, Validators.email]],
+      identification: ["", Validators.required],
+    }),
+    issuer: this.fb.group({
+      id: [""],
+      name: ["", Validators.required],
+      lastname: ["", Validators.required],
+      email: ["", [Validators.required, Validators.email]],
+      identification: ["", Validators.required],
+    }),
+    */
   });
 
   detailForm = this.fb.group({
@@ -64,21 +83,38 @@ export class InvoiceComponent {
   });
 
   callEdition(invoice: IManualInvoice) {
-    this.invoiceForm.patchValue({
-      id: invoice.id?.toString() || '',
-      name: invoice.name,
-      lastname: invoice.lastname,
-      email: invoice.email,
-      identification: invoice.identification,
-      type: invoice.type,
-      consecutive: invoice.consecutive?.toString() || '',
-      key: invoice.key,
-      issueDate: invoice.issueDate
-    });
-    this.details = invoice.details ?? [];
+  this.invoiceForm.patchValue({
+    id: JSON.stringify(invoice.id),
+    type: invoice.type,
+    consecutive: invoice.consecutive?.toString() || '',
+    key: invoice.key,
+    issueDate: invoice.issueDate,
+    identification: invoice.receiver?.identification,
+    name: invoice.receiver?.name,
+    lastName: invoice.receiver?.lastName,
+    email: invoice.receiver?.email
+    /*
+    receiver: {
+      identification: invoice.receiver?.identification
+      name: invoice.receiver?.name,
+      lastname: invoice.receiver?.lastName,
+      email: invoice.receiver?.email,
+    }
+      /*
+    issuer: {
+      name: invoice.issuer?.name,
+      lastname: invoice.issuer?.lastName,
+      email: invoice.issuer?.email,
+      identification: invoice.issuer?.identification
+    }
+      */
+  });
 
-    this.modalService.displayModal(this.addInvoiceModal);
-  }
+  this.details = invoice.details ?? [];
+   this.isEditing = true;
+  this.modalService.displayModal(this.addInvoiceModal);
+}
+
   
   constructor() {
     this.invoiceService.search.page = 1;
@@ -94,6 +130,7 @@ export class InvoiceComponent {
   updateInvoice(invoice: IManualInvoice) {
     this.invoiceService.update(invoice);
     this.modalService.closeAll();
+    this.invoiceForm.reset();
   }
 
   search(event: Event) {

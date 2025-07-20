@@ -97,3 +97,4 @@ export interface IManualInvoice {
   issuer?: IInvoiceUser;    // Usuario que emite la factura
   users?: IUser;
 }
+

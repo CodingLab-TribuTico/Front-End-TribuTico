@@ -24,8 +24,16 @@ export class ManualInvoicesFormComponent {
   @Input() details: IDetailInvoice[] = [];
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
+  @Output() callUpdateMethod = new EventEmitter<IManualInvoice>();
+  @Output() callCancelMethod = new EventEmitter<void>();
   public type: string = 'ingreso';
-  
+  @Input() isEditing: boolean = false;
+
+
+  //variables para la edicion
+  public isEditingDetail: boolean = false;
+  public editingIndex: number = -1;
+
   // Variables para el modal de confirmación
   public showDeleteModal: boolean = false;
   public indexToDelete: number = -1;
@@ -101,6 +109,7 @@ export class ManualInvoicesFormComponent {
     }
 
     this.callSavedMethod.emit(manualInvoice);
+    
     this.details = [];
     this.detailForm.reset({
       category: '',
@@ -126,7 +135,16 @@ export class ManualInvoicesFormComponent {
       description: this.detailForm.controls["description"].value,
     };
 
+     if (this.isEditingDetail) {
+    // Actualizar el detalle existente
+    this.details[this.editingIndex] = detail;
+    this.isEditingDetail = false;
+    this.editingIndex = -1;
+  } else {
+    // Agregar nuevo detalle
     this.details.push(detail);
+  }
+   // this.details.push(detail);
     this.detailForm.reset({
       category: '',
       tax: '',
@@ -185,7 +203,6 @@ export class ManualInvoicesFormComponent {
     const selectElement = event.target as HTMLSelectElement;
     this.type = selectElement.value;
   }
-
   
   editDetailItem(index: number) {
     const detail = this.details[index];
@@ -205,6 +222,9 @@ export class ManualInvoicesFormComponent {
     this.details.splice(index, 1);
     
     this.calculateTotal();
+
+    this.isEditingDetail = true;
+    this.editingIndex = index;
   }
 
   deleteDetailItem(index: number) {
@@ -224,4 +244,35 @@ export class ManualInvoicesFormComponent {
     this.showDeleteModal = false;
     this.indexToDelete = -1;
   }
+
+  callUpdate() {
+  const type = this.invoiceForm.controls["type"].value;
+
+  const invoiceUser: IInvoiceUser = {
+    identification: this.invoiceForm.controls["identification"].value,
+    name: this.invoiceForm.controls["name"].value,
+    lastName: this.invoiceForm.controls["lastName"].value,
+    email: this.invoiceForm.controls["email"].value,
+  };
+
+  let manualInvoice: IManualInvoice = {
+    id: this.invoiceForm.controls["id"].value,
+    type,
+    consecutive: this.invoiceForm.controls["consecutive"].value,
+    key: this.invoiceForm.controls["key"].value,
+    issueDate: this.invoiceForm.controls["issueDate"].value,
+    details: this.details,
+  };
+
+  if (type === "ingreso") {
+    manualInvoice.receiver = invoiceUser;
+  } else {
+    manualInvoice.issuer = invoiceUser;
+  }
+
+  this.callUpdateMethod.emit(manualInvoice);
+  
+}
+
+  
 }

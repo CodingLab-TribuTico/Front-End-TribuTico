@@ -267,10 +267,20 @@
   </form>
 
   <div class="flex gap-4 justify-center">
-    <button (click)="callSave()" [disabled]="invoiceForm.invalid" type="button"
-      class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-flamenco disabled:text-bisque">
-      Registrar
+    <button 
+    *ngIf="!isEditing" 
+    class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-flamenco disabled:text-bisque"
+    (click)="callSave()" 
+    type="button">
+    Guardar
     </button>
+
+    <button *ngIf="isEditing"
+     class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-flamenco disabled:text-bisque"
+    (click)="callUpdate()" 
+    [disabled]="invoiceForm.invalid"
+    type="button">Actualizar</button>
+
     <button type="button"
       class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-golden-glow/80 transition-colors"
       (click)="callCancel()">

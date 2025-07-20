@@ -27,8 +27,15 @@
 <ng-template #addInvoiceModal>
     <app-modal [hideFooter]="true">
         <div>
-            <app-manual-invoices-form [invoiceForm]="invoiceForm" [detailForm]="detailForm" [details]="details" (callSaveMethod)="saveInvoice($event)"
-                (callUpdateMethod)="updateInvoice($event)" (callCancelMethod)="cancelUpdate()" />
+            <app-manual-invoices-form 
+            [invoiceForm]="invoiceForm" 
+            [detailForm]="detailForm" 
+            [details]="details" 
+            (callSaveMethod)="saveInvoice($event)"
+            (callUpdateMethod)="updateInvoice($event)" 
+            (callCancelMethod)="cancelUpdate()" 
+            [isEditing]="isEditing"
+            />
         </div>
     </app-modal>
 </ng-template>
