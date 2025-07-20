@@ -13,6 +13,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
+import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.component';
 
 export const routes: Routes = [
   {
@@ -112,6 +113,18 @@ export const routes: Routes = [
             IRoleType.user
           ],
           name: 'Restablecer Contraseña',
+          showInSidebar: false
+        }
+      },
+      {
+        path: 'invoice-detail/:id',
+        component: InvoiceDetailComponent,
+        data: {
+          authorities: [
+            IRoleType.superAdmin,
+            IRoleType.user
+          ],
+          name: 'Detalle de Factura',
           showInSidebar: false
         }
       }

@@ -11,11 +11,12 @@ import { MatIconModule } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { IDetailInvoice, IManualInvoice } from "../../interfaces";
 import { ModalService } from "../../services/modal.service";
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: "app-invoice-list",
   standalone: true,
-  imports: [CommonModule, MatIconModule, ModalComponent],
+  imports: [CommonModule, MatIconModule, ModalComponent, RouterModule],
   templateUrl: "./invoice-list.component.html",
   styleUrl: "./invoice-list.component.scss",
 })
@@ -26,6 +27,7 @@ export class InvoiceListComponent {
     new EventEmitter<IManualInvoice>();
   @Output() callDeleteAction: EventEmitter<IManualInvoice> =
     new EventEmitter<IManualInvoice>();
+  @Output() callViewAction: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @ViewChild("confirmationModal") public confirmationModal: any;
   public modalService: ModalService = inject(ModalService);
   public selectedInvoice: IManualInvoice | null = null;
@@ -37,6 +39,10 @@ export class InvoiceListComponent {
 
   hideModal() {
     this.modalService.closeAll();
+  }
+
+  viewInvoice(item: IManualInvoice) {
+    this.callViewAction.emit(item);
   }
 
   deleteInvoice(id: IManualInvoice["id"]) {

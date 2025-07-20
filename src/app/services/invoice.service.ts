@@ -7,10 +7,14 @@ import { AlertService } from "./alert.service";
   providedIn: "root",
 })
 export class InvoiceService extends BaseService<IManualInvoice> {
-  protected override source: string = "electronic-bill";
+  protected override source: string = "invoices";
   private invoicesList = signal<IManualInvoice[]>([]);
+  private currentInvoice = signal<IManualInvoice | null>(null);
   get invoices$() {
     return this.invoicesList;
+  }
+  get currentInvoice$() {
+    return this.currentInvoice;
   }
   public search: ISearch = {
     page: 1,
@@ -35,6 +39,18 @@ export class InvoiceService extends BaseService<IManualInvoice> {
           (_, i) => i + 1
         );
         this.invoicesList.set(response.data);
+      },
+      error: (err: any) => {
+        console.error("error", err);
+      },
+    });
+  }
+
+  getById(id: number) {
+    this.find(id).subscribe({
+      next: (response: IResponse<IManualInvoice>) => {
+        console.log("response currentInvoice", response);
+        this.currentInvoice.set(response.data);
       },
       error: (err: any) => {
         console.error("error", err);
@@ -116,4 +132,9 @@ export class InvoiceService extends BaseService<IManualInvoice> {
       },
     });
   }
+
+  clearCurrentInvoice() {
+    this.currentInvoice.set(null);
+  }
+
 }
