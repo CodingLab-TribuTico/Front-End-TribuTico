@@ -54,32 +54,14 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   save(item: IManualInvoice) {
     this.add(item).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.alertService.displayAlert('success', response.message || 'Factura guardada correctamente!', 'center', 'top', ['success-snackbar']);
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred adding the team', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Error al guardar la factura', 'center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
-  }
-
-  saveInvoice(item: IManualInvoice): Observable<IResponse<IManualInvoice>> {
-    return this.http.post<IResponse<IManualInvoice>>(`${this.source}`, item).pipe(
-      tap((response) => {
-        this.alertService.displayAlert('success', response.message || 'Factura guardada correctamente!', 'center', 'top', ['success-snackbar']);
-        this.getAll(); 
-      }),
-      catchError((error) => {
-        this.alertService.displayAlert('error', 'Error al guardar la factura', 'center', 'top', ['error-snackbar']);
-        console.error('Error al guardar la factura:', error);
-        throw error;
-      })
-    );
-  }
-
-  saveWithUserId(item: IManualInvoice, userId: number): Observable<IResponse<IManualInvoice>> {
-    return this.saveInvoice(item); 
   }
 
   update(item: IManualInvoice) {

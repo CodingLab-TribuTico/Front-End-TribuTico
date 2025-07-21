@@ -91,17 +91,7 @@ export class UploadInvoicesComponent {
       return;
     }
 
-    console.log('Enviando factura al backend:', item);
-
-    // El backend ahora obtiene el usuario del token JWT automáticamente
-    this.invoicesService.saveInvoice(item).subscribe({
-      next: (response) => {
-        console.log('Factura guardada exitosamente:', response);
-      },
-      error: (error) => {
-        console.error('Error al guardar la factura:', error);
-      }
-    });
+    this.invoicesService.save(item);
   }
 
   changeType(type: string) {

@@ -5,177 +5,142 @@
 
       <div class="grid grid-cols-2 gap-10 gap-y-6">
         <div class="flex flex-col">
-          <label class="text-base font-bold text-bisque" for="name">Nombre</label>
+          <label class="mb-2 text-bisque font-bold" for="name">Nombre<span class="text-burnt-umber">*</span></label>
           @if (isEditing) {
-          <input 
-            formControlName="name"
-            type="text"
-            placeholder="Nombre"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
-            />
+          <input formControlName="name" type="text" placeholder="Nombre"
+            class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:outline-none focus:border-golden-glow" />
           <div class="min-h-[1rem]">
             @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
-              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            <p class="text-sm text-burnt-umber">Este campo es obligatorio</p>
             }
           </div>
           }
           @if (!isEditing) {
-            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
-              {{ profileService.user$().name ?? "No disponible" }}
-            </p>
+          <p class="text-bisque font-bold border-b border-zorba pb-2">
+            {{ profileService.user$().name?.trim() || "No disponible" }}
+          </p>
           }
         </div>
 
         <div class="flex flex-col">
-          <label class="text-base font-bold text-bisque" for="name">Primer apellido</label>
+          <label class="mb-2 text-bisque font-bold" for="lastname">Primer apellido<span
+              class="text-burnt-umber">*</span></label>
           @if (isEditing) {
-          <input 
-            formControlName="lastname"
-            type="text"
-            placeholder="Primer apellido"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
-            />
+          <input formControlName="lastname" type="text" placeholder="Primer apellido"
+            class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:outline-none focus:border-golden-glow" />
           <div class="min-h-[1rem]">
             @if (userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched) {
-              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            <p class="text-sm text-burnt-umber">Este campo es obligatorio</p>
             }
           </div>
           }
           @if (!isEditing) {
-            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
-              {{ profileService.user$().lastname ?? "No disponible" }}
-            </p>
+          <p class="text-bisque font-bold border-b border-zorba pb-2">
+            {{ profileService.user$().lastname?.trim() || "No disponible" }}
+          </p>
           }
         </div>
 
         <div class="flex flex-col">
-          <label class="text-base font-bold text-bisque" for="name">Segundo apellido</label>
+          <label class="mb-2 text-bisque font-bold" for="lastname2">Segundo apellido</label>
           @if (isEditing) {
-          <input 
-            formControlName="lastname2"
-            type="text"
-            placeholder="Segundo apellido"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
-            />
-          <div class="min-h-[1rem]">
-            @if (userForm.get('lastname2')?.invalid && userForm.get('lastname2')?.touched) {
-              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
-            }
-          </div>
+          <input formControlName="lastname2" type="text" placeholder="Segundo apellido"
+            class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:outline-none focus:border-golden-glow" />
           }
           @if (!isEditing) {
-            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
-              {{ profileService.user$().lastname2 ?? "No disponible" }}
-            </p>
+          <p class="text-bisque font-bold border-b border-zorba pb-2">
+            {{ profileService.user$().lastname2?.trim() || "No disponible" }}
+          </p>
           }
         </div>
 
         <div class="flex flex-col">
-          <label class="text-base font-bold text-bisque" for="name">Cédula</label>
+          <label class="mb-2 text-bisque font-bold" for="identification">Cédula<span
+              class="text-burnt-umber">*</span></label>
           @if (isEditing) {
-          <input 
-            formControlName="identification"
-            type="text"
-            placeholder="Cédula"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
-            />
+          <input formControlName="identification" type="text" placeholder="Cédula"
+            class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:outline-none focus:border-golden-glow" />
           <div class="min-h-[1rem]">
             @if (userForm.get('identification')?.errors?.['required'] && userForm.get('identification')?.touched) {
-              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
-            } 
-            @if (userForm.get('identification')?.errors?.['minlength'] || userForm.get('identification')?.errors?.['maxlength']) {
-              <p class="text-burnt-umber text-sm">Cédula inválida</p>
+            <p class="text-sm text-burnt-umber">Este campo es obligatorio</p>
+            }
+            @if (userForm.get('identification')?.errors?.['minlength'] ||
+            userForm.get('identification')?.errors?.['maxlength']) {
+            <p class="text-sm text-burnt-umber">Cédula inválida</p>
             }
           </div>
           }
           @if (!isEditing) {
-            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
-              {{ profileService.user$().identification ?? "No disponible" }}
-            </p>
+          <p class="text-bisque font-bold border-b border-zorba pb-2">
+            {{ profileService.user$().identification?.trim() || "No disponible" }}
+          </p>
           }
         </div>
 
         <div class="flex flex-col">
-          <label class="text-base font-bold text-bisque" for="name">Fecha de nacimiento</label>
+          <label class="mb-2 text-bisque font-bold" for="birthDate">Fecha de nacimiento<span
+              class="text-burnt-umber">*</span></label>
           @if (isEditing) {
-          <input
-            formControlName="birthDate"
-            type="date"
-            placeholder="Fecha de nacimiento"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
-            />
+          <input formControlName="birthDate" type="date" placeholder="Fecha de nacimiento"
+            class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:outline-none focus:border-golden-glow" />
           <div class="min-h-[1rem]">
             @if (userForm.get('birthDate')?.invalid && userForm.get('birthDate')?.touched) {
-              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            <p class="text-sm text-burnt-umber">Este campo es obligatorio</p>
             }
           </div>
           }
           @if (!isEditing) {
-            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
-              {{ profileService.user$().birthDate ?? "No disponible" }}
-            </p>
+          <p class="text-bisque font-bold border-b border-zorba pb-2">
+            {{ profileService.user$().birthDate?.trim() || "No disponible" }}
+          </p>
           }
         </div>
 
         <div class="flex flex-col">
-          <label class="text-base font-bold text-bisque" for="name">Correo electrónico</label>
+          <label class="mb-2 text-bisque font-bold" for="email">Correo electrónico<span
+              class="text-burnt-umber">*</span></label>
           @if (isEditing) {
-          <input 
-            formControlName="email"
-            type="text"
-            placeholder="Correo electrónico"
-            class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-1 focus:outline-none focus:border-golden-glow" 
-            />
+          <input formControlName="email" type="text" placeholder="Correo electrónico"
+            class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:outline-none focus:border-golden-glow" />
           <div class="min-h-[1rem]">
             @if (userForm.get('email')?.errors?.['required'] && userForm.get('email')?.touched) {
-              <p class="text-burnt-umber text-sm">Este campo es obligatorio</p>
+            <p class="text-sm text-burnt-umber">Este campo es obligatorio</p>
             }
             @if (userForm.get('email')?.errors?.['pattern']) {
-              <p class="text-burnt-umber text-sm">Correo electrónico inválido</p>
+            <p class="text-sm text-burnt-umber">Correo electrónico inválido</p>
             }
           </div>
           }
           @if (!isEditing) {
-            <p class="text-base font-bold text-bisque border-b border-zorba pb-2">
-              {{ profileService.user$().email ?? "No disponible" }}
-            </p>
+          <p class="text-bisque font-bold border-b border-zorba pb-2">
+            {{ profileService.user$().email?.trim() || "No disponible" }}
+          </p>
           }
         </div>
       </div>
 
       <div class="flex justify-center items-center gap-4 mt-10">
-        <button 
-          *ngIf="!isEditing"
-          type="button"
-          (click)="updateUser(profileService.user$())"
-          class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+        <button *ngIf="!isEditing" type="button" (click)="updateUser(profileService.user$())"
+          class="px-4 py-2 font-bold rounded-md text-bisque bg-flamenco hover:bg-golden-glow hover:text-flamenco transition-colors">
           Editar
         </button>
 
-        <div 
-          *ngIf="!isEditing"
-          class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+        <div *ngIf="!isEditing"
+          class="px-4 py-2 font-bold rounded-md text-bisque bg-flamenco hover:bg-golden-glow hover:text-flamenco transition-colors">
           <a routerLink="/app/reset-password">Cambiar contraseña</a>
         </div>
 
-        <button 
-          *ngIf="isEditing"
-          type="button"
-          (click)="saveChanges(userForm.value)"
+        <button *ngIf="isEditing" type="button" (click)="saveChanges(userForm.value)"
           [disabled]="userForm.invalid || !userForm.dirty"
-          class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed">
+          class="px-4 py-2 font-bold rounded-md text-bisque bg-flamenco hover:bg-golden-glow hover:text-flamenco transition-colors disabled:bg-flamenco disabled:text-bisque disabled:opacity-80 disabled:cursor-not-allowed">
           Guardar
         </button>
 
-        <button 
-          *ngIf="isEditing"
-          type="button"
-          (click)="cancelChanges()"
-          class="bg-golden-glow text-crater-brown py-2 px-4 rounded-md font-bold hover:bg-bisque transition-colors">
+        <button *ngIf="isEditing" type="button" (click)="cancelChanges()"
+          class="px-4 py-2 font-bold rounded-md text-crater-brown bg-golden-glow hover:bg-bisque transition-colors">
           Cancelar
         </button>
       </div>
     </div>
   </div>
 </form>
-
