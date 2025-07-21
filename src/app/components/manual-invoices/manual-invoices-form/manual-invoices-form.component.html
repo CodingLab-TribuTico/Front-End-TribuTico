@@ -50,7 +50,7 @@
         placeholder="Clave" />
       @if (invoiceForm.controls['key'].invalid && (invoiceForm.controls['key'].dirty ||
       invoiceForm.controls['key'].touched)) {
-      <div class="text-burnt-umber text-sm">El código es obligatorio.</div>
+      <div class="text-burnt-umber text-sm">La clave es obligatoria.</div>
       }
     </div>
   </div>
@@ -116,19 +116,10 @@
       @if(details && details.length > 0) {
       <div class="flex gap-4 flex-wrap mb-4">
         @for(detail of details; track $index) {
-        <app-card-detail 
-          [cabys]="detail.cabys || '0'" 
-          [quantity]="detail.quantity || 0" 
-          [unit]="detail.unit || ''"
-          [unitPrice]="detail.unitPrice || 0" 
-          [discount]="detail.discount || 0" 
-          [tax]="detail.tax || 0"
-          [taxAmount]="detail.taxAmount || 0" 
-          [category]="detail.category || ''" 
-          [total]="detail.total || 0"
-          [description]="detail.description || ''"
-          [index]="$index"
-          (editDetail)="editDetailItem($event)"
+        <app-card-detail [cabys]="detail.cabys || '0'" [quantity]="detail.quantity || 0" [unit]="detail.unit || ''"
+          [unitPrice]="detail.unitPrice || 0" [discount]="detail.discount || 0" [tax]="detail.tax || 0"
+          [taxAmount]="detail.taxAmount || 0" [category]="detail.category || ''" [total]="detail.total || 0"
+          [description]="detail.description || ''" [index]="$index" (editDetail)="editDetailItem($event)"
           (deleteDetail)="deleteDetailItem($event)">
         </app-card-detail>
         }
@@ -267,12 +258,12 @@
   </form>
 
   <div class="flex gap-4 justify-center">
-    <button (click)="callSave()" [disabled]="invoiceForm.invalid" type="button"
+    <button (click)="callSave()" [disabled]="invoiceForm.invalid || this.details.length == 0" ctype="button"
       class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-flamenco disabled:text-bisque">
       Registrar
     </button>
     <button type="button"
-      class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-golden-glow/80 transition-colors"
+      class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-bisque transition-colors"
       (click)="callCancel()">
       Cancelar
     </button>
@@ -281,14 +272,8 @@
 </form>
 
 @if (showDeleteModal) {
-<app-modal 
-  [title]="'Confirmar eliminación'" 
-  [icon]="'delete'"
-  [confirmAction]="'Eliminar'" 
-  [cancelAction]="'Cancelar'"
-  [textCenter]="true"
-  (callConfirmationMethod)="confirmDelete()"
-  (callCancelMethod)="hideDeleteModal()">
+<app-modal [title]="'Confirmar eliminación'" [icon]="'delete'" [confirmAction]="'Eliminar'" [cancelAction]="'Cancelar'"
+  [textCenter]="true" (callConfirmationMethod)="confirmDelete()" (callCancelMethod)="hideDeleteModal()">
   <p class="text-bisque">
     ¿Estás seguro de que quieres eliminar este detalle de la factura?
   </p>

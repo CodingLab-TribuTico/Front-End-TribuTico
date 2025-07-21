@@ -12,8 +12,12 @@ import { tap, catchError } from "rxjs/operators";
 export class InvoiceService extends BaseService<IManualInvoice> {
   protected override source: string = 'invoice';
   private invoicesList = signal<IManualInvoice[]>([]);
+  private invoicesByUserIdList = signal<IManualInvoice[]>([]);
   get invoices$() {
     return this.invoicesList;
+  }
+  get invoicesByUserId$() {
+    return this.invoicesByUserIdList;
   }
   public search: ISearch = {
     page: 1,
@@ -36,35 +40,28 @@ export class InvoiceService extends BaseService<IManualInvoice> {
     });
   }
 
-  save(item: IManualInvoice) {
-    this.add(item).subscribe({
-      next: (response: IResponse<IManualInvoice>) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
-        this.getAll();
+  getByUserId(userId: number) {
+    this.findAllWithParams({ userId: userId }).subscribe({
+      next: (response: IResponse<IManualInvoice[]>) => {
+        this.invoicesByUserIdList.set(response.data);
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred adding the team', 'center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
   }
 
-  saveInvoice(item: IManualInvoice): Observable<IResponse<IManualInvoice>> {
-    return this.http.post<IResponse<IManualInvoice>>(`${this.source}`, item).pipe(
-      tap((response) => {
+  save(item: IManualInvoice) {
+    this.add(item).subscribe({
+      next: (response: IResponse<IManualInvoice>) => {
         this.alertService.displayAlert('success', response.message || 'Factura guardada correctamente!', 'center', 'top', ['success-snackbar']);
-        this.getAll(); 
-      }),
-      catchError((error) => {
+        this.getAll();
+      },
+      error: (err: any) => {
         this.alertService.displayAlert('error', 'Error al guardar la factura', 'center', 'top', ['error-snackbar']);
-        console.error('Error al guardar la factura:', error);
-        throw error;
-      })
-    );
-  }
-
-  saveWithUserId(item: IManualInvoice, userId: number): Observable<IResponse<IManualInvoice>> {
-    return this.saveInvoice(item); 
+        console.error('error', err);
+      }
+    });
   }
 
   update(item: IManualInvoice) {
