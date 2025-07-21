@@ -1,4 +1,4 @@
-import { Component, effect, inject, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, ViewChild } from '@angular/core';
 import { LlamaLoaderComponent } from '../../components/llama-loader/llama-loader.component';
 import { CommonModule } from '@angular/common';
 import { OcrService } from '../../services/ocr.service';
@@ -10,6 +10,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { ManualInvoicesFormComponent } from "../../components/manual-invoices/manual-invoices-form/manual-invoices-form.component";
 import { InputFileFormComponent } from "../../components/input-file-form/input-file-form.component";
 import { toSignal } from '@angular/core/rxjs-interop';
+import { XmlService } from '../../services/xml.service';
 
 @Component({
   selector: 'app-upload-invoices',
@@ -24,11 +25,16 @@ export class UploadInvoicesComponent {
   public importInvoicesText: string = "Ocultar importar";
   public importInvoicesIcon: string = "receipt_long_off";
   public ocrService: OcrService = inject(OcrService);
+  public xmlService: XmlService = inject(XmlService);
   public modalService: ModalService = inject(ModalService);
   public fb: FormBuilder = inject(FormBuilder);
   public type: string = 'ingreso';
   public details: IDetailInvoice[] = [];
   @ViewChild('cancelSubscriptionModal') public cancelSubscriptionModal: any;
+
+  public combinedResponse = computed(() => {
+    return this.xmlService.responseScan$() || this.ocrService.responseScan$();
+  });
 
   public invoiceForm = this.fb.group({
     id: [''],
@@ -82,7 +88,7 @@ export class UploadInvoicesComponent {
 
   saveInvoice(item: IManualInvoice) {
     console.log(item);
-    //this.invoicesService.save(item);
+    this.invoicesService.save(item);
   }
 
   changeType(type: string) {
@@ -91,5 +97,10 @@ export class UploadInvoicesComponent {
     } else if (type === 'gasto') {
       this.type = 'ingreso';
     }
+  }
+
+  resetScanResponse() {
+    this.xmlService.responseScan.set(null);
+    this.ocrService.resetResponseScan();
   }
 }

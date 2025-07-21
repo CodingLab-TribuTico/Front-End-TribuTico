@@ -109,19 +109,22 @@
         </tfoot>
     </table>
     <div class="flex justify-between">
-        <div class="flex justify-end">
-            <button (click)="openDeleteModal()" class="bg-crater-brown px-2 p-0.5 rounded-md flex items-center">
-                <span class="material-symbols-rounded text-lg text-flamenco">delete</span>
-                <span class="text-bisque text-sm font-medium ml-2">Eliminar</span>
-            </button>
-        </div>
 
-        <div class="flex justify-start">
+        <div class="flex justify-end">
             <button (click)="onBack()" class="bg-flamenco px-2 p-0.5 rounded-md flex items-center">
                 <span class="material-symbols-rounded text-lg text-bisque">
                     arrow_left_alt
                 </span>
                 <span class="text-bisque text-sm font-medium ml-2">Volver</span>
+            </button>
+        </div>
+
+        <div class="flex justify-start">
+
+            <button (click)="openDeleteModal()" class="bg-golden-glow px-2 p-0.5 rounded-md flex items-center"
+                type="button">
+                <span class="material-symbols-rounded text-lg text-crater-brown">delete</span>
+                <span class="text-crater-brown text-sm font-medium ml-2">Eliminar</span>
             </button>
         </div>
     </div>
@@ -132,5 +135,9 @@
 </div>
 
 <ng-template #confirmationModal>
-
+    <app-modal (callConfirmationMethod)="deleteInvoice()" (callCancelMethod)="hideModal()" [cancelAction]="'Cancelar'"
+        [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'" [textCenter]="true"
+        [icon]="'error'">
+        <p class="text-bisque text-base max-w-lg">Esta acción eliminará la factura permanentemente.</p>
+    </app-modal>
 </ng-template>

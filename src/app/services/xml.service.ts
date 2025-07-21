@@ -29,6 +29,7 @@ export class XmlService extends BaseService<IResponse<any>> {
 
       this.currentSubscription = this.addFile(formData).subscribe({
         next: (response: any) => {
+          console.log('Respuesta escaneo XML:', response);
           this.responseScan.set(response);
         },
         error: (err: any) => {

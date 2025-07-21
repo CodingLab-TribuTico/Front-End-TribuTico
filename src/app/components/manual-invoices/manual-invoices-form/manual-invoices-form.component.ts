@@ -28,6 +28,7 @@ export class ManualInvoicesFormComponent {
     effect(() => {
       const response = this.responseScan();
       if (response) {
+        const type = response.type || this.type;;
         this.fillInvoiceFromAutocomplete(response);
       }
     });
@@ -76,29 +77,26 @@ export class ManualInvoicesFormComponent {
       email: this.invoiceForm.controls["email"].value,
     };
 
-    const userLocal = localStorage.getItem("auth_user");
-    const user = {
-      identification: userLocal ? JSON.parse(userLocal).identification : null,
-      name: userLocal ? JSON.parse(userLocal).name : null,
-      lastname: userLocal ? JSON.parse(userLocal).lastname : null,
-      email: userLocal ? JSON.parse(userLocal).email : null,
-    }
-
-    let manualInvoice: IManualInvoice = {
+    let manualInvoice: Partial<IManualInvoice> = {
       type,
       consecutive: this.invoiceForm.controls["consecutive"].value,
       key: this.invoiceForm.controls["key"].value,
       issueDate: this.invoiceForm.controls["issueDate"].value,
-      receiver: type === "ingreso" ? person : user,
-      issuer: type === "gasto" ? person : user,
       details: this.details,
     };
+
+    if (type === "gasto") {
+      manualInvoice.issuer = person;
+    } else {
+      manualInvoice.receiver = person;
+    }
 
     if (this.invoiceForm.controls["id"].value) {
       manualInvoice.id = this.invoiceForm.controls["id"].value;
     }
 
-    this.callSavedMethod.emit(manualInvoice);
+    this.callSavedMethod.emit(manualInvoice as IManualInvoice);
+
     this.details = [];
     this.detailForm.reset({
       category: '',
@@ -132,26 +130,63 @@ export class ManualInvoicesFormComponent {
   }
 
   fillInvoiceFromAutocomplete(response: any) {
-    console.log(response);
-    if (response.data !== undefined) {
-      const data = response.data;
-      const type = data.type || 'ingreso';
-      this.type = type;
-      const person = type === 'ingreso' ? data.receiver : data.issuer;
+    console.log('Respuesta completa:', response);
+    if (!response) return;
 
-      this.invoiceForm.controls['type'].setValue(data.type ?? '');
-      this.invoiceForm.controls['consecutive'].setValue(data.consecutive ?? '');
-      this.invoiceForm.controls['key'].setValue(data.key ?? '');
+    const data = response.data || response;
+    const type = data.type || 'gasto';
+    this.type = type;
 
-      this.invoiceForm.controls['issueDate'].setValue(data.issueDate ?? '');
+    this.updateFormForType(type, data);
 
-      this.invoiceForm.controls['identification'].setValue(person?.identification ?? '');
-      this.invoiceForm.controls['name'].setValue(person?.name ?? '');
-      this.invoiceForm.controls['lastname'].setValue(person?.lastname ?? '');
-      this.invoiceForm.controls['email'].setValue(person?.email ?? '');
+    this.callResetScanMethod.emit();
+  }
 
-      this.details = data.details || [];
-      this.callResetScanMethod.emit();
+  private updateFormForType(type: string, data: any) {
+    const personData = type === 'ingreso' ? data.receiver : data.issuer;
+    const person = personData || {};
+
+    let firstName = '';
+    let lastName = '';
+    if (person.name) {
+      const fullName = person.name.trim().split(/\s+/);
+      if (fullName.length > 0) {
+        firstName = fullName[0];
+        lastName = fullName.slice(2).join(' ');
+      }
+    }
+
+    this.invoiceForm.patchValue({
+      type: type,
+      consecutive: data.consecutive || '',
+      key: data.key || '',
+      issueDate: data.issueDate || '',
+      identification: person.identification || '',
+      name: firstName,
+      lastname: lastName,
+      email: person.email || ''
+    });
+
+    this.details = [];
+
+    if (data.details && data.details.length > 0) {
+      const firstDetail = data.details[0];
+      this.detailForm.patchValue({
+        cabys: firstDetail.cabys || '',
+        quantity: firstDetail.quantity || 0,
+        unit: firstDetail.unit || '',
+        unitPrice: firstDetail.unitPrice || 0,
+        discount: firstDetail.discount || 0,
+        tax: firstDetail.tax || 0,
+        category: firstDetail.category || '',
+        description: firstDetail.description || ''
+      });
+      this.calculateTotal();
+    } else {
+      this.detailForm.reset({
+        category: '',
+        tax: ''
+      });
     }
   }
 
@@ -182,5 +217,12 @@ export class ManualInvoicesFormComponent {
   changeType(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.type = selectElement.value;
+    this.invoiceForm.patchValue({
+      identification: '',
+      name: '',
+      lastname: '',
+      email: ''
+    });
   }
+
 }

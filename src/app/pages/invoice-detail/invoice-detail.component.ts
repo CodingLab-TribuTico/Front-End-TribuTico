@@ -11,7 +11,7 @@ import { ModalComponent } from "../../components/modal/modal.component";
 @Component({
   selector: 'app-invoice-detail',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterModule],
+  imports: [CommonModule, MatIconModule, RouterModule, ModalComponent],
   templateUrl: './invoice-detail.component.html',
   styleUrl: './invoice-detail.component.scss'
 })
@@ -47,22 +47,14 @@ export class InvoiceDetailComponent implements OnInit {
     this.modalService.closeAll();
   }
 
-  // deleteInvoice(): void {
-  //   const currentInvoice = this.invoiceService.currentInvoice$();
-  //   if (currentInvoice?.id) {
-  //     this.invoiceService.delete(currentInvoice).subscribe({
-  //       next: () => {
-  //         this.hideModal();
-  //         this.onBack();
-  //       },
-  //       error: (err) => {
-  //         console.error('Error deleting invoice:', err);
-  //         // Aquí podrías mostrar un mensaje de error al usuario
-  //       }
-  //     });
-  //   }
-  // }
-
+  deleteInvoice(): void {
+    const currentInvoice = this.invoiceService.currentInvoice$();
+    if (currentInvoice) {
+      this.invoiceService.delete(currentInvoice);
+      this.hideModal();
+      this.onBack();
+    }
+  }
 
   calculateTotal(details?: IDetailInvoice[]): number {
     if (!details || details.length === 0) return 0;
