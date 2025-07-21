@@ -108,8 +108,13 @@ export class ManualInvoicesFormComponent {
       manualInvoice.id = this.invoiceForm.controls["id"].value;
     }
 
+    if(manualInvoice.id){
+      this.callUpdateMethod.emit(manualInvoice);
+    } else {
     this.callSavedMethod.emit(manualInvoice);
-    
+    this.invoiceForm.reset();
+    }
+
     this.details = [];
     this.detailForm.reset({
       category: '',
@@ -135,15 +140,10 @@ export class ManualInvoicesFormComponent {
       description: this.detailForm.controls["description"].value,
     };
 
-     if (this.isEditingDetail) {
-    // Actualizar el detalle existente
-    this.details[this.editingIndex] = detail;
-    this.isEditingDetail = false;
-    this.editingIndex = -1;
-  } else {
+     
     // Agregar nuevo detalle
     this.details.push(detail);
-  }
+  
    // this.details.push(detail);
     this.detailForm.reset({
       category: '',
@@ -244,7 +244,7 @@ export class ManualInvoicesFormComponent {
     this.showDeleteModal = false;
     this.indexToDelete = -1;
   }
-
+/*
   callUpdate() {
   const type = this.invoiceForm.controls["type"].value;
 
@@ -274,5 +274,5 @@ export class ManualInvoicesFormComponent {
   
 }
 
-  
+  */
 }

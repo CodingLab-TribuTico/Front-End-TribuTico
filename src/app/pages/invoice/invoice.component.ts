@@ -49,8 +49,9 @@ export class InvoiceComponent {
     name: ["", Validators.required],
     lastName: ["", Validators.required],
     email: ["", [Validators.required, Validators.email]],
-    identification: ["", Validators.required]
-
+    identification: ["", Validators.required],
+    details: this.fb.array([])
+    
     /*
     receiver: this.fb.group({
       id: [""],
@@ -69,6 +70,7 @@ export class InvoiceComponent {
     */
   });
 
+  
   detailForm = this.fb.group({
     cabys: ["", Validators.required],
     quantity: ["", Validators.required],
@@ -81,7 +83,7 @@ export class InvoiceComponent {
     total: ["", Validators.required],
     description: ["", Validators.required],
   });
-
+  
   callEdition(invoice: IManualInvoice) {
   this.invoiceForm.patchValue({
     id: JSON.stringify(invoice.id),
@@ -93,25 +95,11 @@ export class InvoiceComponent {
     name: invoice.receiver?.name,
     lastName: invoice.receiver?.lastName,
     email: invoice.receiver?.email
-    /*
-    receiver: {
-      identification: invoice.receiver?.identification
-      name: invoice.receiver?.name,
-      lastname: invoice.receiver?.lastName,
-      email: invoice.receiver?.email,
-    }
-      /*
-    issuer: {
-      name: invoice.issuer?.name,
-      lastname: invoice.issuer?.lastName,
-      email: invoice.issuer?.email,
-      identification: invoice.issuer?.identification
-    }
-      */
+    
   });
 
   this.details = invoice.details ?? [];
-   this.isEditing = true;
+
   this.modalService.displayModal(this.addInvoiceModal);
 }
 
