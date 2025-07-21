@@ -15,6 +15,7 @@ import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.component';
+import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 
 export const routes: Routes = [
   {
@@ -55,11 +56,17 @@ export const routes: Routes = [
         path: 'invoice',
         component: InvoiceComponent,
         data: {
-          authorities: [
-            IRoleType.superAdmin,
-            IRoleType.user
-          ],
+          authorities: [IRoleType.superAdmin, IRoleType.user],
           name: 'Facturas',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'create-simulation',
+        component: CreateSimulationComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Crear Simulación',
           showInSidebar: true
         }
       },

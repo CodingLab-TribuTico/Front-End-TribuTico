@@ -10,14 +10,23 @@ import { tap, catchError } from "rxjs/operators";
 })
 export class InvoiceService extends BaseService<IManualInvoice> {
   protected override source: string = "invoices";
+
   private invoicesList = signal<IManualInvoice[]>([]);
   private currentInvoice = signal<IManualInvoice | null>(null);
+  private invoicesByUserIdList = signal<IManualInvoice[]>([]);
+
   get invoices$() {
     return this.invoicesList;
   }
+
   get currentInvoice$() {
     return this.currentInvoice;
   }
+
+  get invoicesByUserId$() {
+    return this.invoicesByUserIdList;
+  }
+
   public search: ISearch = {
     page: 1,
     size: 5,
@@ -60,12 +69,23 @@ export class InvoiceService extends BaseService<IManualInvoice> {
     });
   }
 
+  getByUserId(userId: number) {
+    this.findAllWithParams({ userId: userId }).subscribe({
+      next: (response: IResponse<IManualInvoice[]>) => {
+        this.invoicesByUserIdList.set(response.data);
+      },
+      error: (err: any) => {
+        console.error('error', err);
+      }
+    });
+  }
+
   save(item: IManualInvoice) {
     this.add(item).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
         this.alertService.displayAlert(
           "success",
-          response.message,
+          response.message || 'Factura guardada correctamente!',
           "center",
           "top",
           ["success-snackbar"]
@@ -75,7 +95,7 @@ export class InvoiceService extends BaseService<IManualInvoice> {
       error: (err: any) => {
         this.alertService.displayAlert(
           "error",
-          "An error occurred adding the team",
+          "Error al guardar la factura",
           "center",
           "top",
           ["error-snackbar"]
@@ -83,24 +103,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
         console.error("error", err);
       },
     });
-  }
-
-  saveInvoice(item: IManualInvoice): Observable<IResponse<IManualInvoice>> {
-    return this.http.post<IResponse<IManualInvoice>>(`${this.source}`, item).pipe(
-      tap((response) => {
-        this.alertService.displayAlert('success', response.message || 'Factura guardada correctamente!', 'center', 'top', ['success-snackbar']);
-        this.getAll(); 
-      }),
-      catchError((error) => {
-        this.alertService.displayAlert('error', 'Error al guardar la factura', 'center', 'top', ['error-snackbar']);
-        console.error('Error al guardar la factura:', error);
-        throw error;
-      })
-    );
-  }
-
-  saveWithUserId(item: IManualInvoice, userId: number): Observable<IResponse<IManualInvoice>> {
-    return this.saveInvoice(item); 
   }
 
   update(item: IManualInvoice) {
