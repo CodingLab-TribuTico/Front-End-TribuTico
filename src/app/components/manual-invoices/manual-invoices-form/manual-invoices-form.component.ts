@@ -42,6 +42,7 @@ export class ManualInvoicesFormComponent {
     effect(() => {
       const response = this.responseScan();
       if (response) {
+        const type = response.type || this.type;;
         this.fillInvoiceFromAutocomplete(response);
       }
     });
@@ -108,11 +109,11 @@ export class ManualInvoicesFormComponent {
       manualInvoice.id = this.invoiceForm.controls["id"].value;
     }
 
-    if(manualInvoice.id){
+    if (manualInvoice.id) {
       this.callUpdateMethod.emit(manualInvoice);
     } else {
-    this.callSavedMethod.emit(manualInvoice);
-    this.invoiceForm.reset();
+      this.callSavedMethod.emit(manualInvoice);
+      this.invoiceForm.reset();
     }
 
     this.details = [];
@@ -140,11 +141,11 @@ export class ManualInvoicesFormComponent {
       description: this.detailForm.controls["description"].value,
     };
 
-     
+
     // Agregar nuevo detalle
     this.details.push(detail);
-  
-   // this.details.push(detail);
+
+    // this.details.push(detail);
     this.detailForm.reset({
       category: '',
       tax: '',
@@ -152,26 +153,64 @@ export class ManualInvoicesFormComponent {
   }
 
   fillInvoiceFromAutocomplete(response: any) {
-    console.log(response);
-    if (response.data !== undefined) {
-      const data = response.data;
-      const type = data.type || 'ingreso';
-      this.type = type;
-      const person = type === 'ingreso' ? data.receiver : data.issuer;
+    console.log('Respuesta completa:', response);
+    if (!response) return;
 
-      this.invoiceForm.controls['type'].setValue(data.type ?? '');
-      this.invoiceForm.controls['consecutive'].setValue(data.consecutive ?? '');
-      this.invoiceForm.controls['key'].setValue(data.key ?? '');
+    const data = response.data || response;
+    const type = data.type || 'gasto';
 
-      this.invoiceForm.controls['issueDate'].setValue(data.issueDate ?? '');
+    console.log('Datos recibidos:', data);
 
-      this.invoiceForm.controls['identification'].setValue(person?.identification ?? '');
-      this.invoiceForm.controls['name'].setValue(person?.name ?? '');
-      this.invoiceForm.controls['lastName'].setValue(person?.lastName ?? '');
-      this.invoiceForm.controls['email'].setValue(person?.email ?? '');
+    this.type = type;
+    this.updateFormForType(type, data);
 
-      this.details = data.details || [];
-      this.callResetScanMethod.emit();
+  }
+
+  private updateFormForType(type: string, data: any) {
+    const personData = type === 'ingreso' ? data.receiver : data.issuer;
+    const person = personData || {};
+
+    let firstName = '';
+    let lastName = '';
+    if (person.name) {
+      const fullName = person.name.trim().split(/\s+/);
+      if (fullName.length > 0) {
+        firstName = fullName[0];
+        lastName = fullName.slice(2).join(' ');
+      }
+    }
+
+    this.invoiceForm.patchValue({
+      type: type,
+      consecutive: data.consecutive || '',
+      key: data.key || '',
+      issueDate: data.issueDate || '',
+      identification: person.identification || '',
+      name: firstName,
+      lastName: lastName,
+      email: person.email || ''
+    });
+
+    this.details = [];
+
+    if (data.details && data.details.length > 0) {
+      const firstDetail = data.details[0];
+      this.detailForm.patchValue({
+        cabys: firstDetail.cabys || '',
+        quantity: firstDetail.quantity || 0,
+        unit: firstDetail.unit || '',
+        unitPrice: firstDetail.unitPrice || 0,
+        discount: firstDetail.discount || 0,
+        tax: firstDetail.tax || 0,
+        category: firstDetail.category || '',
+        description: firstDetail.description || ''
+      });
+      this.calculateTotal();
+    } else {
+      this.detailForm.reset({
+        category: '',
+        tax: ''
+      });
     }
   }
 
@@ -202,12 +241,20 @@ export class ManualInvoicesFormComponent {
   changeType(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.type = selectElement.value;
+    this.invoiceForm.patchValue({
+      identification: '',
+      name: '',
+      lastname: '',
+      email: ''
+    });
   }
-  
+
+
+
   editDetailItem(index: number) {
     const detail = this.details[index];
-    
-    
+
+
     this.detailForm.patchValue({
       cabys: detail.cabys,
       quantity: detail.quantity,
@@ -220,7 +267,7 @@ export class ManualInvoicesFormComponent {
     });
 
     this.details.splice(index, 1);
-    
+
     this.calculateTotal();
 
     this.isEditingDetail = true;
@@ -244,35 +291,35 @@ export class ManualInvoicesFormComponent {
     this.showDeleteModal = false;
     this.indexToDelete = -1;
   }
-/*
-  callUpdate() {
-  const type = this.invoiceForm.controls["type"].value;
-
-  const invoiceUser: IInvoiceUser = {
-    identification: this.invoiceForm.controls["identification"].value,
-    name: this.invoiceForm.controls["name"].value,
-    lastName: this.invoiceForm.controls["lastName"].value,
-    email: this.invoiceForm.controls["email"].value,
-  };
-
-  let manualInvoice: IManualInvoice = {
-    id: this.invoiceForm.controls["id"].value,
-    type,
-    consecutive: this.invoiceForm.controls["consecutive"].value,
-    key: this.invoiceForm.controls["key"].value,
-    issueDate: this.invoiceForm.controls["issueDate"].value,
-    details: this.details,
-  };
-
-  if (type === "ingreso") {
-    manualInvoice.receiver = invoiceUser;
-  } else {
-    manualInvoice.issuer = invoiceUser;
-  }
-
-  this.callUpdateMethod.emit(manualInvoice);
+  /*
+    callUpdate() {
+    const type = this.invoiceForm.controls["type"].value;
   
-}
-
-  */
+    const invoiceUser: IInvoiceUser = {
+      identification: this.invoiceForm.controls["identification"].value,
+      name: this.invoiceForm.controls["name"].value,
+      lastName: this.invoiceForm.controls["lastName"].value,
+      email: this.invoiceForm.controls["email"].value,
+    };
+  
+    let manualInvoice: IManualInvoice = {
+      id: this.invoiceForm.controls["id"].value,
+      type,
+      consecutive: this.invoiceForm.controls["consecutive"].value,
+      key: this.invoiceForm.controls["key"].value,
+      issueDate: this.invoiceForm.controls["issueDate"].value,
+      details: this.details,
+    };
+  
+    if (type === "ingreso") {
+      manualInvoice.receiver = invoiceUser;
+    } else {
+      manualInvoice.issuer = invoiceUser;
+    }
+  
+    this.callUpdateMethod.emit(manualInvoice);
+    
+  }
+  
+    */
 }

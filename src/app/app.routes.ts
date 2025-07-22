@@ -12,9 +12,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
-import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.component';
+import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 
 export const routes: Routes = [
@@ -67,6 +67,26 @@ export const routes: Routes = [
         data: {
           authorities: [IRoleType.user],
           name: 'Crear Simulación',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'invoice',
+        component: InvoiceComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Crear Simulación',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'invoice',
+        component: InvoiceComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Facturas',
           showInSidebar: true
         }
       },

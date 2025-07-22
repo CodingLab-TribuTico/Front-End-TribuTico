@@ -75,7 +75,7 @@ export interface IDetailInvoice {
   category?: string;
   total?: number;
   description?: string;
-  
+
 }
 
 export interface IInvoiceUser {
