@@ -1,0 +1,169 @@
+<nav class="sticky top-0 z-[9999] w-full bg-crater-brown backdrop-blur-lg backdrop-saturate-150 px-8 py-3">
+    <div class="flex items-center justify-between max-w-7xl mx-auto">
+        <a href="/" aria-label="Inicio TribuTico">
+            <img src="../../../../../assets/img/general/tributico-logo.png" alt="Logo de TribuTico" class="h-10" />
+        </a>
+
+        <button (click)="toggleBurgerMenu()" type="button" aria-label="Abrir menú de navegación"
+            class="lg:hidden h-10 w-10 flex items-center justify-center text-bisque">
+            <span class="material-symbols-rounded text-3xl">menu</span>
+        </button>
+
+        <ul class="hidden lg:flex items-center gap-8">
+            <li class="text-bisque font-bold hover:border-b-2 hover:border-bisque hover:cursor-pointer">
+                <a (click)="scrollTo('hero')">Inicio</a>
+            </li>
+            <li class="text-bisque font-bold hover:border-b-2 hover:border-bisque hover:cursor-pointer">
+                <a (click)="scrollTo('benefits')">Beneficios</a>
+            </li>
+            <li class="text-bisque font-bold hover:border-b-2 hover:border-bisque hover:cursor-pointer">
+                <a (click)="scrollTo('howItWorks')">¿Cómo funciona?</a>
+            </li>
+            <li class="text-bisque font-bold hover:border-b-2 hover:border-bisque hover:cursor-pointer">
+                <a (click)="scrollTo('faq')">FAQ</a>
+            </li>
+            <li>
+                <a routerLink="/login"
+                    class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+                    Iniciar sesión
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="transition-[max-height] duration-300 ease-in-out overflow-hidden lg:hidden"
+        [style.maxHeight]="burgerMenuOpen ? '500px' : '0px'">
+        <ul class="flex flex-col gap-4 p-4 mt-3">
+            <li><a (click)="scrollTo('hero')" class="text-bisque hover:cursor-pointer">Inicio</a></li>
+            <li><a (click)="scrollTo('benefits')" class="text-bisque hover:cursor-pointer">Beneficios</a></li>
+            <li><a (click)="scrollTo('howItWorks')" class="text-bisque hover:cursor-pointer">¿Cómo funciona?</a></li>
+            <li><a (click)="scrollTo('faq')" class="text-bisque hover:cursor-pointer">FAQ</a></li>
+            <li>
+                <a routerLink="/login"
+                    class="bg-flamenco text-bisque py-1.5 px-4 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors block text-center">
+                    Iniciar sesión
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div #hero class="scroll-mt-24 flex min-h-screen w-full bg-crater-brown px-4 py-8 md:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full items-center justify-center mb-0 lg:mb-20">
+        <div class="flex justify-center lg:justify-start items-center flex-col text-center lg:text-left w-full">
+            <div class="w-fit">
+                <h1 class="text-4xl md:text-5xl font-bold text-golden-glow leading-tight w-full">
+                    Simplifica tu Contabilidad<br class="hidden 2xl:block" />
+                    con el sistema <span class="text-flamenco">TribuTico</span>
+                </h1>
+
+                <p class="py-4 text-base md:text-lg text-bisque w-full">
+                    Automatiza tus declaraciones fiscales, gestiona tus facturas electrónicas y <br
+                        class="hidden 2xl:block" />
+                    recibe recomendaciones personalizadas para ahorrar tiempo y dinero.
+                </p>
+
+                <div class="flex flex-wrap gap-3 justify-center lg:justify-start w-full">
+                    <a routerLink="/login"
+                        class="bg-golden-glow text-crater-brown py-2 px-6 rounded-md font-bold hover:bg-bisque transition-colors">
+                        Iniciar sesión
+                    </a>
+
+                    <a routerLink="/signup"
+                        class="bg-flamenco text-bisque py-2 px-6 rounded-md font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+                        Registrarse
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flex justify-center items-center">
+            <img src="../../../../../assets/img/landing-page/hero-illustration.png" alt="Landing Page Image"
+                class="w-full max-w-sm h-auto shadow-md">
+        </div>
+    </div>
+</div>
+
+<div #benefits id="benefits" class="scroll-mt-24 bg-isabelline py-8 px-4 md:px-12 h-full">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-crater-brown">Beneficios</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 2xl:w-5/6 justify-center mx-auto">
+            <app-card-landing-page [bgColor]="'bg-golden-glow'" [iconIsUp]="false" [textColor]="'text-crater-brown'"
+                [title]="'Contabilidad y Declaraciones sin Complicaciones'"
+                [description]="'Centraliza tus ingresos, gastos y facturas con XML estándar de Hacienda. Nuestro módulo calcula automáticamente cuánto debes pagar de impuestos (IVA y Renta), y te guía paso a paso para presentar tu declaración. ¡Sin necesidad de contador!.'"
+                [icon]="'calculate'" />
+
+            <app-card-landing-page [bgColor]="'bg-crater-brown'" [iconIsUp]="true" [textColor]="'text-bisque'"
+                [title]="'Asistente Inteligente en Tiempo Real'"
+                [description]="'Consulta fácilmente tus dudas sobre impuestos, gastos deducibles y obligaciones fiscales a través de un chat integrado. Obtén orientación basada en tu información y enfócate en lo importante: hacer crecer tu empresa.'"
+                [icon]="'robot'" />
+
+            <app-card-landing-page [bgColor]="'bg-flamenco'" [iconIsUp]="false" [textColor]="'text-crater-brown'"
+                [title]="'Alertas y Objetivos Financieros Personalizados'"
+                [description]="'Recibe notificaciones clave para no olvidar tus obligaciones fiscales: cierres fiscales, fechas de declaración, y más. Además, establece objetivos contables y tributarios, como “reducir impuestos” o “ordenar mi cierre contable”, y te ayudamos a lograrlos.'"
+                [icon]="'notifications_unread'" />
+        </div>
+    </div>
+</div>
+
+<div #howItWorks class="scroll-mt-24  bg-crater-brown py-8 px-4 md:px-12">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-golden-glow">¿Cómo funciona?</h1>
+
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 w-5/6 mx-auto items-stretch">
+            <div class="flex flex-col justify-between space-y-4 divide-y divide-golden-glow/30 h-full">
+                <app-card-how-works [title]="'1. Carga tu información'"
+                    [description]="'Carga tus facturas en formato manual, PDF o XML para registrar fácilmente tus ingresos y gastos. Puedes incorporar tus comprobantes de distintas formas, permitiendo que cada documento quede debidamente identificado y asociado al periodo correspondiente.'">
+                </app-card-how-works>
+                <app-card-how-works [title]="'2. Consulta y organiza'"
+                    [description]="'Toda tu información se presenta de forma clara y estructurada, lo que te permite entender fácilmente tu situación fiscal y económica. Desde un solo lugar, puedes revisar tus cifras con tranquilidad y mantener el control de tus finanzas en todo momento.'">
+                </app-card-how-works>
+                <app-card-how-works [title]="'3. Presenta a tiempo'"
+                    [description]="'Mantente al tanto de los momentos importantes del calendario fiscal con recordatorios oportunos, y prepara tu declaración de manera organizada y sin contratiempos.'">
+                </app-card-how-works>
+            </div>
+
+            <div class="bg-golden-glow p-10 rounded-md flex items-center justify-center h-full shadow-md">
+                <img src="../../../../../assets/img/landing-page/how-works-illustration.png"
+                    alt="Ilustración de una persona usando un teléfono junto a un datáfono"
+                    class="w-96 h-auto max-w-full" />
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div #faq class="scroll-mt-24 bg-isabelline py-8 px-4 md:px-12 h-full">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl md:text-4xl font-bold text-crater-brown">Preguntas frecuentes</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 text-left">
+            <app-accordion [index]="1" [title]="'¿Puedo usar la plataforma aunque no tenga un contador?'"
+                [description]="'Sí. La plataforma está diseñada para emprendedores y pequeñas empresas que no cuentan con un contador. Puedes gestionar tus impuestos, ingresos y gastos de forma simple y guiada.'" />
+
+            <app-accordion [index]="2" [title]="'¿Me ayuda a saber cuánto debo pagar de impuestos?'"
+                [description]="'Sí. Al ingresar tus ingresos y gastos, el sistema te muestra un estimado de cuánto debes pagar en impuestos como IVA y Renta, basado en los datos y normativa de Hacienda.'" />
+
+            <app-accordion [index]="3" [title]="'¿Puedo subir mis facturas con formato PDF?'"
+                [description]="'Claro. Puedes cargar tus facturas siempre que sigan el formato PDF estándar de Hacienda. Esto permite que el sistema procese automáticamente la información y te ayude a autocompletar el formulario.'" />
+
+            <app-accordion [index]="4" [title]="'¿Qué pasa si no sé cuáles gastos son deducibles?'"
+                [description]="'El asistente del sistema te puede ayudar a identificar qué gastos podrían ser deducibles según tus actividades y lo establecido por Hacienda.'" />
+
+            <app-accordion [index]="5" [title]="'¿La plataforma me recuerda cuándo presentar mis declaraciones?'"
+                [description]="'Sí. Puedes recibir alertas automáticas antes de las fechas clave como el cierre fiscal o la presentación de declaraciones, para que no se te pase ningún plazo.'" />
+
+            <app-accordion [index]="6" [title]="'¿Puedo hacer preguntas directamente desde la plataforma?'"
+                [description]="'Sí. Tienes acceso a un chat donde puedes hacer preguntas sobre temas contables, tributarios o legales y recibir respuestas adaptadas a tu situación.'" />
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="bg-crater-brown py-6">
+        <div class="container mx-auto text-center">
+            <p class="text-bisque">© 2023 TribuTico. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>

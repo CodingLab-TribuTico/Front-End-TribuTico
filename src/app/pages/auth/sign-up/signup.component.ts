@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { IUser } from '../../../interfaces';
-import { GoogleAuthComponent } from "../../../components/google-auth/google-auth.component";
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, GoogleAuthComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss'
 })
-export class SigUpComponent {
+export class SignUpComponent {
   public signUpError!: String;
   public validSignup!: boolean;
   @ViewChild('name') nameModel!: NgModel;
@@ -28,17 +26,16 @@ export class SigUpComponent {
 
   public user: IUser = {};
 
-  constructor(private router: Router, 
+  constructor(private router: Router,
     private authService: AuthService
-  ) {}
+  ) { }
 
   get passwordsMatch(): boolean {
     return this.user.password === this.confirmPassword;
   }
 
-      public showPassword: boolean = false;
-      public showConfirmPassword: boolean = false;
-
+  public showPassword: boolean = false;
+  public showConfirmPassword: boolean = false;
 
   public handleSignup(event: Event) {
     event.preventDefault();
@@ -60,16 +57,21 @@ export class SigUpComponent {
     if (
       this.nameModel.valid &&
       this.lastnameModel.valid &&
-      this.lastname2Model.valid &&
-      this.emailModel.valid &&
+      this.emailModel.valid && !this.emailModel.errors?.['email'] &&
       this.passwordModel.valid &&
-      this.identificationModel.valid &&
+      this.identificationModel.valid && this.identificationModel.value.length === 9 &&
       this.birthDateModel.valid &&
       this.passwordsMatch
     ) {
       this.authService.signup(this.user).subscribe({
-        next: () => this.validSignup = true,
-        error: (err: any) => (this.signUpError = err.description),
+        next: () => {
+          this.signUpError = '';
+          this.validSignup = true;
+          setTimeout(() => {
+            this.router.navigateByUrl('/login');
+          }, 1000);
+        },
+        error: (err: any) => (this.signUpError = err),
       });
     }
   }

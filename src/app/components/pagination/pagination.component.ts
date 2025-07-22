@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [MatIconModule, CommonModule],
   templateUrl: './pagination.component.html',
-  styleUrl: './pagination.component.scss'
 })
 export class PaginationComponent {
   @Input() service: any;

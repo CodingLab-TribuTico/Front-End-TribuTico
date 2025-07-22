@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, EventEmitter, inject, Input, Output, Signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { IDetailInvoice, IManualInvoice } from '../../../interfaces';
+import { IDetailInvoice, IManualInvoice, IInvoiceUser } from '../../../interfaces';
 import { CardDetailComponent } from '../../card-detail/card-detail.component';
+import { ModalComponent } from '../../modal/modal.component';
 
 @Component({
   selector: "app-manual-invoices-form",
@@ -11,7 +12,8 @@ import { CardDetailComponent } from '../../card-detail/card-detail.component';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    CardDetailComponent
+    CardDetailComponent,
+    ModalComponent
   ],
 })
 export class ManualInvoicesFormComponent {
@@ -23,6 +25,10 @@ export class ManualInvoicesFormComponent {
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
   public type: string = 'ingreso';
+
+  // Variables para el modal de confirmación
+  public showDeleteModal: boolean = false;
+  public indexToDelete: number = -1;
 
   constructor() {
     effect(() => {
@@ -70,14 +76,14 @@ export class ManualInvoicesFormComponent {
   callSave() {
     const type = this.invoiceForm.controls["type"].value;
 
-    const person = {
+    const invoiceUser: IInvoiceUser = {
       identification: this.invoiceForm.controls["identification"].value,
       name: this.invoiceForm.controls["name"].value,
-      lastname: this.invoiceForm.controls["lastname"].value,
+      lastName: this.invoiceForm.controls["lastName"].value,
       email: this.invoiceForm.controls["email"].value,
     };
 
-    let manualInvoice: Partial<IManualInvoice> = {
+    let manualInvoice: IManualInvoice = {
       type,
       consecutive: this.invoiceForm.controls["consecutive"].value,
       key: this.invoiceForm.controls["key"].value,
@@ -85,10 +91,10 @@ export class ManualInvoicesFormComponent {
       details: this.details,
     };
 
-    if (type === "gasto") {
-      manualInvoice.issuer = person;
+    if (type === 'ingreso') {
+      manualInvoice.receiver = invoiceUser;
     } else {
-      manualInvoice.receiver = person;
+      manualInvoice.issuer = invoiceUser;
     }
 
     if (this.invoiceForm.controls["id"].value) {
@@ -135,11 +141,12 @@ export class ManualInvoicesFormComponent {
 
     const data = response.data || response;
     const type = data.type || 'gasto';
-    this.type = type;
 
+    console.log('Datos recibidos:', data);
+
+    this.type = type;
     this.updateFormForType(type, data);
 
-    this.callResetScanMethod.emit();
   }
 
   private updateFormForType(type: string, data: any) {
@@ -163,7 +170,7 @@ export class ManualInvoicesFormComponent {
       issueDate: data.issueDate || '',
       identification: person.identification || '',
       name: firstName,
-      lastname: lastName,
+      lastName: lastName,
       email: person.email || ''
     });
 
@@ -225,4 +232,42 @@ export class ManualInvoicesFormComponent {
     });
   }
 
+
+  editDetailItem(index: number) {
+    const detail = this.details[index];
+
+
+    this.detailForm.patchValue({
+      cabys: detail.cabys,
+      quantity: detail.quantity,
+      unit: detail.unit,
+      unitPrice: detail.unitPrice,
+      discount: detail.discount,
+      tax: detail.tax,
+      category: detail.category,
+      description: detail.description
+    });
+
+    this.details.splice(index, 1);
+
+    this.calculateTotal();
+  }
+
+  deleteDetailItem(index: number) {
+    this.indexToDelete = index;
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete() {
+    if (this.indexToDelete >= 0) {
+      this.details.splice(this.indexToDelete, 1);
+      this.indexToDelete = -1;
+    }
+    this.hideDeleteModal();
+  }
+
+  hideDeleteModal() {
+    this.showDeleteModal = false;
+    this.indexToDelete = -1;
+  }
 }

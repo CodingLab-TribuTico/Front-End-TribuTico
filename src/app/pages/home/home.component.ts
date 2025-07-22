@@ -8,7 +8,6 @@ import { InvoiceListComponent } from '../../components/invoice-list/invoice-list
   standalone: true,
   imports: [CardMenuComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   public role: string = '';

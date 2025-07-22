@@ -66,6 +66,10 @@ export class AuthService {
     return this.user;
   }
 
+  public getCurrentUserId(): number | undefined {
+    return this.user?.id;
+  }
+
   public getAccessToken(): string | null {
     return this.accessToken;
   }

@@ -75,14 +75,15 @@ export interface IDetailInvoice {
   category?: string;
   total?: number;
   description?: string;
+
 }
 
-export interface IPerson {
-  identification?: string;
+export interface IInvoiceUser {
+  id?: number;
   name?: string;
-  lastname?: string;
-  phone?: string;
+  lastName?: string;
   email?: string;
+  identification?: string;
 }
 
 export interface IManualInvoice {
@@ -91,8 +92,72 @@ export interface IManualInvoice {
   consecutive?: string;
   key?: string;
   issueDate?: string;
-  issuer?: IPerson;
-  receiver?: IPerson;
   details?: IDetailInvoice[];
-  user?: IUser;
+  receiver?: IInvoiceUser;  // Usuario que recibe la factura
+  issuer?: IInvoiceUser;    // Usuario que emite la factura
+  users?: IUser;
+}
+
+export interface IIsrSimulation {
+  id?: number;
+
+  // I. Datos generales
+  simulationPeriod: string;
+  simulationName: string;
+  simulationIdentification: string;
+
+  // I. Activos y pasivos
+  currentAssets: number;
+  equityInvestments: number;
+  inventory: number;
+  netFixedAssets: number;
+  totalNetAssets: number;
+  totalLiabilities: number;
+  netEquity: number;
+
+  // II. Ingresos y gastos
+  salesRevenue: number;
+  professionalFees: number;
+  commissions: number;
+  interestsAndYields: number;
+  dividendsAndShares: number;
+  rents: number;
+  otherIncome: number;
+  nonTaxableIncome: number;
+  grossIncomeTotal: number;
+
+  // III. Costos, gastos y deducciones
+  initialInventory: number;
+  purchases: number;
+  finalInventory: number;
+  costOfGoodsSold: number;
+  financialExpenses: number;
+  administrativeExpenses: number;
+  depreciationAndAmortization: number;
+  pensionContributions: number;
+  otherAllowableDeductions: number;
+  totalAllowableDeductions: number;
+
+  // IV. Base imponible
+  netTaxableIncome: number;
+  nonTaxableSalaryAmount: number;
+  incomeTax: number;
+  freeTradeZoneExemption: number;
+  otherExemptions: number;
+  netIncomeTaxAfterExemptions: number;
+
+  // V. Créditos
+  familyCredit: number;
+  otherCredits: number;
+  periodTax: number;
+  twoPercentWithholdings: number;
+  otherWithholdings: number;
+  partialPayments: number;
+  totalNetTax: number;
+
+  // VI. Liquidación deuda tributaria
+  interests: number;
+  totalTaxDebt: number;
+  requestedCompensation: number;
+  totalDebtToPay: number;
 }

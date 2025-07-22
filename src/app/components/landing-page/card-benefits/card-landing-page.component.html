@@ -1,0 +1,18 @@
+<div [ngClass]="[bgColor, 'p-4 rounded-md flex flex-col items-center justify-center py-10 h-full shadow-md']">
+    @if(iconIsUp) {
+    <div class="bg-isabelline rounded-md flex items-center justify-center py-10 w-5/6 mb-4">
+        <span [ngClass]="[iconColor, 'material-symbols-rounded', 'text-7xl']">
+            {{icon}}
+        </span>
+    </div>
+    }
+    <h2 [ngClass]="[textColor, 'font-bold text-lg textColor w-5/6']">{{title}}</h2>
+    <p [ngClass]="[textColor, 'text-justify w-5/6']">{{description}}</p>
+    @if(!iconIsUp) {
+    <div class="bg-isabelline rounded-md flex items-center justify-center py-10 w-5/6 mt-4">
+        <span [ngClass]="[textColor, 'material-symbols-rounded', 'text-7xl']">
+            {{icon}}
+        </span>
+    </div>
+    }
+</div>

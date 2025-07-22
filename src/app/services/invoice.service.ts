@@ -2,19 +2,25 @@ import { inject, Injectable, signal } from "@angular/core";
 import { BaseService } from "./base-service";
 import { IResponse, ISearch, IManualInvoice } from "../interfaces";
 import { AlertService } from "./alert.service";
+import { Observable } from "rxjs";
+import { tap, catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
 })
 export class InvoiceService extends BaseService<IManualInvoice> {
-  protected override source: string = "invoices";
+  protected override source: string = 'invoices';
   private invoicesList = signal<IManualInvoice[]>([]);
   private currentInvoice = signal<IManualInvoice | null>(null);
+  private invoicesByUserIdList = signal<IManualInvoice[]>([]);
   get invoices$() {
     return this.invoicesList;
   }
   get currentInvoice$() {
     return this.currentInvoice;
+  }
+  get invoicesByUserId$() {
+    return this.invoicesByUserIdList;
   }
   public search: ISearch = {
     page: 1,
@@ -58,28 +64,27 @@ export class InvoiceService extends BaseService<IManualInvoice> {
     });
   }
 
+  getByUserId(userId: number) {
+    this.findAllWithParams({ userId: userId }).subscribe({
+      next: (response: IResponse<IManualInvoice[]>) => {
+        this.invoicesByUserIdList.set(response.data);
+      },
+      error: (err: any) => {
+        console.error('error', err);
+      }
+    });
+  }
+
   save(item: IManualInvoice) {
     this.add(item).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
-        this.alertService.displayAlert(
-          "success",
-          response.message,
-          "center",
-          "top",
-          ["success-snackbar"]
-        );
+        this.alertService.displayAlert('success', response.message || 'Factura guardada correctamente!', 'center', 'top', ['success-snackbar']);
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert(
-          "error",
-          "An error occurred adding the team",
-          "center",
-          "top",
-          ["error-snackbar"]
-        );
-        console.error("error", err);
-      },
+        this.alertService.displayAlert('error', 'Error al guardar la factura', 'center', 'top', ['error-snackbar']);
+        console.error('error', err);
+      }
     });
   }
 

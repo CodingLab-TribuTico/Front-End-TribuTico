@@ -7,6 +7,8 @@ import { ModalComponent } from "../../components/modal/modal.component";
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice } from '../../interfaces';
 import { InvoiceService } from '../../services/invoice.service';
+import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../services/alert.service';
 import { ManualInvoicesFormComponent } from "../../components/manual-invoices/manual-invoices-form/manual-invoices-form.component";
 import { InputFileFormComponent } from "../../components/input-file-form/input-file-form.component";
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -17,10 +19,11 @@ import { XmlService } from '../../services/xml.service';
   standalone: true,
   imports: [LlamaLoaderComponent, CommonModule, ModalComponent, ReactiveFormsModule, ManualInvoicesFormComponent, InputFileFormComponent],
   templateUrl: './upload-invoices.component.html',
-  styleUrl: './upload-invoices.component.scss'
 })
 export class UploadInvoicesComponent {
   public invoicesService: InvoiceService = inject(InvoiceService);
+  public authService: AuthService = inject(AuthService);
+  public alertService: AlertService = inject(AlertService);
   public hideImportInvoicesVar: boolean = true;
   public importInvoicesText: string = "Ocultar importar";
   public importInvoicesIcon: string = "receipt_long_off";
@@ -44,7 +47,7 @@ export class UploadInvoicesComponent {
     key: ['', Validators.required],
     identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
-    lastname: ['', Validators.required],
+    lastName: ['', Validators.required],
     email: ['', Validators.required],
   });
 
@@ -87,7 +90,14 @@ export class UploadInvoicesComponent {
   }
 
   saveInvoice(item: IManualInvoice) {
-    console.log(item);
+    const userId = this.authService.getCurrentUserId();
+
+    if (!userId) {
+      console.error('No se pudo obtener el ID del usuario');
+      this.alertService.displayAlert('error', 'No se pudo obtener el ID del usuario. Por favor, inicia sesión nuevamente.', 'center', 'top', ['error-snackbar']);
+      return;
+    }
+
     this.invoicesService.save(item);
   }
 
