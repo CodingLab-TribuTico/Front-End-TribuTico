@@ -57,7 +57,7 @@
 
   <div>
     <div class="border-b-2 mb-4 border-zorba">
-      <h2 class="text-bisque font-bold">Datos del @if(type === "ingreso") {cliente} @else {proveedor}</h2>
+      <h2 class="text-bisque font-bold">Datos del @if(type() === "ingreso") {cliente} @else {proveedor}</h2>
     </div>
     <div class="flex gap-4 flex-wrap">
       <div class="flex flex-col gap-2 flex-1">
@@ -272,13 +272,28 @@
 </form>
 
 @if (showDeleteModal) {
-<app-modal [title]="'Confirmar eliminación'" [icon]="'delete'" [confirmAction]="'Eliminar'" [cancelAction]="'Cancelar'"
-  [textCenter]="true" (callConfirmationMethod)="confirmDelete()" (callCancelMethod)="hideDeleteModal()">
-  <p class="text-bisque">
-    ¿Estás seguro de que quieres eliminar este detalle de la factura?
-  </p>
-  <p class="text-bisque/80 text-sm mt-2">
-    Esta acción no se puede deshacer.
-  </p>
-</app-modal>
+<div class="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-30">
+  <div class="bg-crater-brown rounded-md p-6 shadow-lg max-w-md w-full text-center">
+    <span class="material-symbols-rounded text-bisque text-5xl mb-4">
+      delete
+    </span>
+    <h2 class="text-bisque font-bold text-xl mb-4">Confirmar eliminación</h2>
+    <p class="text-bisque mb-2">
+      ¿Estás seguro de que quieres eliminar este detalle de la factura?
+    </p>
+    <p class="text-bisque/80 text-sm mb-6">
+      Esta acción no se puede deshacer.
+    </p>
+    <div class="flex justify-center space-x-4">
+      <button (click)="confirmDelete()"
+        class="bg-flamenco text-bisque py-1 px-4 rounded font-bold hover:bg-golden-glow transition-colors">
+        Eliminar
+      </button>
+      <button (click)="hideDeleteModal()"
+        class="bg-golden-glow text-crater-brown py-1 px-4 rounded font-bold hover:bg-bisque transition-colors">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>
 }

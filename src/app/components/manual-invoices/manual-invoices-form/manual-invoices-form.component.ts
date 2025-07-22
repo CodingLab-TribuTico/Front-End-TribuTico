@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, Output, Signal } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, Output, signal, Signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice, IInvoiceUser } from '../../../interfaces';
 import { CardDetailComponent } from '../../card-detail/card-detail.component';
@@ -21,20 +21,32 @@ export class ManualInvoicesFormComponent {
   @Input() invoiceForm!: FormGroup;
   @Input() detailForm!: FormGroup;
   @Input() responseScan!: any;
-  public details: IDetailInvoice[] = [];
+  @Input() details: IDetailInvoice[] = [];
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
-  public type: string = 'ingreso';
-  
+  public type = signal<'ingreso' | 'gasto'>('ingreso');
+  @Output() callUpdateMethod = new EventEmitter<IManualInvoice>();
+  @Output() callCancelMethod = new EventEmitter<void>();
+  @Input() isEditing: boolean = false;
+
+
+  //variables para la edicion
+  public isEditingDetail: boolean = false;
+  public editingIndex: number = -1;
+
   // Variables para el modal de confirmación
   public showDeleteModal: boolean = false;
   public indexToDelete: number = -1;
 
   constructor() {
     effect(() => {
+      if (!this.responseScan) return;
       const response = this.responseScan();
+      const currentType = this.type();
+
       if (response) {
-        this.fillInvoiceFromAutocomplete(response);
+        const typeToUse = response.type || currentType;
+        this.fillInvoiceFromAutocomplete(response, typeToUse);
       }
     });
   }
@@ -100,7 +112,13 @@ export class ManualInvoicesFormComponent {
       manualInvoice.id = this.invoiceForm.controls["id"].value;
     }
 
-    this.callSavedMethod.emit(manualInvoice);
+    if (manualInvoice.id) {
+      this.callUpdateMethod.emit(manualInvoice);
+    } else {
+      this.callSavedMethod.emit(manualInvoice);
+      this.invoiceForm.reset();
+    }
+
     this.details = [];
     this.detailForm.reset({
       category: '',
@@ -109,7 +127,6 @@ export class ManualInvoicesFormComponent {
     this.invoiceForm.reset({
       type: '',
     });
-    this.type = 'ingreso';
   }
 
   callSaveDetail() {
@@ -126,34 +143,74 @@ export class ManualInvoicesFormComponent {
       description: this.detailForm.controls["description"].value,
     };
 
+
+    // Agregar nuevo detalle
     this.details.push(detail);
+
+    // this.details.push(detail);
     this.detailForm.reset({
       category: '',
       tax: '',
     });
   }
 
-  fillInvoiceFromAutocomplete(response: any) {
-    console.log(response);
-    if (response.data !== undefined) {
-      const data = response.data;
-      const type = data.type || 'ingreso';
-      this.type = type;
-      const person = type === 'ingreso' ? data.receiver : data.issuer;
+  fillInvoiceFromAutocomplete(response: any, type: 'ingreso' | 'gasto') {
+    console.log('Respuesta completa:', response);
+    if (!response) return;
 
-      this.invoiceForm.controls['type'].setValue(data.type ?? '');
-      this.invoiceForm.controls['consecutive'].setValue(data.consecutive ?? '');
-      this.invoiceForm.controls['key'].setValue(data.key ?? '');
+    const data = response.data || response;
 
-      this.invoiceForm.controls['issueDate'].setValue(data.issueDate ?? '');
+    console.log('Datos recibidos:', data);
 
-      this.invoiceForm.controls['identification'].setValue(person?.identification ?? '');
-      this.invoiceForm.controls['name'].setValue(person?.name ?? '');
-      this.invoiceForm.controls['lastName'].setValue(person?.lastName ?? '');
-      this.invoiceForm.controls['email'].setValue(person?.email ?? '');
+    this.updateFormForType(type, data);
 
-      this.details = data.details || [];
-      this.callResetScanMethod.emit();
+  }
+
+  updateFormForType(type: string, data: any) {
+    const personData = type === 'ingreso' ? data.receiver : data.issuer;
+    const person = personData || {};
+
+    let firstName = '';
+    let lastName = '';
+    if (person.name) {
+      const fullName = person.name.trim().split(/\s+/);
+      if (fullName.length > 0) {
+        firstName = fullName[0];
+        lastName = fullName.slice(2).join(' ');
+      }
+    }
+
+    this.invoiceForm.patchValue({
+      type: type,
+      consecutive: data.consecutive || '',
+      key: data.key || '',
+      issueDate: data.issueDate || '',
+      identification: person.identification || '',
+      name: firstName,
+      lastName: lastName,
+      email: person.email || ''
+    });
+
+    this.details = [];
+
+    if (data.details && data.details.length > 0) {
+      const firstDetail = data.details[0];
+      this.detailForm.patchValue({
+        cabys: firstDetail.cabys || '',
+        quantity: firstDetail.quantity || 0,
+        unit: firstDetail.unit || '',
+        unitPrice: firstDetail.unitPrice || 0,
+        discount: firstDetail.discount || 0,
+        tax: firstDetail.tax || 0,
+        category: firstDetail.category || '',
+        description: firstDetail.description || ''
+      });
+      this.calculateTotal();
+    } else {
+      this.detailForm.reset({
+        category: '',
+        tax: ''
+      });
     }
   }
 
@@ -171,26 +228,27 @@ export class ManualInvoicesFormComponent {
   }
 
   callCancel() {
-    this.details = [];
-    this.detailForm.reset({
-      category: '',
-      tax: '',
-    });
-    this.invoiceForm.reset({
-      type: '',
-    });
+    this.callCancelMethod.emit();
   }
 
   changeType(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    this.type = selectElement.value;
+    this.type.set(selectElement.value as 'ingreso' | 'gasto');
+
+    this.invoiceForm.patchValue({
+      identification: '',
+      name: '',
+      lastName: '',
+      email: ''
+    });
   }
 
-  
+
+
   editDetailItem(index: number) {
     const detail = this.details[index];
-    
-    
+
+
     this.detailForm.patchValue({
       cabys: detail.cabys,
       quantity: detail.quantity,
@@ -203,8 +261,11 @@ export class ManualInvoicesFormComponent {
     });
 
     this.details.splice(index, 1);
-    
+
     this.calculateTotal();
+
+    this.isEditingDetail = true;
+    this.editingIndex = index;
   }
 
   deleteDetailItem(index: number) {

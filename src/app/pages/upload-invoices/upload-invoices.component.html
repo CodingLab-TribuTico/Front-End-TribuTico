@@ -17,8 +17,8 @@
         <div class="p-6 rounded-md h-full w-full flex justify-center items-center bg-crater-brown"
             [ngClass]="hideImportInvoicesVar ? '' : 'max-w-4xl'">
             <app-manual-invoices-form [invoiceForm]="invoiceForm" [detailForm]="detailForm"
-                [responseScan]="ocrService.responseScan$" (callResetScanMethod)="ocrService.resetResponseScan()"
-                (callSavedMethod)="saveInvoice($event)" />
+                [responseScan]="combinedResponse" (callResetScanMethod)="resetScanResponse()"
+                (callSavedMethod)="saveInvoice($event)" (callCancelMethod)="callCancel()" />
         </div>
 
         @if(hideImportInvoicesVar) {

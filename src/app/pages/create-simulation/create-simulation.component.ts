@@ -5,11 +5,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { InvoiceService } from '../../services/invoice.service';
 import { IManualInvoice } from '../../interfaces';
+import { LoaderComponent } from '../../components/loader/loader.component';
 
 @Component({
   selector: 'app-create-simulation',
   standalone: true,
-  imports: [IsrSimulationComponent, CommonModule, ReactiveFormsModule],
+  imports: [IsrSimulationComponent, CommonModule, ReactiveFormsModule, LoaderComponent],
   templateUrl: './create-simulation.component.html',
 })
 export class CreateSimulationComponent {

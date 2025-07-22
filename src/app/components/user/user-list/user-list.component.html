@@ -31,7 +31,8 @@
             </span>
           </button>
           <button (click)="openModal(item)" [disabled]="(item.id == idUser)"
-            class="bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed" type="button">
+            class="group bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-golden-glow hover:bg-bisque ml-2"
+            type="button">
             <span class="material-symbols-rounded text-lg text-crater-brown">
               delete
             </span>
