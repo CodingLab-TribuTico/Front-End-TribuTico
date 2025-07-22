@@ -18,7 +18,7 @@
             [ngClass]="hideImportInvoicesVar ? '' : 'max-w-4xl'">
             <app-manual-invoices-form [invoiceForm]="invoiceForm" [detailForm]="detailForm"
                 [responseScan]="combinedResponse" (callResetScanMethod)="resetScanResponse()"
-                (callSavedMethod)="saveInvoice($event)" />
+                (callSavedMethod)="saveInvoice($event)" (callCancelMethod)="callCancel()" />
         </div>
 
         @if(hideImportInvoicesVar) {

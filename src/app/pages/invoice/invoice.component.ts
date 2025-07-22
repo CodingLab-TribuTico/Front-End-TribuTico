@@ -3,12 +3,11 @@ import {
   EventEmitter,
   inject,
   Output,
-  ViewChild,
 } from "@angular/core";
 import { InvoiceService } from "../../services/invoice.service";
 import { ModalService } from "../../services/modal.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { IManualInvoice } from "../../interfaces";
+import { IDetailInvoice, IManualInvoice } from "../../interfaces";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { ModalComponent } from "../../components/modal/modal.component";
 import { LoaderComponent } from "../../components/loader/loader.component";
@@ -31,25 +30,54 @@ import { ManualInvoicesFormComponent } from "../../components/manual-invoices/ma
 export class InvoiceComponent {
   public invoiceService: InvoiceService = inject(InvoiceService);
   public modalService: ModalService = inject(ModalService);
-  @ViewChild("addInvoiceModal") public addInvoiceModal: any;
   public title: string = "Facturas";
-  public fb: FormBuilder = inject(FormBuilder);
   @Output() callCustomSearchMethod = new EventEmitter();
+  public details: IDetailInvoice[] = [];
+  public fb: FormBuilder = inject(FormBuilder);
+  public isEditing: boolean = false;
+  public showEditInvoiceModal: boolean = false;
 
-  invoiceForm = this.fb.group({
-    id: [""],
-    consecutive: ["", Validators.required],
-    issueDate: ["", Validators.required],
-    receiver: this.fb.group({
-      identification: ["", Validators.required],
-      name: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-    }),
-    user: this.fb.group({
-      birthDate: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-    }),
+  public invoiceForm = this.fb.group({
+    id: [''],
+    type: ['', Validators.required],
+    issueDate: ['', Validators.required],
+    consecutive: ['', Validators.required],
+    key: ['', Validators.required],
+    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    name: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', Validators.required],
   });
+
+  public detailForm = this.fb.group({
+    cabys: ['', Validators.required],
+    unit: ['', Validators.required],
+    quantity: ['', [Validators.required, Validators.min(1)]],
+    unitPrice: ['', [Validators.required, Validators.min(0)]],
+    discount: ['', Validators.required],
+    tax: ['', [Validators.required, Validators.min(0)]],
+    total: [{ value: '', disabled: true }, Validators.required],
+    category: ['', Validators.required],
+    description: ['', Validators.required]
+  });
+
+  callEdition(invoice: IManualInvoice) {
+    this.invoiceForm.patchValue({
+      id: JSON.stringify(invoice.id),
+      type: invoice.type,
+      consecutive: invoice.consecutive?.toString() || '',
+      key: invoice.key,
+      issueDate: invoice.issueDate,
+      identification: invoice.receiver?.identification,
+      name: invoice.receiver?.name,
+      lastName: invoice.receiver?.lastName,
+      email: invoice.receiver?.email
+
+    });
+
+    this.details = invoice.details ?? [];
+    this.showEditInvoiceModal = true;
+  }
 
   constructor() {
     this.invoiceService.search.page = 1;
@@ -59,31 +87,13 @@ export class InvoiceComponent {
 
   saveInvoice(invoice: IManualInvoice) {
     this.invoiceService.save(invoice);
-    this.modalService.closeAll();
-  }
-
-  callEdition(invoice: IManualInvoice) {
-    console.log("Editando factura:", invoice);
-    this.invoiceForm.patchValue({
-      id: invoice.id?.toString(),
-      consecutive: invoice.consecutive,
-      issueDate: invoice.issueDate,
-      receiver: {
-        identification: invoice.receiver?.identification,
-        name: invoice.receiver?.name,
-        email: invoice.receiver?.email,
-      },
-      user: {
-        birthDate: invoice.users?.birthDate,
-        email: invoice.users?.email,
-      },
-    });
-    this.modalService.displayModal(this.addInvoiceModal);
+    this.showEditInvoiceModal = false;
   }
 
   updateInvoice(invoice: IManualInvoice) {
     this.invoiceService.update(invoice);
-    this.modalService.closeAll();
+    this.invoiceForm.reset();
+    this.showEditInvoiceModal = false;
   }
 
   search(event: Event) {
@@ -97,6 +107,6 @@ export class InvoiceComponent {
 
   cancelUpdate() {
     this.invoiceForm.reset();
-    this.modalService.closeAll();
+    this.showEditInvoiceModal = false;
   }
 }

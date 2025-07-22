@@ -1,3 +1,4 @@
+@defer {
 <div class="p-4 bg-bisque rounded-md shadow-md max-w-6xl mx-auto">
 
     @if (invoice(); as invoiceData) {
@@ -144,6 +145,9 @@
     }
 
 </div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}
 
 <ng-template #confirmationModal>
     <app-modal (callConfirmationMethod)="deleteInvoice()" (callCancelMethod)="hideModal()" [cancelAction]="'Cancelar'"

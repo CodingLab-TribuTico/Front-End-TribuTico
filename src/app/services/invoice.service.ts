@@ -9,19 +9,23 @@ import { tap, catchError } from "rxjs/operators";
   providedIn: "root",
 })
 export class InvoiceService extends BaseService<IManualInvoice> {
-  protected override source: string = 'invoice';
+  protected override source: string = "invoices";
   private invoicesList = signal<IManualInvoice[]>([]);
   private currentInvoice = signal<IManualInvoice | null>(null);
   private invoicesByUserIdList = signal<IManualInvoice[]>([]);
+
   get invoices$() {
     return this.invoicesList;
   }
+
   get currentInvoice$() {
     return this.currentInvoice;
   }
+
   get invoicesByUserId$() {
     return this.invoicesByUserIdList;
   }
+
   public search: ISearch = {
     page: 1,
     size: 5,
@@ -38,7 +42,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
       search: this.search.search,
     }).subscribe({
       next: (response: IResponse<IManualInvoice[]>) => {
-        console.log("response", response);
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from(
           { length: this.search.totalPages ? this.search.totalPages : 0 },
@@ -55,7 +58,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   getById(id: number) {
     this.find(id).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
-        console.log("response currentInvoice", response);
         this.currentInvoice.set(response.data);
       },
       error: (err: any) => {
@@ -78,13 +80,25 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   save(item: IManualInvoice) {
     this.add(item).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
-        this.alertService.displayAlert('success', response.message || 'Factura guardada correctamente!', 'center', 'top', ['success-snackbar']);
+        this.alertService.displayAlert(
+          "success",
+          response.message || 'Factura guardada correctamente!',
+          "center",
+          "top",
+          ["success-snackbar"]
+        );
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'Error al guardar la factura', 'center', 'top', ['error-snackbar']);
-        console.error('error', err);
-      }
+        this.alertService.displayAlert(
+          "error",
+          "Error al guardar la factura",
+          "center",
+          "top",
+          ["error-snackbar"]
+        );
+        console.error("error", err);
+      },
     });
   }
 

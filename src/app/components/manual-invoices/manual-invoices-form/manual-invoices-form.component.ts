@@ -21,10 +21,18 @@ export class ManualInvoicesFormComponent {
   @Input() invoiceForm!: FormGroup;
   @Input() detailForm!: FormGroup;
   @Input() responseScan!: any;
-  public details: IDetailInvoice[] = [];
+  @Input() details: IDetailInvoice[] = [];
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
   public type = signal<'ingreso' | 'gasto'>('ingreso');
+  @Output() callUpdateMethod = new EventEmitter<IManualInvoice>();
+  @Output() callCancelMethod = new EventEmitter<void>();
+  @Input() isEditing: boolean = false;
+
+
+  //variables para la edicion
+  public isEditingDetail: boolean = false;
+  public editingIndex: number = -1;
 
   // Variables para el modal de confirmación
   public showDeleteModal: boolean = false;
@@ -32,7 +40,7 @@ export class ManualInvoicesFormComponent {
 
   constructor() {
     effect(() => {
-
+      if (!this.responseScan) return;
       const response = this.responseScan();
       const currentType = this.type();
 
@@ -104,7 +112,12 @@ export class ManualInvoicesFormComponent {
       manualInvoice.id = this.invoiceForm.controls["id"].value;
     }
 
-    this.callSavedMethod.emit(manualInvoice as IManualInvoice);
+    if (manualInvoice.id) {
+      this.callUpdateMethod.emit(manualInvoice);
+    } else {
+      this.callSavedMethod.emit(manualInvoice);
+      this.invoiceForm.reset();
+    }
 
     this.details = [];
     this.detailForm.reset({
@@ -130,7 +143,11 @@ export class ManualInvoicesFormComponent {
       description: this.detailForm.controls["description"].value,
     };
 
+
+    // Agregar nuevo detalle
     this.details.push(detail);
+
+    // this.details.push(detail);
     this.detailForm.reset({
       category: '',
       tax: '',
@@ -211,14 +228,7 @@ export class ManualInvoicesFormComponent {
   }
 
   callCancel() {
-    this.details = [];
-    this.detailForm.reset({
-      category: '',
-      tax: '',
-    });
-    this.invoiceForm.reset({
-      type: '',
-    });
+    this.callCancelMethod.emit();
   }
 
   changeType(event: Event) {
@@ -232,6 +242,7 @@ export class ManualInvoicesFormComponent {
       email: ''
     });
   }
+
 
 
   editDetailItem(index: number) {
@@ -252,6 +263,9 @@ export class ManualInvoicesFormComponent {
     this.details.splice(index, 1);
 
     this.calculateTotal();
+
+    this.isEditingDetail = true;
+    this.editingIndex = index;
   }
 
   deleteDetailItem(index: number) {

@@ -56,9 +56,7 @@ export const routes: Routes = [
         path: 'create-simulation',
         component: CreateSimulationComponent,
         data: {
-          authorities: [
-            IRoleType.user
-          ],
+          authorities: [IRoleType.user],
           name: 'Crear Simulación',
           showInSidebar: true
         }

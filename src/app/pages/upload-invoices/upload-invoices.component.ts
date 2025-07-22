@@ -137,4 +137,15 @@ export class UploadInvoicesComponent {
     this.xmlService.responseScan.set(null);
     this.ocrService.resetResponseScan();
   }
+
+  callCancel() {
+    this.details = [];
+    this.detailForm.reset({
+      category: '',
+      tax: '',
+    });
+    this.invoiceForm.reset({
+      type: '',
+    });
+  }
 }

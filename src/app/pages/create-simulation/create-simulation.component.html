@@ -55,6 +55,7 @@
     </button>
 </form>
 } @else {
+@defer {
 <div>
     <app-isr-simulation [simulationPeriod]="isrSimulation.simulationPeriod"
         [simulationName]="isrSimulation.simulationName"
@@ -93,4 +94,7 @@
         </button>
     </div>
 </div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}
 }
