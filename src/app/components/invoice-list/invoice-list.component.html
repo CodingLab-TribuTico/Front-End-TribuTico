@@ -21,14 +21,16 @@
                 <td class="p-3">{{calculateTotal(item.details) | currency}}</td>
                 <td class="p-3">{{item.issuer?.email}}</td>
                 <td class="p-3 space-x-1 flex flex-row">
-                    <button (click)="callModalAction.emit(item)" class="bg-flamenco px-2 p-0.5 rounded-md"
+                    <button (click)="callModalAction.emit(item)"
+                        class="bg-flamenco px-2 p-0.5 rounded-md hover:bg-golden-glow hover:text-flamenco text-bisque flex items-center"
                         type="button">
-                        <span class="material-symbols-rounded text-lg text-bisque">edit</span>
+                        <span class="material-symbols-rounded text-lg">edit</span>
                     </button>
                     <a [routerLink]="['/app/invoice-detail', item.id]"
-                        class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2" type="button">
-                        <span class="material-symbols-rounded text-lg text-bisque">visibility</span>
-                        <span class="text-bisque text-sm font-medium ml-2">Ver</span>
+                        class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2 hover:bg-golden-glow hover:text-flamenco text-bisque"
+                        type="button">
+                        <span class="material-symbols-rounded text-lg">visibility</span>
+                        <span class="text-sm ml-2 font-bold">Ver</span>
                     </a>
                 </td>
             </tr>

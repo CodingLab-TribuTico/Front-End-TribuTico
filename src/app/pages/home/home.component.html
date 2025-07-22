@@ -32,16 +32,21 @@
                     [textColor]="'text-crater-brown'"
                     [description]="'Sube facturas de manera manual o mediante archivos. Consulta, edita detalles, elimina registros y utiliza filtros.'"
                     [firstButtonBackgroundColor]="'bg-crater-brown'" [firstButtonTextColor]="'text-bisque'"
-                    [firtButtonText]="'Cargar'" [firstButtonRoute]="'upload-invoices'"
-                    [secondButtonBackgroundColor]="'bg-bisque'" [secondButtonTextColor]="'text-crater-brown'"
-                    [secondButtonRoute]="'invoice'" [secondButtonText]="'Gestionar'" />
+                    [firstButtonText]="'Cargar'" [firstButtonRoute]="'upload-invoices'"
+                    [firstButtonHoverTextColor]="'hover:text-crater-brown'"
+                    [firstButtonHoverBgColor]="'hover:bg-bisque'" [secondButtonBackgroundColor]="'bg-bisque'"
+                    [secondButtonTextColor]="'text-crater-brown'" [secondButtonRoute]="'invoice'"
+                    [secondButtonText]="'Gestionar'" [secondButtonHoverBgColor]="'hover:bg-crater-brown'"
+                    [secondButtonHoverTextColor]="'hover:text-bisque'" />
 
                 } @else {
                 <app-card [icons]="['group']" [iconsColor]="'text-crater-brown'" [backgroundColor]="'bg-golden-glow'"
                     [title]="'GESTIONA A TUS USUARIOS.'" [textColor]="'text-crater-brown'"
                     [description]="'Crea, edita o elimina cuentas y gestiona los roles y permisos de cada usuario.'"
                     [firstButtonBackgroundColor]="'bg-crater-brown'" [firstButtonTextColor]="'text-bisque'"
-                    [firtButtonText]="'Usuarios'" [firstButtonRoute]="'users'" />
+                    [firstButtonText]="'Usuarios'" [firstButtonRoute]="'users'"
+                    [firstButtonHoverTextColor]="'hover:text-crater-brown'"
+                    [firstButtonHoverBgColor]="'hover:bg-bisque'" />
                 }
 
                 @if(role == "USER") {
@@ -50,7 +55,9 @@
                     [textColor]="'text-bisque'"
                     [description]="'Genera proyecciones basadas en tus facturas, guarda tus simulaciones y accede fácilmente. Consulta o elimina simulaciones.'"
                     [firstButtonBackgroundColor]="'bg-golden-glow'" [firstButtonTextColor]="'text-crater-brown'"
-                    [firtButtonText]="'Crear'" [firstButtonRoute]="'create-simulation'" />
+                    [firstButtonText]="'Crear'" [firstButtonRoute]="'create-simulation'"
+                    [firstButtonHoverBgColor]="'hover:bg-bisque'"
+                    [firstButtonHoverTextColor]="'hover:text-crater-brown'" />
                 } @else {
                 <app-card [icons]="['edit_notifications']" [iconsColor]="'text-bisque'"
                     [backgroundColor]="'bg-crater-brown'" [title]="'NOTIFICA A TUS USUARIOS.'"
