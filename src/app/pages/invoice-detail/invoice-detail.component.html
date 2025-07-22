@@ -123,20 +123,22 @@
     <div class="flex justify-between">
 
         <div class="flex justify-end">
-            <button (click)="onBack()" class="bg-flamenco px-2 p-0.5 rounded-md font-bold flex items-center">
+            <button (click)="onBack()"
+                class="bg-flamenco px-2 p-0.5 rounded-md hover:bg-golden-glow hover:text-flamenco text-bisque flex items-center">
                 <span class="material-symbols-rounded text-lg text-bisque">
                     arrow_left_alt
                 </span>
-                <span class="text-bisque text-sm font-medium ml-2">Volver</span>
+                <span class="text-bisque text-sm font-bold ml-2">Volver</span>
             </button>
         </div>
 
         <div class="flex justify-start">
 
-            <button (click)="openDeleteModal()" class="bg-golden-glow px-2 p-0.5 rounded-md font-bold flex items-center"
+            <button (click)="openDeleteModal()"
+                class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer font-bold hover:bg-bisque transition-colors flex items-center"
                 type="button">
                 <span class="material-symbols-rounded text-lg text-crater-brown">delete</span>
-                <span class="text-crater-brown text-sm font-medium ml-2">Eliminar</span>
+                <span class="text-crater-brown text-sm font-bold ml-2">Eliminar</span>
             </button>
         </div>
     </div>
