@@ -2,13 +2,11 @@ import {
   Component,
   EventEmitter,
   inject,
-  Input,
   Output,
-  ViewChild,
 } from "@angular/core";
 import { InvoiceService } from "../../services/invoice.service";
 import { ModalService } from "../../services/modal.service";
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { IDetailInvoice, IManualInvoice } from "../../interfaces";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { ModalComponent } from "../../components/modal/modal.component";
@@ -32,13 +30,12 @@ import { ManualInvoicesFormComponent } from "../../components/manual-invoices/ma
 export class InvoiceComponent {
   public invoiceService: InvoiceService = inject(InvoiceService);
   public modalService: ModalService = inject(ModalService);
-  @ViewChild("addInvoiceModal") public addInvoiceModal: any;
   public title: string = "Facturas";
   @Output() callCustomSearchMethod = new EventEmitter();
   public details: IDetailInvoice[] = [];
   public fb: FormBuilder = inject(FormBuilder);
   public isEditing: boolean = false;
-
+  public showEditInvoiceModal: boolean = false;
 
   public invoiceForm = this.fb.group({
     id: [''],
@@ -79,10 +76,8 @@ export class InvoiceComponent {
     });
 
     this.details = invoice.details ?? [];
-
-    this.modalService.displayModal(this.addInvoiceModal);
+    this.showEditInvoiceModal = true; 
   }
-
 
   constructor() {
     this.invoiceService.search.page = 1;
@@ -92,13 +87,13 @@ export class InvoiceComponent {
 
   saveInvoice(invoice: IManualInvoice) {
     this.invoiceService.save(invoice);
-    this.modalService.closeAll();
+    this.showEditInvoiceModal = false; 
   }
 
   updateInvoice(invoice: IManualInvoice) {
     this.invoiceService.update(invoice);
-    this.modalService.closeAll();
     this.invoiceForm.reset();
+    this.showEditInvoiceModal = false; 
   }
 
   search(event: Event) {
@@ -112,8 +107,6 @@ export class InvoiceComponent {
 
   cancelUpdate() {
     this.invoiceForm.reset();
-    this.modalService.closeAll();
+    this.showEditInvoiceModal = false; 
   }
 }
-
-
