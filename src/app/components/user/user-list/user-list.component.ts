@@ -42,4 +42,17 @@ export class UserListComponent {
     }
     this.selectedUser = null;
   }
+
+  statusText(status: IUser["status"]): string {
+    switch (status) {
+      case 'active':
+        return 'Activo';
+      case 'blocked':
+        return 'Bloqueado';
+      case 'disabled':
+        return 'Desactivado';
+      default:
+        return 'Desconocido';
+    }
+  }
 }

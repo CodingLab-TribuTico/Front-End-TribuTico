@@ -10,7 +10,7 @@ import { tap, catchError } from "rxjs/operators";
 })
 
 export class InvoiceService extends BaseService<IManualInvoice> {
-  protected override source: string = 'invoice';
+  protected override source: string = 'invoices';
   private invoicesList = signal<IManualInvoice[]>([]);
   private invoicesByUserIdList = signal<IManualInvoice[]>([]);
   get invoices$() {
