@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../interfaces';
 import { Observable, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class AuthService {
   private user: IUser = { email: '', authorities: [] };
   private http: HttpClient = inject(HttpClient);
   public tokenIsExpired: boolean = false;
-  public userStatus: boolean = true;
+  public userStatus: string = 'active';
 
   constructor() {
     this.load();
@@ -92,11 +92,12 @@ export class AuthService {
         this.user.email = credentials.email;
         this.expiresIn = response.expiresIn;
         this.user = response.authUser;
-        this.userStatus = this.user.status ? this.user.status : false;
+        this.userStatus = this.user.status ?? 'active';
         this.save();
       })
     );
   }
+
 
   changePassword(userId: number, password: { currentPassword: string; newPassword: string }) {
     return this.http.patch(`users/change-password/${userId}`, password);

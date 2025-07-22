@@ -92,3 +92,13 @@
     </p>
   </app-modal>
 </ng-template>
+
+<ng-template #disabledUserModal>
+  <app-modal (callConfirmationMethod)="hideModal()" [confirmAction]="'Cerrar'" [title]="'Cuenta desactivada.'"
+    [textCenter]="true" [icon]="'block'">
+    <p class="text-bisque text-base max-w-lg">
+      Tu cuenta ha sido desactivada. Si crees que se trata de un error, por favor comunícate con el administrador del
+      sistema.
+    </p>
+  </app-modal>
+</ng-template>
