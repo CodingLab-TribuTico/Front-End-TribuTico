@@ -18,7 +18,7 @@ export interface IUser {
   birthDate?: string;
   email?: string;
   password?: string;
-  status?: boolean;
+  status?: string;
   createdAt?: string;
   updatedAt?: string;
   authorities?: IAuthority[];
@@ -76,7 +76,7 @@ export interface IDetailInvoice {
   category?: string;
   total?: number;
   description?: string;
-  
+
 }
 
 export interface IInvoiceUser {

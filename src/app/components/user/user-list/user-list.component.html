@@ -23,7 +23,7 @@
         <td class="p-3" scope="row">{{item.lastname2}}</td>
         <td class="p-3" scope="row">{{item.birthDate | date: 'dd/MM/yyyy'}}</td>
         <td class="p-3" scope="row">{{item.email}}</td>
-        <th class="p-3" scope="col">{{(item.status ? "Activo" : "Bloqueado")}}</th>
+        <th class="p-3" scope="col">{{statusText(item.status)}}</th>
         <td class="p-3 space-x-1">
           <button (click)="callModalAction.emit(item);" class="bg-flamenco px-2 p-0.5 rounded-md" type="button">
             <span class="material-symbols-rounded text-lg text-bisque">
