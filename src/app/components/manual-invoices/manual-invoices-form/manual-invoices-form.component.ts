@@ -40,6 +40,7 @@ export class ManualInvoicesFormComponent {
 
   constructor() {
     effect(() => {
+      if (!this.responseScan) return;
       const response = this.responseScan();
       if (response) {
         const type = response.type || this.type;;
@@ -228,14 +229,7 @@ export class ManualInvoicesFormComponent {
   }
 
   callCancel() {
-    this.details = [];
-    this.detailForm.reset({
-      category: '',
-      tax: '',
-    });
-    this.invoiceForm.reset({
-      type: '',
-    });
+    this.callCancelMethod.emit();
   }
 
   changeType(event: Event) {
@@ -291,35 +285,4 @@ export class ManualInvoicesFormComponent {
     this.showDeleteModal = false;
     this.indexToDelete = -1;
   }
-  /*
-    callUpdate() {
-    const type = this.invoiceForm.controls["type"].value;
-  
-    const invoiceUser: IInvoiceUser = {
-      identification: this.invoiceForm.controls["identification"].value,
-      name: this.invoiceForm.controls["name"].value,
-      lastName: this.invoiceForm.controls["lastName"].value,
-      email: this.invoiceForm.controls["email"].value,
-    };
-  
-    let manualInvoice: IManualInvoice = {
-      id: this.invoiceForm.controls["id"].value,
-      type,
-      consecutive: this.invoiceForm.controls["consecutive"].value,
-      key: this.invoiceForm.controls["key"].value,
-      issueDate: this.invoiceForm.controls["issueDate"].value,
-      details: this.details,
-    };
-  
-    if (type === "ingreso") {
-      manualInvoice.receiver = invoiceUser;
-    } else {
-      manualInvoice.issuer = invoiceUser;
-    }
-  
-    this.callUpdateMethod.emit(manualInvoice);
-    
-  }
-  
-    */
 }

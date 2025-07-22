@@ -53,26 +53,8 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'invoice',
-        component: InvoiceComponent,
-        data: {
-          authorities: [IRoleType.superAdmin, IRoleType.user],
-          name: 'Facturas',
-          showInSidebar: true
-        }
-      },
-      {
         path: 'create-simulation',
         component: CreateSimulationComponent,
-        data: {
-          authorities: [IRoleType.user],
-          name: 'Crear Simulación',
-          showInSidebar: true
-        }
-      },
-      {
-        path: 'invoice',
-        component: InvoiceComponent,
         data: {
           authorities: [IRoleType.user],
           name: 'Crear Simulación',

@@ -7,11 +7,12 @@ import { InvoiceService } from '../../services/invoice.service';
 import { ModalService } from '../../services/modal.service';
 import { NgbSlide } from "../../../../node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel";
 import { ModalComponent } from "../../components/modal/modal.component";
+import { LoaderComponent } from '../../components/loader/loader.component';
 
 @Component({
   selector: 'app-invoice-detail',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterModule, ModalComponent],
+  imports: [CommonModule, MatIconModule, RouterModule, ModalComponent, LoaderComponent],
   templateUrl: './invoice-detail.component.html',
   styleUrl: './invoice-detail.component.scss'
 })

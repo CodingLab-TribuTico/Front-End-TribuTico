@@ -40,70 +40,50 @@ export class InvoiceComponent {
   public isEditing: boolean = false;
 
 
-  invoiceForm = this.fb.group({
-    id: [""],
-    type: ["", Validators.required],
-    consecutive: ["", Validators.required],
-    issueDate: ["", Validators.required],
-    key: ["", Validators.required],
-    name: ["", Validators.required],
-    lastName: ["", Validators.required],
-    email: ["", [Validators.required, Validators.email]],
-    identification: ["", Validators.required],
-    details: this.fb.array([])
-    
-    /*
-    receiver: this.fb.group({
-      id: [""],
-      name: ["", Validators.required],
-      lastname: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-      identification: ["", Validators.required],
-    }),
-    issuer: this.fb.group({
-      id: [""],
-      name: ["", Validators.required],
-      lastname: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-      identification: ["", Validators.required],
-    }),
-    */
+  public invoiceForm = this.fb.group({
+    id: [''],
+    type: ['', Validators.required],
+    issueDate: ['', Validators.required],
+    consecutive: ['', Validators.required],
+    key: ['', Validators.required],
+    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    name: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', Validators.required],
   });
 
-  
-  detailForm = this.fb.group({
-    cabys: ["", Validators.required],
-    quantity: ["", Validators.required],
-    unit: ["", Validators.required],
-    unitPrice: ["", Validators.required],
-    discount: ["", Validators.required],
-    tax: ["", Validators.required],
-    taxAmount: ["", Validators.required],
-    category: ["", Validators.required],
-    total: ["", Validators.required],
-    description: ["", Validators.required],
+  public detailForm = this.fb.group({
+    cabys: ['', Validators.required],
+    unit: ['', Validators.required],
+    quantity: ['', [Validators.required, Validators.min(1)]],
+    unitPrice: ['', [Validators.required, Validators.min(0)]],
+    discount: ['', Validators.required],
+    tax: ['', [Validators.required, Validators.min(0)]],
+    total: [{ value: '', disabled: true }, Validators.required],
+    category: ['', Validators.required],
+    description: ['', Validators.required]
   });
-  
+
   callEdition(invoice: IManualInvoice) {
-  this.invoiceForm.patchValue({
-    id: JSON.stringify(invoice.id),
-    type: invoice.type,
-    consecutive: invoice.consecutive?.toString() || '',
-    key: invoice.key,
-    issueDate: invoice.issueDate,
-    identification: invoice.receiver?.identification,
-    name: invoice.receiver?.name,
-    lastName: invoice.receiver?.lastName,
-    email: invoice.receiver?.email
-    
-  });
+    this.invoiceForm.patchValue({
+      id: JSON.stringify(invoice.id),
+      type: invoice.type,
+      consecutive: invoice.consecutive?.toString() || '',
+      key: invoice.key,
+      issueDate: invoice.issueDate,
+      identification: invoice.receiver?.identification,
+      name: invoice.receiver?.name,
+      lastName: invoice.receiver?.lastName,
+      email: invoice.receiver?.email
 
-  this.details = invoice.details ?? [];
+    });
 
-  this.modalService.displayModal(this.addInvoiceModal);
-}
+    this.details = invoice.details ?? [];
 
-  
+    this.modalService.displayModal(this.addInvoiceModal);
+  }
+
+
   constructor() {
     this.invoiceService.search.page = 1;
     this.invoiceService.search.size = 10;
@@ -136,4 +116,4 @@ export class InvoiceComponent {
   }
 }
 
- 
+

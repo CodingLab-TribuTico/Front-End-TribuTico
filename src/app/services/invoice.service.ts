@@ -42,7 +42,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
       search: this.search.search,
     }).subscribe({
       next: (response: IResponse<IManualInvoice[]>) => {
-        console.log("response", response);
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from(
           { length: this.search.totalPages ? this.search.totalPages : 0 },
@@ -59,7 +58,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   getById(id: number) {
     this.find(id).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
-        console.log("response currentInvoice", response);
         this.currentInvoice.set(response.data);
       },
       error: (err: any) => {
