@@ -74,8 +74,8 @@ export class InvoiceComponent {
         email: invoice.receiver?.email,
       },
       user: {
-        birthDate: invoice.user?.birthDate,
-        email: invoice.user?.email,
+        birthDate: invoice.users?.birthDate,
+        email: invoice.users?.email,
       },
     });
     this.modalService.displayModal(this.addInvoiceModal);

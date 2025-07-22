@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, ViewChild } from '@angular/core';
 import { LlamaLoaderComponent } from '../../components/llama-loader/llama-loader.component';
 import { CommonModule } from '@angular/common';
 import { OcrService } from '../../services/ocr.service';
@@ -34,6 +34,7 @@ export class UploadInvoicesComponent {
   public type: string = 'ingreso';
   public details: IDetailInvoice[] = [];
   @ViewChild('cancelSubscriptionModal') public cancelSubscriptionModal: any;
+  @ViewChild('inputFileForm') inputFileForm!: InputFileFormComponent;
 
   public combinedResponse = computed(() => {
     return this.xmlService.responseScan$() || this.ocrService.responseScan$();
@@ -85,8 +86,31 @@ export class UploadInvoicesComponent {
   }
 
   cancelCurrentRequest() {
+    this.xmlService.cancelCurrentRequest();
     this.ocrService.cancelCurrentRequest();
+    this.invoiceForm.reset({
+      type: '',
+      issueDate: '',
+      consecutive: '',
+      key: '',
+      identification: '',
+      name: '',
+      lastName: '',
+      email: ''
+    });
+
+    this.detailForm.reset({
+      category: '',
+      tax: ''
+    });
+
+    if (this.inputFileForm) {
+      this.inputFileForm.removeFile();
+    }
+
     this.hideModal();
+    window.location.reload();
+
   }
 
   saveInvoice(item: IManualInvoice) {

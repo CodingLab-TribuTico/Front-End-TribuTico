@@ -19,6 +19,8 @@ export class InputFileFormComponent {
   selectedFile: File | null = null;
   isDragging = false;
 
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   constructor() {
     effect(() => {
       if (!this.isLoading()) {
@@ -45,6 +47,13 @@ export class InputFileFormComponent {
 
   removeFile(): void {
     this.selectedFile = null;
+    this.clearFileInput();
+  }
+
+  clearFileInput(): void {
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   onDragOver(event: DragEvent): void {

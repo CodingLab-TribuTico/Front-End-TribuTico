@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, Output, Signal } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, Output, signal, Signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice, IInvoiceUser } from '../../../interfaces';
 import { CardDetailComponent } from '../../card-detail/card-detail.component';
@@ -24,7 +24,7 @@ export class ManualInvoicesFormComponent {
   public details: IDetailInvoice[] = [];
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
-  public type: string = 'ingreso';
+  public type = signal<'ingreso' | 'gasto'>('ingreso');
 
   // Variables para el modal de confirmación
   public showDeleteModal: boolean = false;
@@ -32,10 +32,13 @@ export class ManualInvoicesFormComponent {
 
   constructor() {
     effect(() => {
+
       const response = this.responseScan();
+      const currentType = this.type();
+
       if (response) {
-        const type = response.type || this.type;;
-        this.fillInvoiceFromAutocomplete(response);
+        const typeToUse = response.type || currentType;
+        this.fillInvoiceFromAutocomplete(response, typeToUse);
       }
     });
   }
@@ -111,7 +114,6 @@ export class ManualInvoicesFormComponent {
     this.invoiceForm.reset({
       type: '',
     });
-    this.type = 'ingreso';
   }
 
   callSaveDetail() {
@@ -135,21 +137,19 @@ export class ManualInvoicesFormComponent {
     });
   }
 
-  fillInvoiceFromAutocomplete(response: any) {
+  fillInvoiceFromAutocomplete(response: any, type: 'ingreso' | 'gasto') {
     console.log('Respuesta completa:', response);
     if (!response) return;
 
     const data = response.data || response;
-    const type = data.type || 'gasto';
 
     console.log('Datos recibidos:', data);
 
-    this.type = type;
     this.updateFormForType(type, data);
 
   }
 
-  private updateFormForType(type: string, data: any) {
+  updateFormForType(type: string, data: any) {
     const personData = type === 'ingreso' ? data.receiver : data.issuer;
     const person = personData || {};
 
@@ -223,11 +223,12 @@ export class ManualInvoicesFormComponent {
 
   changeType(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    this.type = selectElement.value;
+    this.type.set(selectElement.value as 'ingreso' | 'gasto');
+
     this.invoiceForm.patchValue({
       identification: '',
       name: '',
-      lastname: '',
+      lastName: '',
       email: ''
     });
   }

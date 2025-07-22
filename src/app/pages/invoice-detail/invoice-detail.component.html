@@ -27,10 +27,14 @@
     </div>
 
     <h2 class="text-2xl font-bold text-crater-brown mb-4">Datos del Cliente</h2>
-    <div class="grid grid-cols-3 gap-5 mb-6">
+    <div class="grid grid-cols-4 gap-5 mb-6">
         <div>
             <p class="font-semibold text-crater-brown">Nombre:</p>
             <p>{{invoiceData?.receiver?.name || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Apellido:</p>
+            <p>{{invoiceData?.receiver?.lastName || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Identificación:</p>
@@ -43,10 +47,14 @@
     </div>
 
     <h2 class="text-2xl font-bold text-crater-brown mb-4">Datos del Proveedor</h2>
-    <div class="grid grid-cols-3 gap-5 mb-6">
+    <div class="grid grid-cols-4 gap-5 mb-6">
         <div>
             <p class="font-semibold text-crater-brown">Nombre:</p>
             <p>{{invoiceData?.issuer?.name || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Apellido:</p>
+            <p>{{invoiceData?.issuer?.lastName || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Identificación:</p>
@@ -88,20 +96,23 @@
         </tbody>
         <tfoot>
             <tr class="font-bold border-t-2 border-crater-brown">
-                <td colspan="7" class="p-2 text-right">Subtotal:</td>
-                <td class="p-2 text-right">{{calculateSubtotal(invoiceData?.details ?? []) | currency: 'CRC ':
+                <td colspan="7" class="p-2 text-right text-crater-brown">Subtotal:</td>
+                <td class="p-2 text-right text-crater-brown">{{calculateSubtotal(invoiceData?.details ?? []) | currency:
+                    'CRC ':
                     'symbol':'1.2-2'}}</td>
                 <td></td>
             </tr>
             <tr class="font-bold">
-                <td colspan="7" class="p-2 text-right">Total Impuestos:</td>
-                <td class="p-2 text-right">{{calculateTotalTaxes(invoiceData?.details ?? []) | currency: 'CRC ':
+                <td colspan="7" class="p-2 text-right text-crater-brown">Total Impuestos:</td>
+                <td class="p-2 text-right text-crater-brown">{{calculateTotalTaxes(invoiceData?.details ?? []) |
+                    currency: 'CRC ':
                     'symbol':'1.2-2'}}</td>
                 <td></td>
             </tr>
             <tr class="font-bold border-t-2 border-crater-brown">
-                <td colspan="7" class="p-2 text-right">Total General:</td>
-                <td class="p-2 text-right">{{calculateTotal(invoiceData?.details ?? []) | currency: 'CRC ':
+                <td colspan="7" class="p-2 text-right text-crater-brown">Total General:</td>
+                <td class="p-2 text-right text-crater-brown">{{calculateTotal(invoiceData?.details ?? []) | currency:
+                    'CRC ':
                     'symbol':'1.2-2'}}
                 </td>
                 <td></td>
@@ -111,7 +122,7 @@
     <div class="flex justify-between">
 
         <div class="flex justify-end">
-            <button (click)="onBack()" class="bg-flamenco px-2 p-0.5 rounded-md flex items-center">
+            <button (click)="onBack()" class="bg-flamenco px-2 p-0.5 rounded-md font-bold flex items-center">
                 <span class="material-symbols-rounded text-lg text-bisque">
                     arrow_left_alt
                 </span>
@@ -121,7 +132,7 @@
 
         <div class="flex justify-start">
 
-            <button (click)="openDeleteModal()" class="bg-golden-glow px-2 p-0.5 rounded-md flex items-center"
+            <button (click)="openDeleteModal()" class="bg-golden-glow px-2 p-0.5 rounded-md font-bold flex items-center"
                 type="button">
                 <span class="material-symbols-rounded text-lg text-crater-brown">delete</span>
                 <span class="text-crater-brown text-sm font-medium ml-2">Eliminar</span>

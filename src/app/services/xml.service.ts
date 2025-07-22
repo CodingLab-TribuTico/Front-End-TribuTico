@@ -46,6 +46,13 @@ export class XmlService extends BaseService<IResponse<any>> {
     }
   }
 
-
+  cancelCurrentRequest() {
+    this.responseScan.set(null);
+    this.isLoadingSignal.set(false);
+    if (this.currentSubscription) {
+      this.currentSubscription.unsubscribe();
+      this.currentSubscription = null;
+    }
+  }
 
 }
