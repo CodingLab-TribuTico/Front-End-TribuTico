@@ -45,6 +45,7 @@ export class ManualInvoicesFormComponent {
       if (response) {
         const typeToUse = response.type || currentType;
         this.fillInvoiceFromAutocomplete(response, typeToUse);
+        this.callResetScanMethod.emit();
       }
     });
   }
