@@ -9,7 +9,7 @@
             class="text-burnt-umber">*</span></label>
         <input id="identification" formControlName="identification" type="text"
           class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold focus:outline-none focus:border-golden-glow"
-          placeholder="#########">
+          placeholder="123456789">
 
         <div class="min-h-[1.5rem]">
           @if (userForm.controls['identification'].errors?.['required'] &&
@@ -25,16 +25,16 @@
       </div>
 
       <div class="mb-2">
-        <label class="block my-2 text-base font-semibold text-bisque" for="lastname">Apellido 1<span
+        <label class="block my-2 text-base font-semibold text-bisque" for="lastname">Primer apellido<span
             class="text-burnt-umber">*</span></label>
         <input id="lastname" formControlName="lastname" type="text"
           class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
-          placeholder="Doe">
+          placeholder="Primer apellido">
 
         <div class="min-h-[1.5rem]">
           @if (userForm.controls['lastname'].invalid && (userForm.controls['lastname'].dirty ||
           userForm.controls['lastname'].touched)) {
-          <p class="text-burnt-umber text-sm">Apellido 1 es obligatorio</p>
+          <p class="text-burnt-umber text-sm">Primer apellido es obligatorio</p>
           }
         </div>
       </div>
@@ -61,7 +61,7 @@
             class="text-burnt-umber">*</span></label>
         <input id="name" formControlName="name" type="text"
           class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
-          placeholder="John">
+          placeholder="Nombre">
 
         <div class="min-h-[1.5rem]">
           @if (userForm.controls['name'].invalid && (userForm.controls['name'].dirty ||
@@ -72,10 +72,10 @@
       </div>
 
       <div class="mb-2">
-        <label class="block my-2 text-base font-semibold text-bisque" for="lastname2">Apellido 2</label>
+        <label class="block my-2 text-base font-semibold text-bisque" for="lastname2">Segundo apellido</label>
         <input id="lastname2" formControlName="lastname2" type="text"
           class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
-          placeholder="Smith">
+          placeholder="Segundo apellido">
 
         <div class="min-h-[1.5rem]"></div>
       </div>
@@ -85,7 +85,7 @@
             class="text-burnt-umber">*</span></label>
         <input id="email" formControlName="email" type="email"
           class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
-          placeholder="email@gmail.com">
+          placeholder="email@dominio.com">
 
         <div class="min-h-[1.5rem]">
           @if (userForm.controls["email"].errors?.["required"] &&
@@ -110,11 +110,14 @@
         <option value="">
           Seleccione un estatus
         </option>
-        <option value="true">
+        <option value="active">
           Activo
         </option>
-        <option value="false">
+        <option value="blocked">
           Bloqueado
+        </option>
+        <option value="disabled">
+          Desactivado
         </option>
       </select>
 

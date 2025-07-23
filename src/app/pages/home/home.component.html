@@ -12,8 +12,8 @@
         <div class="flex flex-col justify-center items-center bg-bisque rounded-md h-full w-full px-8 py-6 2xl:px-12">
             <div class="w-fit justify-end items-end">
                 <div class="flex justify-center items-center w-full">
-                    <img src=" ../../../../../assets/img/homepage/MessagesIllustration.png"
-                        alt="Ilustración de mensajes" class="w-52 2xl:w-auto mb-2" />
+                    <img src=" ../../../../../assets/img/homepage/messages-illustration.png"
+                        alt="Ilustración de mensajes" class="w-full 2xl:w-auto mb-4" loading="eager" />
                 </div>
                 <h5 class="text-crater-brown font-black mb-2 text-2xl w-full text-left">
                     NECESITAS AYUDA?<br>
@@ -22,11 +22,8 @@
                 <p class="text-sm 2xl:text-base font-normal text-crater-brown">
                     Interactúa con el asistente virtual para resolver dudas y acceder a información.
                 </p>
-                <button
-                    class="bg-golden-glow px-4 py-2 rounded-md font-bold mt-4 text-crater-brown text-lg">Chatbot</button>
             </div>
         </div>
-
         <div class="flex flex-col gap-4 h-full w-full">
             <div class="grid grid-cols-2 gap-4 flex-1">
                 @if(role == "USER") {
@@ -35,15 +32,21 @@
                     [textColor]="'text-crater-brown'"
                     [description]="'Sube facturas de manera manual o mediante archivos. Consulta, edita detalles, elimina registros y utiliza filtros.'"
                     [firstButtonBackgroundColor]="'bg-crater-brown'" [firstButtonTextColor]="'text-bisque'"
-                    [firtButtonText]="'Cargar'" [secondButtonBackgroundColor]="'bg-bisque'"
-                    [secondButtonTextColor]="'text-crater-brown'" [secondButtonText]="'Gestionar'" />
+                    [firstButtonText]="'Cargar'" [firstButtonRoute]="'upload-invoices'"
+                    [firstButtonHoverTextColor]="'hover:text-crater-brown'"
+                    [firstButtonHoverBgColor]="'hover:bg-bisque'" [secondButtonBackgroundColor]="'bg-bisque'"
+                    [secondButtonTextColor]="'text-crater-brown'" [secondButtonRoute]="'invoice'"
+                    [secondButtonText]="'Gestionar'" [secondButtonHoverBgColor]="'hover:bg-crater-brown'"
+                    [secondButtonHoverTextColor]="'hover:text-bisque'" />
 
                 } @else {
                 <app-card [icons]="['group']" [iconsColor]="'text-crater-brown'" [backgroundColor]="'bg-golden-glow'"
                     [title]="'GESTIONA A TUS USUARIOS.'" [textColor]="'text-crater-brown'"
                     [description]="'Crea, edita o elimina cuentas y gestiona los roles y permisos de cada usuario.'"
                     [firstButtonBackgroundColor]="'bg-crater-brown'" [firstButtonTextColor]="'text-bisque'"
-                    [firtButtonText]="'Usuarios'" [firstButtonRoute]="'users'" />
+                    [firstButtonText]="'Usuarios'" [firstButtonRoute]="'users'"
+                    [firstButtonHoverTextColor]="'hover:text-crater-brown'"
+                    [firstButtonHoverBgColor]="'hover:bg-bisque'" />
                 }
 
                 @if(role == "USER") {
@@ -52,15 +55,14 @@
                     [textColor]="'text-bisque'"
                     [description]="'Genera proyecciones basadas en tus facturas, guarda tus simulaciones y accede fácilmente. Consulta o elimina simulaciones.'"
                     [firstButtonBackgroundColor]="'bg-golden-glow'" [firstButtonTextColor]="'text-crater-brown'"
-                    [firtButtonText]="'Crear'" [secondButtonBackgroundColor]="'bg-bisque'"
-                    [secondButtonTextColor]="'text-crater-brown'" [secondButtonText]="'Gestionar'" />
+                    [firstButtonText]="'Crear'" [firstButtonRoute]="'create-simulation'"
+                    [firstButtonHoverBgColor]="'hover:bg-bisque'"
+                    [firstButtonHoverTextColor]="'hover:text-crater-brown'" />
                 } @else {
                 <app-card [icons]="['edit_notifications']" [iconsColor]="'text-bisque'"
                     [backgroundColor]="'bg-crater-brown'" [title]="'NOTIFICA A TUS USUARIOS.'"
                     [textColor]="'text-bisque'"
-                    [description]="'Envía alertas, recordatorios o mensajes importantes de forma rápida y sencilla.'"
-                    [firstButtonBackgroundColor]="'bg-golden-glow'" [firstButtonTextColor]="'text-crater-brown'"
-                    [firtButtonText]="'Notificaciones'" />
+                    [description]="'Envía alertas, recordatorios o mensajes importantes de forma rápida y sencilla.'" />
                 }
 
             </div>
@@ -68,16 +70,11 @@
             <app-card [icons]="['bar_chart', 'target']" [iconsColor]="'text-bisque'" [backgroundColor]="'bg-flamenco'"
                 [title]="'ACCEDE A INFORMACION VISUAL DE TUS FINANZAS Y ESTABLECE METAS.'"
                 [textColor]="'text-crater-brown'"
-                [description]="'Visualiza tus ingresos y egresos mensuales, flujo de caja, distribución de egresos por categoría y otros indicadores clave. Además, crea metas personalizadas basadas en tu historial para mejorar tu salud financiera.'"
-                [firstButtonBackgroundColor]="'bg-bisque'" [firstButtonTextColor]="'text-crater-brown'"
-                [firtButtonText]="'Reportes'" [secondButtonBackgroundColor]="'bg-golden-glow'"
-                [secondButtonTextColor]="'text-crater-brown'" [secondButtonText]="'Metas'" />
+                [description]="'Visualiza tus ingresos y egresos mensuales, flujo de caja, distribución de egresos por categoría y otros indicadores clave. Además, crea metas personalizadas basadas en tu historial para mejorar tu salud financiera.'" />
             } @else {
             <app-card [icons]="['bar_chart_4_bars']" [iconsColor]="'text-bisque'" [backgroundColor]="'bg-flamenco'"
                 [title]="'VISUALIZA REPORTES DEL SISTEMA CON DATOS CLAVE.'" [textColor]="'text-crater-brown'"
-                [description]="'Consulta gráficos detallados sobre usuarios registrados, estado de cuentas, evolución mensual de ingresos y egresos, balance neto por usuario, total de facturas procesadas, proporción entre ingresos y egresos, así como rankings de usuarios según actividad e ingresos generados.'"
-                [firstButtonBackgroundColor]="'bg-bisque'" [firstButtonTextColor]="'text-crater-brown'"
-                [firtButtonText]="'Reportes'" />
+                [description]="'Consulta gráficos detallados sobre usuarios registrados, estado de cuentas, evolución mensual de ingresos y egresos, balance neto por usuario, total de facturas procesadas, proporción entre ingresos y egresos, así como rankings de usuarios según actividad e ingresos generados.'" />
             }
         </div>
     </div>

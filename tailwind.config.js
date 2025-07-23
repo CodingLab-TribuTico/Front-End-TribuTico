@@ -15,6 +15,15 @@ module.exports = {
         'goblin': '#3E885B',
         'isabelline': '#F2F1EC',
       },
+      keyframes: {
+        ripple: {
+          '0%, 100%': { transform: 'translate(-50%, -50%) scale(1)' },
+          '50%': { transform: 'translate(-50%, -50%) scale(.9)' }
+        },
+      },
+      animation: {
+        ripple: 'ripple 2s ease infinite',
+      },
     },
     fontFamily: {
       'montserrat': ['Montserrat', 'sans-serif'],

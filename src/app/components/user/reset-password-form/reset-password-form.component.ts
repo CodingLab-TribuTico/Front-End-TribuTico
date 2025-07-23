@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "../../../services/auth.service";
 import { IUser } from "../../../interfaces";
-import { Router, RouterLink } from "@angular/router";
+import { Router } from "@angular/router";
 import { AlertService } from "../../../services/alert.service";
 
 @Component({
@@ -13,17 +13,16 @@ import { AlertService } from "../../../services/alert.service";
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    RouterLink
   ]
 })
 export class ResetPasswordFormComponent {
   @Input() form!: FormGroup;
   @Output() callSaveMethod: EventEmitter<IUser> = new EventEmitter<IUser>();
   @Output() callCancel: EventEmitter<void> = new EventEmitter<void>();
- 
+
   public user?: IUser;
   public passwordError!: string;
-  
+
   showCurrentPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
@@ -34,49 +33,50 @@ export class ResetPasswordFormComponent {
     private alertService: AlertService
   ) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.user = this.authService.getUser();
   }
 
   public resetPassword(event: Event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const userId = this.user?.id!;
-  const currentPassword = this.form.get('currentPassword')?.value;
-  const newPassword  = this.form.get('password')?.value;
-  const confirmPassword = this.form.get('confirmPassword')?.value;
+    const userId = this.user?.id!;
+    const currentPassword = this.form.get('currentPassword')?.value;
+    const newPassword = this.form.get('password')?.value;
+    const confirmPassword = this.form.get('confirmPassword')?.value;
 
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    return;
-  }
-
-  if (newPassword  !== confirmPassword) {
-    this.passwordError = 'Las contraseñas no coinciden';
-    return;
-  }
-
-  this.authService.changePassword(userId, {currentPassword, newPassword }).subscribe({
-    next: (response: any) => {
-      this.alertService.displayAlert(
-      'success', response?.message,
-      'center',
-      'top',
-      ['success-snackbar']
-    );
-    this.router.navigateByUrl('/app/profile');
-    },
-    error: (err) => {
-      const errorMessage = err?.error?.message;
-      this.alertService.displayAlert(
-      'error',
-      errorMessage,
-      'center',
-      'top',
-      ['error-snackbar']
-    );
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
     }
-  });
+
+    if (newPassword !== confirmPassword) {
+      this.passwordError = 'Las contraseñas no coinciden';
+      return;
+    }
+
+    this.authService.changePassword(userId, { currentPassword, newPassword }).subscribe({
+      next: (response: any) => {
+        this.alertService.displayAlert(
+          'success', response?.message,
+          'center',
+          'top',
+          ['success-snackbar']
+        );
+        this.router.navigateByUrl('/app/profile');
+      },
+      error: (err) => {
+        console.error('Error al cambiar la contraseña:', err);
+        const errorMessage = err?.message;
+        this.alertService.displayAlert(
+          'error',
+          errorMessage,
+          'center',
+          'top',
+          ['error-snackbar']
+        );
+      }
+    });
   }
 
   cancel() {
@@ -84,7 +84,7 @@ export class ResetPasswordFormComponent {
     this.form.reset();
     this.router.navigate(["/app/profile"]);
   }
-  
+
 }
 
 

@@ -3,54 +3,49 @@
     <div>
       <p class="text-base font-base text-crater-brown">
         Mostrando de
-        <span>{{((service.search.pageNumber-1)*5)+1}}</span>
+        <span>{{ ((service.search.pageNumber - 1) * service.search.pageSize) + 1 }}</span>
         a
-        <span>{{
-          service.search.pageNumber !== service.totalItems.length ? service.search.pageNumber*5
-          : (service.search.pageNumber-1)*5 +(service.search.totalElements%5)
-          }}</span>
+        <span>{{ Math.min(service.search.pageNumber * service.search.pageSize, service.search.totalElements) }}</span>
         de
-        <span>{{service.search.totalElements}}</span>
+        <span>{{ service.search.totalElements }}</span>
         resultados
       </p>
     </div>
+
     <div>
       <nav class="isolate inline-flex -space-x-px rounded-md" aria-label="Pagination">
         <button (click)="onPage(1)" [disabled]="service.search.pageNumber === 1"
-          class="text-bisque rounded-l-md px-2 py-2 border-r-2 border-zorba  bg-crater-brown disabled:text-zorba ">
-          <span class="material-symbols-rounded text-lg">
-            keyboard_double_arrow_left
-          </span>
-        </button>
-        <button (click)="onPage(service.search.pageNumber-1)" [disabled]="service.search.pageNumber === 1"
-          class="text-bisque px-2 py-2 border-r-2 border-zorba bg-crater-brown disabled:text-zorba">
-          <span class="material-symbols-rounded text-lg">
-            chevron_left
-          </span>
+          class="text-bisque rounded-l-md px-2 py-2 border-r-2 border-zorba bg-crater-brown disabled:text-zorba">
+          <span class="material-symbols-rounded text-lg">keyboard_double_arrow_left</span>
         </button>
 
-        @for (item of service.totalItems; track $index) {
-        @if (service.search.pageNumber - 2 <= item && item <=service.search.pageNumber + 2) { <button
-          [disabled]="service.search.pageNumber === item" (click)="onPage(item)" aria-current="page"
-          class="text-bisque px-4 py-2 border-r-2 border-zorba"
-          [ngClass]="{ 'bg-zorba': service.search.pageNumber === item, 'bg-crater-brown': service.search.pageNumber !== item }">
-          {{item}}</button>
+        <button (click)="onPage(service.search.pageNumber - 1)" [disabled]="service.search.pageNumber === 1"
+          class="text-bisque px-2 py-2 border-r-2 border-zorba bg-crater-brown disabled:text-zorba">
+          <span class="material-symbols-rounded text-lg">chevron_left</span>
+        </button>
+
+        @for (page of pageRange; track page) {
+        @if (Math.abs(service.search.pageNumber - page) <= 2) { <button (click)="onPage(page)"
+          [disabled]="service.search.pageNumber === page" class="text-bisque px-4 py-2 border-r-2 border-zorba"
+          [ngClass]="{
+                  'bg-zorba': service.search.pageNumber === page,
+                  'bg-crater-brown': service.search.pageNumber !== page
+                }">
+          {{ page }}
+          </button>
           }
           }
 
           <button (click)="onPage(service.search.pageNumber + 1)"
-            [disabled]="service.search.pageNumber === service.totalItems.length"
+            [disabled]="service.search.pageNumber === service.search.totalPages"
             class="text-bisque px-2 py-2 bg-crater-brown border-r-2 border-zorba disabled:text-zorba">
-            <span class="material-symbols-rounded text-lg">
-              chevron_right
-            </span>
+            <span class="material-symbols-rounded text-lg">chevron_right</span>
           </button>
-          <button (click)="onPage(service.totalItems.length)"
-            [disabled]="service.search.pageNumber === service.totalItems.length"
+
+          <button (click)="onPage(service.search.totalPages)"
+            [disabled]="service.search.pageNumber === service.search.totalPages"
             class="text-bisque rounded-r-md px-2 py-2 bg-crater-brown disabled:text-zorba">
-            <span class="material-symbols-rounded text-lg">
-              keyboard_double_arrow_right
-            </span>
+            <span class="material-symbols-rounded text-lg">keyboard_double_arrow_right</span>
           </button>
       </nav>
     </div>

@@ -1,0 +1,100 @@
+@if(!isrSimulationShown) {
+<form [formGroup]="formIsrSimulation" (ngSubmit)="onSubmit()"
+    class="flex flex-col space-y-4 bg-crater-brown p-6 rounded-md">
+    <label for="type" class="text-base font-semibold text-bisque">Tipo de simulación:</label>
+    <select id="simulationType"
+        class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+        (change)="changeType($event)" formControlName="simulationType">
+        <option value="isr">Impuesto sobre la Renta (ISR)</option>
+        <option value="iva">Impuesto sobre el Valor Agregado (IVA)</option>
+    </select>
+
+    @if (type === 'isr') {
+    <label for="year" class="text-base font-semibold text-bisque">Año<span class="text-burnt-umber">*</span></label>
+    <select id="year"
+        class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+        formControlName="year">
+        <option value="" disabled selected>Seleccione un año</option>
+        @for (year of loadInvoicesYears(invoiceService.invoicesByUserId$()); track year) {
+        <option [value]="year">{{ year }}</option>
+        }
+        @if (formIsrSimulation.controls['year'].invalid && (formIsrSimulation.controls['year'].dirty ||
+        formIsrSimulation.controls['year'].touched)) {
+        <div class="text-burnt-umber text-sm">El año es obligatorio.</div>
+        }
+    </select>
+
+    <label for="childrenNumber" class="text-base font-semibold text-bisque">Número de hijos<span
+            class="text-burnt-umber">*</span></label>
+    <input type="number" id="childrenNumber" formControlName="childrenNumber"
+        class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow" />
+    @if (formIsrSimulation.controls['childrenNumber'].invalid && (formIsrSimulation.controls['childrenNumber'].dirty ||
+    formIsrSimulation.controls['childrenNumber'].touched)) {
+    <div class="text-burnt-umber text-sm">El número de hijos es obligatorio.</div>
+    }
+
+    <label for="hasSpouse" class="text-base font-semibold text-bisque">Tiene cónyuge?<span
+            class="text-burnt-umber">*</span></label>
+    <div class="flex flex-row items-center w-full justify-center">
+        <div class="flex items-center px-4 border border-bisque rounded-l-md w-full">
+            <input type="radio" [value]="true" formControlName="hasSpouse" name="hasSpouse"
+                class="w-4 h-4 text-bisque bg-gray-100 border-gray-300 focus:ring-bisque" />
+            <label class="w-full py-4 ms-2 text-sm font-medium text-bisque">Sí</label>
+        </div>
+        <div class="flex items-center px-4 border border-bisque rounded-r-md w-full justify-center">
+            <input type="radio" [value]="false" formControlName="hasSpouse" name="hasSpouse"
+                class="w-4 h-4 text-bisque bg-gray-100 border-gray-300 focus:ring-bisque" />
+            <label class="w-full py-4 ms-2 text-sm font-medium text-bisque">No</label>
+        </div>
+    </div>
+    }
+
+    <button type="submit" [disabled]="formIsrSimulation.invalid"
+        class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque disabled:bg-flamenco">
+        Crear simulación
+    </button>
+</form>
+} @else {
+@defer {
+<div>
+    <app-isr-simulation [simulationPeriod]="isrSimulation.simulationPeriod"
+        [simulationName]="isrSimulation.simulationName"
+        [simulationIdentification]="isrSimulation.simulationIdentification"
+        [currentAssets]="isrSimulation.currentAssets" [equityInvestments]="isrSimulation.equityInvestments"
+        [inventory]="isrSimulation.inventory" [netFixedAssets]="isrSimulation.netFixedAssets"
+        [totalNetAssets]="isrSimulation.totalNetAssets" [totalLiabilities]="isrSimulation.totalLiabilities"
+        [netEquity]="isrSimulation.netEquity" [salesRevenue]="isrSimulation.salesRevenue"
+        [professionalFees]="isrSimulation.professionalFees" [commissions]="isrSimulation.commissions"
+        [interestsAndYields]="isrSimulation.interestsAndYields" [dividendsAndShares]="isrSimulation.dividendsAndShares"
+        [rents]="isrSimulation.rents" [otherIncome]="isrSimulation.otherIncome"
+        [nonTaxableIncome]="isrSimulation.nonTaxableIncome" [grossIncomeTotal]="isrSimulation.grossIncomeTotal"
+        [initialInventory]="isrSimulation.initialInventory" [purchases]="isrSimulation.purchases"
+        [finalInventory]="isrSimulation.finalInventory" [costOfGoodsSold]="isrSimulation.costOfGoodsSold"
+        [financialExpenses]="isrSimulation.financialExpenses"
+        [administrativeExpenses]="isrSimulation.administrativeExpenses"
+        [depreciationAndAmortization]="isrSimulation.depreciationAndAmortization"
+        [pensionContributions]="isrSimulation.pensionContributions"
+        [otherAllowableDeductions]="isrSimulation.otherAllowableDeductions"
+        [totalAllowableDeductions]="isrSimulation.totalAllowableDeductions"
+        [netTaxableIncome]="isrSimulation.netTaxableIncome"
+        [nonTaxableSalaryAmount]="isrSimulation.nonTaxableSalaryAmount" [incomeTax]="isrSimulation.incomeTax"
+        [freeTradeZoneExemption]="isrSimulation.freeTradeZoneExemption"
+        [otherExemptions]="isrSimulation.otherExemptions"
+        [netIncomeTaxAfterExemptions]="isrSimulation.netIncomeTaxAfterExemptions"
+        [familyCredit]="isrSimulation.familyCredit" [otherCredits]="isrSimulation.otherCredits"
+        [periodTax]="isrSimulation.periodTax" [twoPercentWithholdings]="isrSimulation.twoPercentWithholdings"
+        [otherWithholdings]="isrSimulation.otherWithholdings" [partialPayments]="isrSimulation.partialPayments"
+        [totalNetTax]="isrSimulation.totalNetTax" [interests]="isrSimulation.interests"
+        [totalTaxDebt]="isrSimulation.totalTaxDebt" [requestedCompensation]="isrSimulation.requestedCompensation"
+        [totalDebtToPay]="isrSimulation.totalDebtToPay" />
+    <div class="flex justify-center mt-4">
+        <button (click)="closeSimulation()"
+            class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+            Regresar
+        </button>
+    </div>
+</div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}
+}

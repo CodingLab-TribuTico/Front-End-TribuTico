@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { CardComponent } from '../../components/card/card.component';
+import { CardMenuComponent } from '../../components/card-menu/card-menu.component';
 import { Router } from '@angular/router';
+import { InvoiceListComponent } from '../../components/invoice-list/invoice-list.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CardComponent],
+  imports: [CardMenuComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   public role: string = '';

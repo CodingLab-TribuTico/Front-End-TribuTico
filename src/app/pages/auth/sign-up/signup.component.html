@@ -1,6 +1,8 @@
 <div class="min-h-screen flex">
   <div class="w-1/2 flex flex-col justify-center items-center bg-isabelline px-16 py-8">
-    <img src="../../../../../assets/img/signup/signup.png" alt="imagenTribuTico" class="mb-8 w-[300px] h-auto" />
+    <img src="../../../../../assets/img/signup/signup.png"
+      alt="Dos chicas y un chico saludando para dar la bienvenida a TribuTico" class="mb-8 w-72 h-auto"
+      loading="eager" />
     <p class="text-center text-crater-brown mb-8 font-bold">
       Crea tu cuenta en minutos y empieza a optimar tu gestión fiscal.<br>
       Completa tus datos y únete a nuestra comunidad.
@@ -9,14 +11,14 @@
 
   <div class="w-1/2 flex flex-col justify-center items-center bg-crater-brown px-16 py-8">
     <div class="text-center mb-8">
-      <h2 class="text-bisque text-3xl mb-2">Crea tu cuenta</h2>
-      <p class="text-bisque mb-8">Regístrate y empieza a simplificar tu gestión tributaria desde hoy.</p>
+      <h2 class="text-bisque text-3xl mb-2 font-bold">Crea tu cuenta</h2>
+      <p class="text-bisque">Regístrate y empieza a simplificar tu gestión tributaria desde hoy.</p>
     </div>
     <form (ngSubmit)="handleSignup($event)" autocomplete="off" #frm="ngForm"
       class="grid grid-cols-2 gap-4 items-center w-full max-w-xl">
 
       <div class="flex flex-col">
-        <label class="text-bisque font-semibold mb-1" for="name">Nombre</label>
+        <label class="text-bisque font-semibold mb-1" for="name">Nombre<span class="text-burnt-umber">*</span></label>
         <input
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
           #name="ngModel" type="text" id="name" name="name" placeholder="Nombre" [(ngModel)]="user.name" required />
@@ -26,7 +28,8 @@
       </div>
 
       <div class="flex flex-col">
-        <label class="text-bisque font-semibold mb-1" for="birthDate">Fecha de nacimiento</label>
+        <label class="text-bisque font-semibold mb-1" for="birthDate">Fecha de nacimiento<span
+            class="text-burnt-umber">*</span></label>
         <input
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
           #birthDate="ngModel" type="date" id="birthDate" name="birthDate" [(ngModel)]="user.birthDate" required />
@@ -36,7 +39,8 @@
       </div>
 
       <div class="flex flex-col">
-        <label class="text-bisque font-semibold mb-1" for="lastname">Primer apellido</label>
+        <label class="text-bisque font-semibold mb-1" for="lastname">Primer apellido<span
+            class="text-burnt-umber">*</span></label>
         <input
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
           #lastname="ngModel" type="text" id="lastname" name="lastname" placeholder="Primer apellido"
@@ -53,38 +57,50 @@
           #lastname2="ngModel" type="text" id="lastname2" name="lastname2" placeholder="Segundo apellido"
           [(ngModel)]="user.lastname2" required />
         <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
-          <span *ngIf="lastname2.invalid && lastname2.touched">El segundo apellido es obligatorio.</span>
         </div>
       </div>
 
       <div class="flex flex-col">
-        <label class="text-bisque font-semibold mb-1" for="email">Correo electrónico</label>
+        <label class="text-bisque font-semibold mb-1" for="email">Correo electrónico<span
+            class="text-burnt-umber">*</span></label>
         <input
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
-          #email="ngModel" type="email" id="email" name="email" placeholder="nombre@correo.com" [(ngModel)]="user.email"
-          required />
+          #email="ngModel" type="email" id="email" name="email" placeholder="email@dominio.com" [(ngModel)]="user.email"
+          required email />
         <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
-          <span *ngIf="email.invalid && email.touched">El correo electrónico es obligatorio.</span>
+          <span *ngIf="email.errors?.['required'] && email.touched">
+            El correo electrónico es obligatorio.
+          </span>
+          <span *ngIf="!email.errors?.['required'] && email.errors?.['email'] && email.touched">
+            El correo electrónico es inválido.
+          </span>
         </div>
       </div>
 
       <div class="flex flex-col">
-        <label class="text-bisque font-semibold mb-1" for="cedula">Cédula</label>
+        <label class="text-bisque font-semibold mb-1" for="cedula">Cédula<span class="text-burnt-umber">*</span></label>
         <input
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
           #identification="ngModel" type="text" id="identification" name="identification" placeholder="123456789"
           [(ngModel)]="user.identification" required />
         <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
-          <span *ngIf="identification.invalid && identification.touched">La identificación es obligatoria.</span>
+          <span *ngIf="identification.invalid && identification.touched">
+            La identificación es obligatoria.
+          </span>
+          <span
+            *ngIf="identification.value && identification.value.length !== 9 && identification.value.length >= 1 && identification.touched">
+            La identificación es inválida.
+          </span>
         </div>
       </div>
 
       <div class="flex flex-col">
-        <label class="text-bisque font-semibold mb-1" for="password">Contraseña</label>
+        <label class="text-bisque font-semibold mb-1" for="password">Contraseña<span
+            class="text-burnt-umber">*</span></label>
         <div class="relative">
           <input #password="ngModel" [type]="showPassword ? 'text' : 'password'"
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 w-full focus:outline-none focus:border-golden-glow"
-            id="password" name="password" placeholder="********" [(ngModel)]="user.password" required />
+            id="password" name="password" placeholder="*********" [(ngModel)]="user.password" required />
           <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zorba"
             (click)="showPassword = !showPassword" tabindex="-1">
             <span class="material-symbols-rounded select-none text-2xl" style="font-size: 24px;">
@@ -99,11 +115,13 @@
 
       <!-- Repetir contraseña -->
       <div class="flex flex-col">
-        <label class="text-bisque font-semibold mb-1" for="confirmPassword">Repetir contraseña</label>
+        <label class="text-bisque font-semibold mb-1" for="confirmPassword">Repetir contraseña<span
+            class="text-burnt-umber">*</span></label>
         <div class="relative">
           <input [type]="showConfirmPassword ? 'text' : 'password'"
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 w-full focus:outline-none focus:border-golden-glow"
-            id="confirmPassword" name="confirmPassword" placeholder="********" [(ngModel)]="confirmPassword" required />
+            id="confirmPassword" name="confirmPassword" placeholder="*********" [(ngModel)]="confirmPassword"
+            required />
           <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-zorba"
             (click)="showConfirmPassword = !showConfirmPassword" tabindex="-1">
             <span class="material-symbols-rounded select-none text-2xl" style="font-size: 24px;">
@@ -118,15 +136,15 @@
 
       <div class="col-span-2">
         <button
-          class="bg-flamenco text-bisque font-bold rounded-lg py-3 w-full text-2xl mt-4 mb-6 hover:bg-golden-glow hover:text-flamenco transition-colors"
-          type="submit">
+          class="bg-flamenco text-bisque font-bold rounded-md py-2 w-full mb-6 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque disabled:bg-flamenco"
+          [disabled]="!frm.valid" type="submit">
           Registrarse
         </button>
-        <div *ngIf="signUpError" class="text-danger text-center">{{signUpError}}</div>
+        <div *ngIf="signUpError" class="text-flamenco text-center font-semibold mt-2">{{signUpError}}</div>
         <div *ngIf="validSignup" class="text-golden-glow font-bold text-center">
           Usuario registrado, por favor ve a iniciar sesión
         </div>
-        <p class="text-zorba text-center text-xl font-semibold mt-2">
+        <p class="text-zorba text-center text-base">
           Ya tienes cuenta?
           <a href="/login" class="text-flamenco font-bold hover:underline ml-1">Iniciar sesión</a>
         </p>

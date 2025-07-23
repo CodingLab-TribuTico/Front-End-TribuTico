@@ -6,16 +6,14 @@ import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { IUser } from '../../interfaces';
 import { CommonModule } from '@angular/common';
-import { ProfileComponent } from '../profile/profile.component';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
-   standalone: true,
+  standalone: true,
   imports: [
     ResetPasswordFormComponent,
     CommonModule,
-    ProfileComponent
   ]
 })
 export class ResetPasswordComponent {
@@ -31,10 +29,10 @@ export class ResetPasswordComponent {
   public authService: AuthService = inject(AuthService);
   public areActionsAvailable: boolean = false;
   public route: ActivatedRoute = inject(ActivatedRoute);
-  
+
   ngOnInit(): void {
     this.authService.getUserAuthorities();
-    this.route.data.subscribe( data => {
+    this.route.data.subscribe(data => {
       this.areActionsAvailable = this.authService.areActionsAvailable(data['authorities'] ? data['authorities'] : []);
     });
   }
