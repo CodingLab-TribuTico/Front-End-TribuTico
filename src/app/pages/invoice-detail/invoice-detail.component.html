@@ -101,8 +101,7 @@
             <tr class="font-bold border-t-2 border-crater-brown">
                 <td colspan="7" class="p-2 text-right text-crater-brown">Subtotal:</td>
                 <td class="p-2 text-right text-crater-brown">{{calculateSubtotal(invoiceData?.details ?? []) | currency:
-                    'CRC ':
-                    'symbol':'1.2-2'}}</td>
+                    '₡': 'symbol':'1.2-2'}}</td>
                 <td></td>
             </tr>
             <tr class="font-bold">
@@ -115,8 +114,7 @@
             <tr class="font-bold border-t-2 border-crater-brown">
                 <td colspan="7" class="p-2 text-right text-crater-brown">Total General:</td>
                 <td class="p-2 text-right text-crater-brown">{{calculateTotal(invoiceData?.details ?? []) | currency:
-                    'CRC ':
-                    'symbol':'1.2-2'}}
+                    '₡': 'symbol':'1.2-2'}}
                 </td>
                 <td></td>
             </tr>
