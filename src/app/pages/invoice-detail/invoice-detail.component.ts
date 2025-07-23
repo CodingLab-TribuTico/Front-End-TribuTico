@@ -14,7 +14,6 @@ import { LoaderComponent } from '../../components/loader/loader.component';
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterModule, ModalComponent, LoaderComponent],
   templateUrl: './invoice-detail.component.html',
-  styleUrl: './invoice-detail.component.scss'
 })
 export class InvoiceDetailComponent implements OnInit {
 

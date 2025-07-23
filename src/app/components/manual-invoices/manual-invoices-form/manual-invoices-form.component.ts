@@ -3,7 +3,6 @@ import { Component, effect, EventEmitter, inject, Input, Output, signal, Signal 
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice, IInvoiceUser } from '../../../interfaces';
 import { CardDetailComponent } from '../../card-detail/card-detail.component';
-import { ModalComponent } from '../../modal/modal.component';
 
 @Component({
   selector: "app-manual-invoices-form",
@@ -13,7 +12,6 @@ import { ModalComponent } from '../../modal/modal.component';
     ReactiveFormsModule,
     CommonModule,
     CardDetailComponent,
-    ModalComponent
   ],
 })
 export class ManualInvoicesFormComponent {
@@ -143,11 +141,8 @@ export class ManualInvoicesFormComponent {
       description: this.detailForm.controls["description"].value,
     };
 
-
-    // Agregar nuevo detalle
     this.details.push(detail);
 
-    // this.details.push(detail);
     this.detailForm.reset({
       category: '',
       tax: '',
@@ -155,15 +150,9 @@ export class ManualInvoicesFormComponent {
   }
 
   fillInvoiceFromAutocomplete(response: any, type: 'ingreso' | 'gasto') {
-    console.log('Respuesta completa:', response);
     if (!response) return;
-
     const data = response.data || response;
-
-    console.log('Datos recibidos:', data);
-
     this.updateFormForType(type, data);
-
   }
 
   updateFormForType(type: string, data: any) {

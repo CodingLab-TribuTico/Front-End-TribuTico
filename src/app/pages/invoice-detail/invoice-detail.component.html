@@ -7,23 +7,23 @@
     <div class="grid grid-cols-3 gap-5 mb-6">
         <div>
             <p class="font-semibold text-crater-brown">ID:</p>
-            <p>{{invoiceData?.id || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.id || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Consecutivo:</p>
-            <p>{{invoiceData?.consecutive || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.consecutive || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Fecha:</p>
-            <p>{{invoiceData?.issueDate | date: 'dd/MM/yyyy'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.issueDate | date: 'dd/MM/yyyy'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Tipo:</p>
-            <p>{{invoiceData?.type || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.type || 'N/A'}}</p>
         </div>
         <div>
-            <p class="font-semibold text-crater-brown">Key:</p>
-            <p>{{invoiceData?.key || 'N/A'}}</p>
+            <p class="font-semibold text-crater-brown">Clave:</p>
+            <p class="text-crater-brown">{{invoiceData?.key || 'N/A'}}</p>
         </div>
     </div>
 
@@ -31,19 +31,19 @@
     <div class="grid grid-cols-4 gap-5 mb-6">
         <div>
             <p class="font-semibold text-crater-brown">Nombre:</p>
-            <p>{{invoiceData?.receiver?.name || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.receiver?.name || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Apellido:</p>
-            <p>{{invoiceData?.receiver?.lastName || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.receiver?.lastName || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Identificación:</p>
-            <p>{{invoiceData?.receiver?.identification || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.receiver?.identification || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Correo:</p>
-            <p>{{invoiceData?.receiver?.email || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.receiver?.email || 'N/A'}}</p>
         </div>
     </div>
 
@@ -51,19 +51,19 @@
     <div class="grid grid-cols-4 gap-5 mb-6">
         <div>
             <p class="font-semibold text-crater-brown">Nombre:</p>
-            <p>{{invoiceData?.issuer?.name || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.issuer?.name || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Apellido:</p>
-            <p>{{invoiceData?.issuer?.lastName || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.issuer?.lastName || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Identificación:</p>
-            <p>{{invoiceData?.issuer?.identification || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.issuer?.identification || 'N/A'}}</p>
         </div>
         <div>
             <p class="font-semibold text-crater-brown">Correo:</p>
-            <p>{{invoiceData?.issuer?.email || 'N/A'}}</p>
+            <p class="text-crater-brown">{{invoiceData?.issuer?.email || 'N/A'}}</p>
         </div>
     </div>
 
@@ -84,14 +84,16 @@
         <tbody>
             @for (item of invoiceData?.details; track $index) {
             <tr class="border-b border-crater-brown/20">
-                <td class="p-2">{{item.description || 'N/A'}}</td>
-                <td class="p-2">{{item.category || 'N/A'}}</td>
-                <td class="p-2">{{item.cabys || 'N/A'}}</td>
-                <td class="p-2 text-right">{{item.quantity || 0}}</td>
-                <td class="p-2 text-right">{{item.unitPrice | currency: 'CRC ': 'symbol':'1.2-2'}}</td>
-                <td class="p-2 text-right">{{item.tax || 0 | number}}%</td>
-                <td class="p-2 text-right">{{item.taxAmount | currency: 'CRC ': 'symbol':'1.2-2'}}</td>
-                <td class="p-2 text-right">{{item.total | currency: 'CRC ': 'symbol':'1.2-2'}}</td>
+                <td class="p-2 text-crater-brown">{{item.description || 'N/A'}}</td>
+                <td class="p-2 text-crater-brown">{{item.category || 'N/A'}}</td>
+                <td class="p-2 text-crater-brown">{{item.cabys || 'N/A'}}</td>
+                <td class="p-2 text-right text-crater-brown">{{item.quantity || 0}}</td>
+                <td class="p-2 text-right text-crater-brown">{{item.unitPrice | currency: 'CRC ': 'symbol':'1.2-2'}}
+                </td>
+                <td class="p-2 text-right text-crater-brown">{{item.tax || 0 | number}}%</td>
+                <td class="p-2 text-right text-crater-brown">{{item.taxAmount | currency: 'CRC ': 'symbol':'1.2-2'}}
+                </td>
+                <td class="p-2 text-right text-crater-brown">{{item.total | currency: 'CRC ': 'symbol':'1.2-2'}}</td>
             </tr>
             }
         </tbody>
@@ -124,11 +126,13 @@
 
         <div class="flex justify-end">
             <button (click)="onBack()"
-                class="bg-flamenco px-2 p-0.5 rounded-md hover:bg-golden-glow hover:text-flamenco text-bisque flex items-center">
-                <span class="material-symbols-rounded text-lg text-bisque">
+                class="group bg-flamenco px-2 p-0.5 rounded-md hover:bg-golden-glow text-bisque flex items-center">
+                <span class="material-symbols-rounded text-lg text-bisque group-hover:text-flamenco">
                     arrow_left_alt
                 </span>
-                <span class="text-bisque text-sm font-bold ml-2">Volver</span>
+                <span class="text-bisque text-sm font-bold ml-2 group-hover:text-flamenco">
+                    Volver
+                </span>
             </button>
         </div>
 

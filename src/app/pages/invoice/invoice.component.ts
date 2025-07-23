@@ -9,7 +9,6 @@ import { ModalService } from "../../services/modal.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { IDetailInvoice, IManualInvoice } from "../../interfaces";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
-import { ModalComponent } from "../../components/modal/modal.component";
 import { LoaderComponent } from "../../components/loader/loader.component";
 import { InvoiceListComponent } from "../../components/invoice-list/invoice-list.component";
 import { ManualInvoicesFormComponent } from "../../components/manual-invoices/manual-invoices-form/manual-invoices-form.component";
@@ -19,13 +18,11 @@ import { ManualInvoicesFormComponent } from "../../components/manual-invoices/ma
   standalone: true,
   imports: [
     PaginationComponent,
-    ModalComponent,
     LoaderComponent,
     InvoiceListComponent,
     ManualInvoicesFormComponent,
   ],
   templateUrl: "./invoice.component.html",
-  styleUrl: "./invoice.component.scss",
 })
 export class InvoiceComponent {
   public invoiceService: InvoiceService = inject(InvoiceService);

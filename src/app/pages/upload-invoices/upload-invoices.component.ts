@@ -40,6 +40,8 @@ export class UploadInvoicesComponent {
     return this.xmlService.responseScan$() || this.ocrService.responseScan$();
   });
 
+  public isLoading = computed(() => this.ocrService.isLoading$() || this.xmlService.isLoading$());
+
   public invoiceForm = this.fb.group({
     id: [''],
     type: ['', Validators.required],
@@ -109,8 +111,6 @@ export class UploadInvoicesComponent {
     }
 
     this.hideModal();
-    window.location.reload();
-
   }
 
   saveInvoice(item: IManualInvoice) {

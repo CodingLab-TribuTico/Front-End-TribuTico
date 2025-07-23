@@ -25,8 +25,9 @@
         <td class="p-3" scope="row">{{item.email}}</td>
         <th class="p-3" scope="col">{{statusText(item.status)}}</th>
         <td class="p-3 space-x-1">
-          <button (click)="callModalAction.emit(item);" class="bg-flamenco px-2 p-0.5 rounded-md" type="button">
-            <span class="material-symbols-rounded text-lg text-bisque">
+          <button (click)="callModalAction.emit(item);"
+            class="group bg-flamenco hover:bg-golden-glow hover:text-flamenco px-2 p-0.5 rounded-md" type="button">
+            <span class="material-symbols-rounded text-lg text-bisque group-hover:text-flamenco">
               edit
             </span>
           </button>

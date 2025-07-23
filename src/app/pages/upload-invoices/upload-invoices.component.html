@@ -3,7 +3,7 @@
         <h1 class="text-3xl font-bold text-crater-brown">Cargar facturas</h1>
         <button
             class="bg-zorba text-crater-brown px-4 py-2 rounded-md flex justify-center items-center disabled:opacity-80 disabled:cursor-not-allowed hover:bg-crater-brown hover:text-bisque disabled:bg-zorba disabled:text-crater-brown transition-colors"
-            (click)="hideImportInvoices()" [disabled]="ocrService.isLoading$()">
+            (click)="hideImportInvoices()" [disabled]="ocrService.isLoading$() || xmlService.isLoading$()">
             {{importInvoicesText}}
             <span class="material-symbols-rounded ml-2 hover:text-bisque disabled:text-crater-brown transition-colors">
                 {{importInvoicesIcon}}
@@ -26,6 +26,8 @@
 
             @if(ocrService.isLoading$()) {
             <app-llama-loader></app-llama-loader>
+            }@else if(xmlService.isLoading$()) {
+            <app-llama-loader></app-llama-loader>
             } @else {
             <div class="flex items-center justify-between w-full">
                 <h2 class="text-2xl font-bold text-bisque">Escanear factura</h2>
@@ -38,10 +40,9 @@
                 </label>
             </div>
             }
-            <app-input-file-form [ngClass]="[ocrService.isLoading$() ? '' : 'h-full w-full']"
-                [isLoading]="ocrService.isLoading$" (callScanMethod)="ocrService.scanFile($event, type)"
+            <app-input-file-form [ngClass]="[ocrService.isLoading$() || xmlService.isLoading$() ? '' : 'h-full w-full']"
+                [isLoading]="isLoading" (callScanMethod)="ocrService.scanFile($event, type)"
                 (callOpenModalMethod)="openModal()" />
-
         </div>
         }
     </div>

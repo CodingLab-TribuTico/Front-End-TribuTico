@@ -18,7 +18,6 @@ import { RouterModule } from "@angular/router";
   standalone: true,
   imports: [CommonModule, MatIconModule, ModalComponent, RouterModule],
   templateUrl: "./invoice-list.component.html",
-  styleUrl: "./invoice-list.component.scss",
 })
 export class InvoiceListComponent {
   @Input() title: string = "";
