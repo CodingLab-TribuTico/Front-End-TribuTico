@@ -2,8 +2,6 @@ import { inject, Injectable, signal } from "@angular/core";
 import { BaseService } from "./base-service";
 import { IResponse, ISearch, IManualInvoice } from "../interfaces";
 import { AlertService } from "./alert.service";
-import { Observable } from "rxjs";
-import { tap, catchError } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -36,6 +34,7 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   private alertService: AlertService = inject(AlertService);
 
   getAll() {
+    console.log("Fetching all invoices with search params:", this.search);
     this.findAllWithParams({
       page: this.search.page,
       size: this.search.size,

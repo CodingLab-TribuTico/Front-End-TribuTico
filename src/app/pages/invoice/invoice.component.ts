@@ -78,7 +78,7 @@ export class InvoiceComponent {
 
   constructor() {
     this.invoiceService.search.page = 1;
-    this.invoiceService.search.size = 10;
+    this.invoiceService.search.size = 5;
     this.invoiceService.getAll();
   }
 

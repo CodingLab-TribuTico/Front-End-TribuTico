@@ -10,9 +10,9 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class PaginationComponent {
   @Input() service: any;
-  @Output() callCustomPaginationMethod = new EventEmitter();
+  @Output() callCustomPaginationMethod = new EventEmitter<void>();
   @Input() customCall: boolean = false;
-
+  public Math = Math;
 
   onPage(pPage: number) {
     this.service.search.page = pPage;
@@ -22,5 +22,9 @@ export class PaginationComponent {
     } else {
       this.service.getAll();
     }
+  }
+
+  get pageRange(): number[] {
+    return Array.from({ length: this.service.search.totalPages ?? 0 }, (_, i) => i + 1);
   }
 }
