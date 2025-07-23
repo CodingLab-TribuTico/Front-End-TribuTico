@@ -22,6 +22,7 @@ export class XmlService extends BaseService<IResponse<any>> {
 
   scanFile(file: File) {
     if (file) {
+      this.cancelCurrentRequest();
 
       this.isLoadingSignal.set(true);
       const formData = new FormData();
@@ -29,7 +30,6 @@ export class XmlService extends BaseService<IResponse<any>> {
 
       this.currentSubscription = this.addFile(formData).subscribe({
         next: (response: any) => {
-          console.log('Respuesta escaneo XML:', response);
           this.responseScan.set(response);
         },
         error: (err: any) => {

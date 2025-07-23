@@ -136,15 +136,15 @@
 
       <div class="col-span-2">
         <button
-          class="bg-flamenco text-bisque font-bold rounded-md py-2 w-full mb-6 hover:bg-golden-glow hover:text-flamenco transition-colors"
-          type="submit">
+          class="bg-flamenco text-bisque font-bold rounded-md py-2 w-full mb-6 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque disabled:bg-flamenco"
+          [disabled]="!frm.valid" type="submit">
           Registrarse
         </button>
         <div *ngIf="signUpError" class="text-flamenco text-center font-semibold mt-2">{{signUpError}}</div>
         <div *ngIf="validSignup" class="text-golden-glow font-bold text-center">
           Usuario registrado, por favor ve a iniciar sesión
         </div>
-        <p class="text-zorba text-center text-xl font-semibold mt-2">
+        <p class="text-zorba text-center text-base">
           Ya tienes cuenta?
           <a href="/login" class="text-flamenco font-bold hover:underline ml-1">Iniciar sesión</a>
         </p>
