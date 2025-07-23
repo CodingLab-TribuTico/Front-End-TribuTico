@@ -46,7 +46,6 @@ export class InputFileFormComponent {
   }
 
   removeFile(): void {
-    console.log('Removing file');
     this.selectedFile = null;
     this.clearFileInput();
   }
