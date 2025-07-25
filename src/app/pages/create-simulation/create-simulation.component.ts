@@ -58,6 +58,7 @@ export class CreateSimulationComponent {
 
     this.isrSimulationService.createSimulation(year, childrenNumber, hasSpouse, userId);
 
+    console.log('ISR Simulation:', this.isrSimulation);
     setTimeout(() => {
       this.isrSimulation = this.isrSimulationService.isrSimulation;
       if (this.isrSimulation) {

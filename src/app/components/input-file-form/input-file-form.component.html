@@ -4,7 +4,7 @@
         <input type="file" name="file" id="file" class="sr-only" (change)="onFileSelected($event)"
             accept="application/pdf, text/xml" />
         <label for="file"
-            class="relative flex items-center justify-center rounded-md border-2 border-dashed border-zorba p-20 text-center cursor-pointer h-full w-full"
+            class="flex items-center justify-center rounded-md border-2 border-dashed border-zorba p-20 text-center cursor-pointer h-full w-full"
             (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)">
             <div class="flex flex-col items-center justify-center space-y-2">
                 <span class="material-symbols-rounded text-zorba text-6xl"> upload_file </span>
