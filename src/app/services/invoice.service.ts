@@ -34,7 +34,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   private alertService: AlertService = inject(AlertService);
 
   getAll() {
-    console.log("Fetching all invoices with search params:", this.search);
     this.findAllWithParams({
       page: this.search.page,
       size: this.search.size,

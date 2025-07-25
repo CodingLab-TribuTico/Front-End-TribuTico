@@ -211,17 +211,17 @@
 
     <div class="flex gap-4 flex-wrap">
       <div class="flex flex-col gap-2 flex-1 min-w-[200px]">
-        <label class="text-bisque font-bold" for="category">Categoria<span class="text-burnt-umber">*</span></label>
+        <label class="text-bisque font-bold" for="category">Categoría<span class="text-burnt-umber">*</span></label>
         <select id="category" formControlName="category"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2.5 focus:outline-none focus:border-golden-glow">
-          <option [value]="''" disabled selected>Selecciona una categoria</option>
+          <option [value]="''" disabled selected>Selecciona una categoría</option>
           @for (key of keyCategories; track $index) {
           <option [value]="key">{{ categories[key] }}</option>
           }
         </select>
         @if (detailForm.controls['category'].invalid && (detailForm.controls['category'].dirty ||
         detailForm.controls['category'].touched)) {
-        <div class="text-burnt-umber text-sm">La categoria es obligatoria.</div>
+        <div class="text-burnt-umber text-sm">La categoría es obligatoria.</div>
         }
       </div>
 
@@ -238,13 +238,13 @@
     </div>
 
     <div class="flex flex-col gap-2 flex-wrap">
-      <label class="text-bisque font-bold" for="description">Descripcion<span class="text-burnt-umber">*</span></label>
+      <label class="text-bisque font-bold" for="description">Descripción<span class="text-burnt-umber">*</span></label>
       <textarea id="description" formControlName="description" type="text"
         class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow resize-none"
-        placeholder="Descripcion"></textarea>
+        placeholder="Descripción"></textarea>
       @if (detailForm.controls['description'].invalid && (detailForm.controls['description'].dirty ||
       detailForm.controls['description'].touched)) {
-      <div class="text-burnt-umber text-sm">La descripcion es obligatoria.</div>
+      <div class="text-burnt-umber text-sm">La descripción es obligatoria.</div>
       }
     </div>
 
