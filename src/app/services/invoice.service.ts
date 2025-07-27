@@ -12,12 +12,8 @@ import { tap, catchError } from "rxjs/operators";
 export class InvoiceService extends BaseService<IManualInvoice> {
   protected override source: string = 'invoice';
   private invoicesList = signal<IManualInvoice[]>([]);
-  private invoicesByUserIdList = signal<IManualInvoice[]>([]);
   get invoices$() {
     return this.invoicesList;
-  }
-  get invoicesByUserId$() {
-    return this.invoicesByUserIdList;
   }
   public search: ISearch = {
     page: 1,
@@ -41,12 +37,14 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   }
 
   getByUserId(userId: number) {
-    this.findAllWithParams({ userId: userId }).subscribe({
+    this.findAllWithParams({ page: this.search.page, size: this.search.size, userId: userId }).subscribe({
       next: (response: IResponse<IManualInvoice[]>) => {
-        this.invoicesByUserIdList.set(response.data);
+        this.search = { ...this.search, ...response.meta };
+        this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+        this.invoicesList.set(response.data);
       },
       error: (err: any) => {
-        console.error('error', err);
+        console.error('Error al obtener facturas del usuario:', err);
       }
     });
   }
@@ -77,6 +75,7 @@ export class InvoiceService extends BaseService<IManualInvoice> {
       })
     );
   }
+
 
   saveWithUserId(item: IManualInvoice, userId: number): Observable<IResponse<IManualInvoice>> {
     return this.saveInvoice(item); 

@@ -1,0 +1,16 @@
+<div class="flex flex-col space-y-4 w-full">
+    <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
+        {{sectionTitle}}
+    </h1>
+
+    @for (item of items; track item.label) {
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">{{ item.label }}</p>
+        <span
+            [ngClass]="item.isAutocalculated ? 'w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown' : 'w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown'">
+            {{ item.value }}
+        </span>
+
+    </div>
+    }
+</div>

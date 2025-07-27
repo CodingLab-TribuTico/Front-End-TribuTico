@@ -162,3 +162,25 @@ export interface IIsrSimulation {
   requestedCompensation: number;
   totalDebtToPay: number;
 }
+
+export interface IIvaCalculation {
+  id?: number;
+  year: number;
+  month: number;
+  calculationDate: string;
+  ivaVentasBienes: number;
+  ivaVentasServicios: number;
+  ivaExportaciones: number;
+  ivaActividadesAgropecuarias: number;
+  ivaComprasBienes: number;
+  ivaComprasServicios: number;
+  ivaImportaciones: number;
+  ivaGastosGenerales: number;
+  ivaActivosFijos: number;
+  totalIvaDebito: number;
+  totalIvaCredito: number;
+  ivaNetoPorPagar: number;
+  ivaAFavor: number;
+  automaticCalculation: boolean;
+  user?: IUser;
+}
