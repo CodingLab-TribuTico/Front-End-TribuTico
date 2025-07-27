@@ -1,0 +1,138 @@
+@if(gastosCategoria === false && flujoCaja === false && ingresosAndGastos === false) {
+<ng-container>
+    <h1 class="text-3xl font-bold text-center mb-2 text-crater-brown">Reportes</h1>
+    <div class="grid grid-cols-3 gap-4">
+        <app-card-report [title]="'INGRESOS Y REPORTES.'" [icon]="'money_bag'"
+            [description]="'Este reporte gráfico muestra de manera fácil de entender, cómo han sido los ingresos (dinero que entra) y los gastos (dinero que sale) del negocio en toda su existencia.'"
+            [buttonText]="'Ingresos y Gastos'" (callClickMethod)="ingresosAndGastos = true">
+        </app-card-report>
+        <app-card-report [title]="'FLUJO DE CAJA.'" [icon]="'account_balance_wallet'"
+            [description]="'El flujo de caja muestra cuánto dinero entra y sale de tu negocio en un periodo determinado. Es clave para saber si estás generando efectivo o perdiendo dinero.'"
+            [buttonText]="'Flujo de Caja'" (callClickMethod)="flujoCaja = true">
+        </app-card-report>
+        <app-card-report [title]="'GASTOS POR CATEGORÍA.'" [icon]="'category'"
+            [description]="'Este gráfico permite al usuario visualizar sus egresos desglosados por categorías, facilitando la identificación de los rubros donde se concentra la mayor parte de sus gastos.'"
+            [buttonText]="'Gastos por Categoría'" (callClickMethod)="gastosCategoria = true">
+        </app-card-report>
+    </div>
+</ng-container>
+} @else if(ingresosAndGastos) {
+<ng-container>
+    <div class="flex flex-row w-full justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-center text-crater-brown">Reportes totales por Mes</h1>
+        <select (change)="changeYear($event)" id="year"
+            class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+            formControlName="year">
+            <option value=0 selected>Todos</option>
+            @for (year of loadInvoicesYears(invoiceService.invoicesByUserId$()); track year) {
+            <option [value]="year">{{ year }}</option>
+            }
+        </select>
+    </div>
+
+    <div
+        class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+        <div class="h-full w-full flex items-center justify-center">
+            @if(hasGastosIngresosData()) {
+            <app-chart class="h-full w-full flex flex-col justify-center items-center" [title]="title" [labels]="labels"
+                [datasets]="invoiceService.invoicesMonthlyGastosIngresos$()" [type]="'bar'">
+            </app-chart>
+            } @else{
+            <div class="flex flex-col items-center justify-center h-full w-full">
+                <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                    contract_delete
+                </span>
+                <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="flex justify-center mt-2">
+        <button class="bg-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+            (click)="closeReport('ingresosGastos')">Regresar</button>
+    </div>
+</ng-container>
+} @else if(flujoCaja) {
+<ng-container>
+    <div class="flex flex-row w-full justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-center text-crater-brown">Flujo de caja</h1>
+        <div class="flex flex-row items-center gap-2">
+            <label for="Toggle3" class="inline-flex items-center rounded-md cursor-pointer font-bold text-bisque"
+                (change)="toggleVariationType()">
+                <input id="Toggle3" type="checkbox" class="hidden peer">
+                <span class="px-4 py-2 rounded-l-md dark:bg-crater-brown peer-checked:dark:bg-zorba">Mensual</span>
+                <span class="px-4 py-2 rounded-r-md dark:bg-zorba peer-checked:dark:bg-crater-brown">Trimestral</span>
+            </label>
+            <select (change)="changeYear($event)" id="year"
+                class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+                formControlName="year">
+                <option value=0 selected>Todos</option>
+                @for (year of loadInvoicesYears(invoiceService.invoicesByUserId$()); track year) {
+                <option [value]="year">{{ year }}</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div
+        class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+        <div class="h-full w-full flex items-center justify-center">
+            @if(hasFlujoCajaData()) {
+            <app-chart class="h-full w-full flex flex-col justify-center items-center" [title]="title"
+                [labels]="labelsFlujoCaja"
+                [datasets]="variationType === 'months' ? this.invoiceService.invoicesMonthlyFlujoCaja$() : this.invoiceService.invoicesTrimestersFlujoCaja$()"
+                [type]="'line'">
+            </app-chart>
+            } @else{
+            <div class="flex flex-col items-center justify-center h-full w-full">
+                <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                    contract_delete
+                </span>
+                <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="flex justify-center mt-2">
+        <button class="bg-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+            (click)="closeReport('flujoCaja')">Regresar</button>
+    </div>
+</ng-container>
+} @else if(gastosCategoria) {
+<ng-container>
+    <div class="flex flex-row w-full justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-center text-crater-brown">Gastos por categoria</h1>
+        <select (change)="changeYear($event)" id="year"
+            class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+            formControlName="year">
+            <option value=0 selected>Todos</option>
+            @for (year of loadInvoicesYears(invoiceService.invoicesByUserId$()); track year) {
+            <option [value]="year">{{ year }}</option>
+            }
+        </select>
+    </div>
+
+    <div
+        class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+        <div class="h-full w-full flex items-center justify-center">
+            @if(hasGastosCategoriaData()) {
+            <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                [labels]="invoiceService.invoicesGastosCategoria$()[0].labels"
+                [datasets]="invoiceService.invoicesGastosCategoria$()[0].datasets" [type]="'pie'">
+            </app-chart>
+            } @else{
+            <div class="flex flex-col items-center justify-center h-full w-full">
+                <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                    contract_delete
+                </span>
+                <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="flex justify-center mt-2">
+        <button class="bg-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+            (click)="closeReport('gastosCategoria')">Regresar</button>
+    </div>
+</ng-container>
+}

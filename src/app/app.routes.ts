@@ -17,6 +17,7 @@ import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.co
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { ReportsComponent } from './pages/reports/reports.component';
 
 export const routes: Routes = [
   {
@@ -52,6 +53,15 @@ export const routes: Routes = [
         path: 'app',
         redirectTo: 'users',
         pathMatch: 'full',
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Reportes',
+          showInSidebar: true
+        }
       },
       {
         path: 'notifications',

@@ -58,6 +58,7 @@ export interface ISearch {
   query?: string;
   page?: number;
   size?: number;
+  year?: number;
   pageNumber?: number;
   pageSize?: number;
   totalElements?: number;
