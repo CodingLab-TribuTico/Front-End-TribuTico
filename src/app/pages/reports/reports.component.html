@@ -19,7 +19,7 @@
 } @else if(ingresosAndGastos) {
 <ng-container>
     <div class="flex flex-row w-full justify-between items-center mb-2">
-        <h1 class="text-2xl font-bold text-center text-crater-brown">Reportes totales por Mes</h1>
+        <h1 class="text-2xl font-bold text-center text-crater-brown">Ingresos y gastos</h1>
         <select (change)="changeYear($event)" id="year"
             class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
             formControlName="year">
@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="flex justify-center mt-2">
-        <button class="bg-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+        <button class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
             (click)="closeReport('ingresosGastos')">Regresar</button>
     </div>
 </ng-container>
@@ -94,14 +94,14 @@
         </div>
     </div>
     <div class="flex justify-center mt-2">
-        <button class="bg-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+        <button class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
             (click)="closeReport('flujoCaja')">Regresar</button>
     </div>
 </ng-container>
 } @else if(gastosCategoria) {
 <ng-container>
     <div class="flex flex-row w-full justify-between items-center mb-2">
-        <h1 class="text-2xl font-bold text-center text-crater-brown">Gastos por categoria</h1>
+        <h1 class="text-2xl font-bold text-center text-crater-brown">Gastos por categoría</h1>
         <select (change)="changeYear($event)" id="year"
             class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
             formControlName="year">
@@ -131,7 +131,7 @@
         </div>
     </div>
     <div class="flex justify-center mt-2">
-        <button class="bg-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+        <button class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
             (click)="closeReport('gastosCategoria')">Regresar</button>
     </div>
 </ng-container>
