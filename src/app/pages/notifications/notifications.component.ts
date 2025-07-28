@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [MatIconModule, CommonModule],
   templateUrl: './notifications.component.html',
-  styleUrl: './notifications.component.scss'
 })
 export class NotificationsComponent {
   public notifications: INotification[] = [

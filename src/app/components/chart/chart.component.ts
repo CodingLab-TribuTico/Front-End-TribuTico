@@ -6,7 +6,6 @@ import { Chart, ChartType } from 'chart.js/auto';
   standalone: true,
   imports: [],
   templateUrl: './chart.component.html',
-  styleUrl: './chart.component.scss'
 })
 export class ChartComponent implements OnInit, OnChanges {
   @Input() title: string = "";
