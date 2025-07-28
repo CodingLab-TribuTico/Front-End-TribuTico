@@ -58,6 +58,7 @@ export interface ISearch {
   query?: string;
   page?: number;
   size?: number;
+  year?: number;
   pageNumber?: number;
   pageSize?: number;
   totalElements?: number;
@@ -160,4 +161,13 @@ export interface IIsrSimulation {
   totalTaxDebt: number;
   requestedCompensation: number;
   totalDebtToPay: number;
+}
+
+export interface INotification {
+  id: number;
+  title: string;
+  message: string;
+  read: boolean;
+  timestamp: string;
+  type: string;
 }

@@ -20,6 +20,7 @@ export class IsrSimulationService extends BaseService<IResponse<IIsrSimulation>>
     }).subscribe({
       next: (response: any) => {
         this.isrSimulation = response.data;
+        console.log('ISR Simulation created:', response.data);
       },
       error: (err: any) => {
         console.error('error', err);
