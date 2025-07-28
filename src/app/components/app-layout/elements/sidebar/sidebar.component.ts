@@ -36,6 +36,7 @@ export class SidebarComponent {
     'Cargar Facturas': 'add_notes',
     'Crear Simulación': 'interactive_space',
     'Facturas': 'list_alt',
+    'Notificaciones': 'notifications',
   }
 
   constructor(public router: Router

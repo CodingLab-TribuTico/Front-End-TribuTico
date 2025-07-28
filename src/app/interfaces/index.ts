@@ -161,3 +161,12 @@ export interface IIsrSimulation {
   requestedCompensation: number;
   totalDebtToPay: number;
 }
+
+export interface INotification {
+  id?: number;
+  name?: string;
+  description?: string;
+  type?: string;
+  state?: string;
+  closeDate?: string;
+}

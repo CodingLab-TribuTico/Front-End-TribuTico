@@ -16,6 +16,7 @@ import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.component';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
+import { NotificationComponent } from './pages/notification/notification.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,15 @@ export const routes: Routes = [
         path: 'app',
         redirectTo: 'users',
         pathMatch: 'full',
+      },
+      {
+        path: 'notification',
+        component: NotificationComponent,
+        data: {
+          authorities: [IRoleType.superAdmin],
+          name: 'Notificaciones',
+          showInSidebar: true
+        }
       },
       {
         path: 'create-simulation',
