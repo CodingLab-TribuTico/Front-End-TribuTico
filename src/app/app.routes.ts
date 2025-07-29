@@ -18,6 +18,7 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { ReportsComponent } from './pages/reports/reports.component';
+import { NotificationComponent } from './pages/notification/notification.component';
 
 export const routes: Routes = [
   {
@@ -63,11 +64,20 @@ export const routes: Routes = [
           showInSidebar: true
         }
       },
-      {
+       {
         path: 'notifications',
         component: NotificationsComponent,
         data: {
           authorities: [IRoleType.user],
+          name: 'Notificaciones',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'notification',
+        component: NotificationComponent,
+        data: {
+          authorities: [IRoleType.superAdmin],
           name: 'Notificaciones',
           showInSidebar: true
         }
