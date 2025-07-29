@@ -8,7 +8,6 @@ import { Chart, ChartType } from 'chart.js/auto';
   templateUrl: './chart.component.html',
 })
 export class ChartComponent implements OnInit, OnChanges {
-  @Input() title: string = "";
   @Input() labels: string[] = [];
   @Input() datasets: any[] = [];
   @Input() type: ChartType = 'bar';
