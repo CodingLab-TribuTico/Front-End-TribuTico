@@ -171,3 +171,11 @@ export interface INotification {
   timestamp: string;
   type: string;
 }
+export interface INotificationGlobal{
+  id?: number;
+  name?: string;
+  description?: string;
+  type?: string;
+  state?: string;
+  closeDate?: string;
+}
