@@ -5,7 +5,7 @@
         <th class="p-3" scope="col">ID</th>
         <th class="p-3" scope="col">Asunto</th>
         <th class="p-3" scope="col">Descripción</th>
-        <th class="p-3" scope="col">Fecha y Hora de Finalización</th>
+        <th class="p-3" scope="col">Fecha de Finalización</th>
         <th class="p-3" scope="col">Tipo</th>
         <th class="p-3" scope="col">Estado</th>
         <th class="p-3" scope="col">Acciones</th>
@@ -17,14 +17,14 @@
         <td class="p-3" scope="row">{{item.id}}</td>
         <td class="p-3" scope="row">{{item.name}}</td>
         <td class="p-3 max-w-xs break-words leading-tight" scope="row">
-            {{item.description}}
+          {{item.description}}
         </td>
-        <td class="p-3" scope="row">{{ item.closeDate | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td class="p-3" scope="row">{{ item.closeDate | date: 'dd-MM-yyyy' }}</td>
         <td class="p-3" scope="row">{{item.type}}</td>
         <td class="p-3" scope="row">{{item.state}}</td>
         <td class="p-3 space-x-1">
-          
-          <button (click)="openModal(item)" 
+
+          <button (click)="openModal(item)"
             class="group bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-golden-glow hover:bg-bisque ml-2"
             type="button">
             <span class="material-symbols-rounded text-lg text-crater-brown">
