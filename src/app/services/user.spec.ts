@@ -5,7 +5,7 @@ import { AlertService } from './alert.service';
 
 describe('UserService', () => {
   let userService: UserService;
-  let httpMock: HttpTestingController;
+  let http: HttpTestingController;
   let alertService: AlertService;
 
   beforeEach(() => {
@@ -18,12 +18,12 @@ describe('UserService', () => {
     });
 
     userService = TestBed.inject(UserService);
-    httpMock = TestBed.inject(HttpTestingController);
+    http = TestBed.inject(HttpTestingController);
     alertService = TestBed.inject(AlertService);
   });
 
   afterEach(() => {
-    httpMock.verify();
+    http.verify();
   });
 
   const testUser = {
@@ -48,7 +48,7 @@ describe('UserService', () => {
   it('debería devolver todos los usuarios', () => {
     userService.getAll();
 
-    const req = httpMock.expectOne(`users?page=1&size=5&search=`);
+    const req = http.expectOne(`users?page=1&size=5&search=`);
     expect(req.request.method).toBe('GET');
     req.flush(response);
 
@@ -62,7 +62,7 @@ describe('UserService', () => {
     spyOn(alertService, 'displayAlert');
     spyOn(userService, 'getAll');
 
-    const req = httpMock.expectOne('users');
+    const req = http.expectOne('users');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(testUser);
     req.flush({
@@ -86,7 +86,7 @@ describe('UserService', () => {
     spyOn(alertService, 'displayAlert');
     spyOn(userService, 'getAll');
 
-    const req = httpMock.expectOne(`users/${testUser.id}`);
+    const req = http.expectOne(`users/${testUser.id}`);
     expect(req.request.method).toBe('PATCH');
     expect(req.request.body).toEqual(testUser);
     req.flush({ 
@@ -104,12 +104,13 @@ describe('UserService', () => {
   });
 
   it('debería eliminar un usuario', () => {
+    userService.delete(testUser);
+    
     spyOn(alertService, 'displayAlert');
     spyOn(userService, 'getAll');
 
-    userService.delete(testUser);
 
-    const req = httpMock.expectOne(`users/${testUser.id}`);
+    const req = http.expectOne(`users/${testUser.id}`);
     expect(req.request.method).toBe('DELETE');
     req.flush({ 
       message: 'Usuario eliminado con éxito' 
