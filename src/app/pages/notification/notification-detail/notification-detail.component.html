@@ -1,0 +1,50 @@
+@defer {
+<div class="p-4 h-full">
+  <div class="pb-2 justify-between flex flex-row items-end">
+    <div class="flex flex-row items-end ">
+      <button
+          (click)="openModal()"
+          class="bg-golden-glow rounded-md w-8 h-8 flex items-center justify-center hover:bg-bisque transition-colors">
+          <span class="material-symbols-rounded text-crater-brown text-2xl">add</span>
+      </button>
+    <h1 class="text-lg text-crater-brown font-bold ml-2">Notificaciones</h1>
+    
+      </div>
+    <div class="flex items-center gap-2"> 
+      
+      <div class="flex items-center bg-crater-brown rounded-md px-2 py-1">
+        <span class="material-symbols-rounded text-2xl pr-2 text-bisque">
+          search
+        </span>
+        <input (keyup)="search($event)" type="text"
+          class="bg-crater-brown text-bisque placeholder:text-bisque text-base font-bold w-full"
+          placeholder="Buscar por Tipo">
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <app-notification-list (callDeleteAction)="notificationService.delete($event)"
+      [notifications]="notificationService.notifications$()" />
+    @if(notificationService.notifications$().length) {
+      <app-pagination [service]="notificationService" />
+    }
+  </div>
+</div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}
+    
+<ng-template #addNotificationsModal>
+  <app-modal [hideFooter]="true" (callCancelMethod)="hideModal()">
+    <div>
+      <app-notification-form 
+        [notificationForm]="notificationForm"
+        [cancelOption]="true"
+        (callSaveMethod)="saveNotification($event)" 
+        (callCancelMethod)="hideModal()" />
+    </div>
+  </app-modal>
+</ng-template>
+
+

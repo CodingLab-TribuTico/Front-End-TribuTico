@@ -17,7 +17,7 @@ import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.co
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { NotificationDetailComponent } from './pages/notification/notification-list/notification-detail.component';
+import { NotificationDetailComponent } from './pages/notification/notification-detail/notification-detail.component';
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
 
 export const routes: Routes = [
