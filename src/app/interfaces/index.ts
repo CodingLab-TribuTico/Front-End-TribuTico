@@ -182,5 +182,14 @@ export interface IIvaCalculation {
   ivaNetoPorPagar: number;
   ivaAFavor: number;
   automaticCalculation: boolean;
+  
+  // Campos específicos por tarifa de IVA
+  iva1Percent: number;
+  iva2Percent: number;
+  iva4Percent: number;
+  iva8Percent: number;
+  iva13Percent: number;
+  ivaExento: number;
+  
   user?: IUser;
 }

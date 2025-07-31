@@ -1,182 +1,176 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { SectionIvaSimulationComponent } from './section-iva-simulation/section-iva-simulation.component';
+import { TaxBaseComponent } from './tax-base/tax-base.component';
+import { ExemptSalesComponent } from './exempt-sales/exempt-sales.component';
+import { SalesNotSubjectComponent } from './sales-not-subject/sales-not-subject.component';
+import { TotalSalesComponent } from './total-sales/total-sales.component';
 import { IIvaCalculation } from '../../interfaces';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-iva-simulation',
   standalone: true,
-  imports: [CommonModule],
+  imports: [SectionIvaSimulationComponent, TaxBaseComponent, ExemptSalesComponent, SalesNotSubjectComponent, TotalSalesComponent, CommonModule],
   templateUrl: './iva-simulation.component.html'
 })
-export class IvaSimulationComponent implements OnInit {
+export class IvaSimulationComponent {
+  @Input() simulationPeriod: string = '';
+  @Input() simulationName: string = '';
+  @Input() simulationIdentification: string = '';
   @Input() simulation!: IIvaCalculation;
 
-  // Variables para controlar la expansión de secciones
-  public showVentasSujetas: boolean = true; // Iniciamos con "Sí" por defecto
-  public showVentasExentas: boolean = false;
-  public showVentasNoSujetas: boolean = false;
-  
-  // Variables para las diferentes tasas de ventas
-  public showVentasTasa05: boolean = false;  // 0.5%
-  public showVentasTasa1: boolean = false;   // 1%
-  public showVentasTasa2: boolean = false;   // 2%
-  public showVentasTasa4: boolean = false;   // 4%
-  public showVentasTasa8: boolean = false;   // 8%
-  public showVentasTasa13: boolean = true;   // 13% (por defecto)
-  
-  // Variables para compras
-  public showComprasIvaAcreditable: boolean = false;
-  public showComprasBienesServicios: boolean = false;
-  
-  // Variables para IVA no acreditable
-  public showIvaNoAcreditable: boolean = false;
+  // Estados para las opciones SI/NO principales
+  ventasSujetasEnabled: boolean = false;
+  ventasExentasEnabled: boolean = false;
+  ventasNoSujetasEnabled: boolean = false;
 
-  ngOnInit() {
-    console.log('Simulación IVA recibida en el componente:', this.simulation);
-    console.log('Tipo de simulation:', typeof this.simulation);
-    if (this.simulation) {
-      console.log('Propiedades de la simulación:');
-      console.log('- ivaVentasBienes:', this.simulation.ivaVentasBienes, typeof this.simulation.ivaVentasBienes);
-      console.log('- ivaComprasBienes:', this.simulation.ivaComprasBienes, typeof this.simulation.ivaComprasBienes);
-      console.log('- totalIvaDebito:', this.simulation.totalIvaDebito, typeof this.simulation.totalIvaDebito);
-      console.log('- ivaNetoPorPagar:', this.simulation.ivaNetoPorPagar, typeof this.simulation.ivaNetoPorPagar);
-    }
+  // Estados para porcentajes individuales de VENTAS SUJETAS
+  ventasSujetas05Enabled: boolean = false;
+  ventasSujetas1Enabled: boolean = false;
+  ventasSujetas2Enabled: boolean = false;
+  ventasSujetas4Enabled: boolean = false;
+  ventasSujetas8Enabled: boolean = false;
+  ventasSujetas13Enabled: boolean = false;
+
+  // Métodos para manejar cambios SI/NO principales
+  toggleVentasSujetas = (value: boolean) => {
+    this.ventasSujetasEnabled = value;
   }
 
-  get simulationPeriod(): string {
-    if (!this.simulation) return '';
-    const monthNames = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  toggleVentasExentas = (value: boolean) => {
+    this.ventasExentasEnabled = value;
+  }
+
+  toggleVentasNoSujetas = (value: boolean) => {
+    this.ventasNoSujetasEnabled = value;
+  }
+
+  // Métodos para manejar porcentajes individuales de VENTAS SUJETAS
+  toggleVentasSujetas05 = (value: boolean) => {
+    this.ventasSujetas05Enabled = value;
+  }
+
+  toggleVentasSujetas1 = (value: boolean) => {
+    this.ventasSujetas1Enabled = value;
+  }
+
+  toggleVentasSujetas2 = (value: boolean) => {
+    this.ventasSujetas2Enabled = value;
+  }
+
+  toggleVentasSujetas4 = (value: boolean) => {
+    this.ventasSujetas4Enabled = value;
+  }
+
+  toggleVentasSujetas8 = (value: boolean) => {
+    this.ventasSujetas8Enabled = value;
+  }
+
+  toggleVentasSujetas13 = (value: boolean) => {
+    this.ventasSujetas13Enabled = value;
+  }
+
+  // Getter para la sección de VENTAS SUJETAS (simplificado como ISR)
+  get ventasSujetasItems() {
+    if (!this.ventasSujetasEnabled) return [];
+    
+    return [
+      { label: 'Bienes y servicios afectos al 0.5%', value: 0, isAutocalculated: true },
+      { label: 'Bienes y servicios afectos al 1%', value: this.simulation?.iva1Percent || 0, isAutocalculated: true },
+      { label: 'Bienes y servicios afectos al 2%', value: this.simulation?.iva2Percent || 0, isAutocalculated: true },
+      { label: 'Bienes y servicios afectos al 4%', value: this.simulation?.iva4Percent || 0, isAutocalculated: true },
+      { label: 'Bienes y servicios afectos al 8%', value: this.simulation?.iva8Percent || 0, isAutocalculated: true },
+      { label: 'Bienes y servicios afectos al 13%', value: this.simulation?.iva13Percent || 0, isAutocalculated: true }
     ];
-    return `${monthNames[this.simulation.month - 1]} ${this.simulation.year}`;
   }
 
-  get simulationIdentification(): string {
-    return this.simulation?.user?.identification || 'N/A';
+  get ventasSujetasSection() {
+    return {
+      sectionTitle: 'I. TOTAL DE VENTAS SUJETAS, EXENTAS Y NO SUJETAS',
+      hasToggle: false,
+      toggleState: false, // Agregado para evitar error
+      onToggle: () => {}, // Agregado para evitar error
+      items: [], // Asegúrate de que esté aquí
+      subsections: [
+        {
+          title: 'Ventas sujetas (Base imponible)',
+          hasToggle: true,
+          toggleState: this.ventasSujetasEnabled,
+          onToggle: (value: boolean) => this.toggleVentasSujetas(value),
+          subsections: [ // Volvemos a subsections normales, no nested
+            {
+              title: 'BIENES Y SERVICIOS AFECTADOS AL 0,5%',
+              hasToggle: true,
+              toggleState: this.ventasSujetas05Enabled,
+              onToggle: (value: boolean) => this.toggleVentasSujetas05(value),
+              tableData: {
+                headers: ['DETALLE', '0.5%'],
+                rows: ['Bienes', 'Bienes de capital', 'Servicios', 'Uso o consumo personal de mercancías y servicios', 'Transferencias sin contraprestación a terceros'],
+                values: []
+              }
+            },
+            {
+              title: 'BIENES Y SERVICIOS AFECTADOS AL 1%',
+              hasToggle: true,
+              toggleState: this.ventasSujetas1Enabled,
+              onToggle: (value: boolean) => this.toggleVentasSujetas1(value),
+              tableData: {
+                headers: ['DETALLE', '1%'],
+                rows: ['Bienes', 'Bienes de capital', 'Servicios', 'Uso o consumo personal de mercancías y servicios', 'Transferencias sin contraprestación a terceros'],
+                values: []
+              }
+            },
+            {
+              title: 'BIENES Y SERVICIOS AFECTADOS AL 2%',
+              hasToggle: true,
+              toggleState: this.ventasSujetas2Enabled,
+              onToggle: (value: boolean) => this.toggleVentasSujetas2(value),
+              tableData: {
+                headers: ['DETALLE', '2%'],
+                rows: ['Bienes', 'Bienes de capital', 'Servicios', 'Uso o consumo personal de mercancías y servicios', 'Transferencias sin contraprestación a terceros'],
+                values: []
+              }
+            },
+            {
+              title: 'BIENES Y SERVICIOS AFECTADOS AL 4%',
+              hasToggle: true,
+              toggleState: this.ventasSujetas4Enabled,
+              onToggle: (value: boolean) => this.toggleVentasSujetas4(value),
+              tableData: {
+                headers: ['DETALLE', '4%'],
+                rows: ['Bienes', 'Bienes de capital', 'Servicios', 'Uso o consumo personal de mercancías y servicios', 'Transferencias sin contraprestación a terceros'],
+                values: []
+              }
+            },
+            {
+              title: 'BIENES Y SERVICIOS AFECTADOS AL 8%',
+              hasToggle: true,
+              toggleState: this.ventasSujetas8Enabled,
+              onToggle: (value: boolean) => this.toggleVentasSujetas8(value),
+              tableData: {
+                headers: ['DETALLE', '8%'],
+                rows: ['Bienes', 'Bienes de capital', 'Servicios', 'Uso o consumo personal de mercancías y servicios', 'Transferencias sin contraprestación a terceros'],
+                values: []
+              }
+            },
+            {
+              title: 'BIENES Y SERVICIOS AFECTADOS AL 13%',
+              hasToggle: true,
+              toggleState: this.ventasSujetas13Enabled,
+              onToggle: (value: boolean) => this.toggleVentasSujetas13(value),
+              tableData: {
+                headers: ['DETALLE', '13%'],
+                rows: ['Bienes', 'Bienes de capital', 'Servicios', 'Uso o consumo personal de mercancías y servicios', 'Transferencias sin contraprestación a terceros'],
+                values: []
+              }
+            }
+          ]
+        }
+      ]
+    };
   }
 
-  get simulationName(): string {
-    const user = this.simulation?.user;
-    if (!user) return 'N/A';
-    
-    const parts = [user.name, user.lastname, user.lastname2]
-      .filter(part => part && part.trim() !== '');
-    
-    const uniqueParts = parts.filter((part, index) => 
-      parts.indexOf(part) === index
-    );
-    
-    return uniqueParts.join(' ') || 'N/A';
-  }
-
-  formatCurrency(value: number): string {
-    if (value === null || value === undefined || isNaN(value)) {
-      console.warn('Valor inválido para formatCurrency:', value);
-      return '₡0.00';
-    }
-    
-    return new Intl.NumberFormat('es-CR', {
-      style: 'currency',
-      currency: 'CRC',
-      minimumFractionDigits: 2
-    }).format(value);
-  }
-
-  getSafeValue(value: number): number {
-    return (value === null || value === undefined || isNaN(value)) ? 0 : value;
-  }
-
-  
-  getTotalVentasSujetas(): number {
-    const ventasBienes = this.getSafeValue(this.simulation.ivaVentasBienes) / 0.13;
-    const ventasServicios = this.getSafeValue(this.simulation.ivaVentasServicios) / 0.13;
-    const exportaciones = this.getSafeValue(this.simulation.ivaExportaciones) / 0.13;
-    const agropecuarias = this.getSafeValue(this.simulation.ivaActividadesAgropecuarias) / 0.13;
-    
-    return ventasBienes + ventasServicios + exportaciones + agropecuarias;
-  }
-
-  
-  getTotalBaseImponibleCredito(): number {
-    const comprasBienes = this.getSafeValue(this.simulation.ivaComprasBienes) / 0.13;
-    const comprasServicios = this.getSafeValue(this.simulation.ivaComprasServicios) / 0.13;
-    const importaciones = this.getSafeValue(this.simulation.ivaImportaciones) / 0.13;
-    const gastosGenerales = this.getSafeValue(this.simulation.ivaGastosGenerales) / 0.13;
-    const activosFijos = this.getSafeValue(this.simulation.ivaActivosFijos) / 0.13;
-    
-    return comprasBienes + comprasServicios + importaciones + gastosGenerales + activosFijos;
-  }
-
-  /**
-   * Maneja el cambio de estado para ventas sujetas
-   */
-  onVentasSujetasChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasSujetas = target.value === 'si';
-  }
-
-  /**
-   * Maneja el cambio de estado para ventas exentas
-   */
-  onVentasExentasChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasExentas = target.value === 'si';
-  }
-
-  /**
-   * Maneja el cambio de estado para ventas no sujetas
-   */
-  onVentasNoSujetasChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasNoSujetas = target.value === 'si';
-  }
-
-  // Métodos para manejar las diferentes tasas de IVA
-  onVentasTasa05Change(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasTasa05 = target.value === 'si';
-  }
-
-  onVentasTasa1Change(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasTasa1 = target.value === 'si';
-  }
-
-  onVentasTasa2Change(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasTasa2 = target.value === 'si';
-  }
-
-  onVentasTasa4Change(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasTasa4 = target.value === 'si';
-  }
-
-  onVentasTasa8Change(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasTasa8 = target.value === 'si';
-  }
-
-  onVentasTasa13Change(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showVentasTasa13 = target.value === 'si';
-  }
-
-  // Métodos para compras
-  onComprasIvaAcreditableChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showComprasIvaAcreditable = target.value === 'si';
-  }
-
-  onComprasBienesServiciosChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showComprasBienesServicios = target.value === 'si';
-  }
-
-  // Método para IVA no acreditable
-  onIvaNoAcreditableChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.showIvaNoAcreditable = target.value === 'si';
-  }
 }
+  
+
+

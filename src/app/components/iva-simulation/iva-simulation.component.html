@@ -1,5 +1,6 @@
 <div class="w-full">
     <div class="flex flex-col w-full space-y-10">
+        <!-- Encabezado -->
         <div class="flex flex-col space-y-4 w-full">
             <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
                 D-104 - Declaración del Impuesto al Valor Agregado
@@ -7,558 +8,63 @@
 
             <div class="flex flex-row items-center w-full">
                 <p class="w-40 text-crater-brown">02 - Período</p>
-                <span class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">{{simulationPeriod}}</span>
+                <span
+                    class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">{{simulationPeriod}}</span>
             </div>
 
             <div class="flex flex-row items-center w-full">
                 <p class="w-40 text-crater-brown">04 - Cédula</p>
-                <span class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">{{simulationIdentification}}</span>
+                <span
+                    class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">{{simulationIdentification}}</span>
             </div>
 
             <div class="flex flex-row items-center w-full">
                 <p class="w-40 text-crater-brown">06 - Nombre</p>
-                <span class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">{{simulationName}}</span>
+                <span
+                    class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">{{simulationName}}</span>
             </div>
         </div>
 
-        <div class="flex flex-col space-y-4 w-full">
-            <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
-                I. Ventas del período
-            </h1>
+        <!-- I. TOTAL DE VENTAS SUJETAS, EXENTAS Y NO SUJETAS -->
+        <app-section-iva-simulation 
+            [sectionTitle]="ventasSujetasSection.sectionTitle"
+            [hasToggle]="ventasSujetasSection.hasToggle"
+            [toggleState]="ventasSujetasSection.toggleState"
+            [onToggle]="ventasSujetasSection.onToggle"
+            [items]="ventasSujetasSection.items"
+            [subsections]="ventasSujetasSection.subsections">
+        </app-section-iva-simulation>
 
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_sujetas" value="si" class="mr-1" 
-                               (change)="onVentasSujetasChange($event)" 
-                               [checked]="showVentasSujetas">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_sujetas" value="no" class="mr-1" 
-                               (change)="onVentasSujetasChange($event)"
-                               [checked]="!showVentasSujetas">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Ventas sujetas al impuesto</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(getTotalVentasSujetas())}}
-                </span>
-            </div>
+        <!-- II. BASE IMPONIBLE -->
+        <app-tax-base
+            [simulationPeriod]="simulationPeriod"
+            [simulationName]="simulationName"
+            [simulationIdentification]="simulationIdentification"
+            [simulation]="simulation">
+        </app-tax-base>
 
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_05" value="si" class="mr-1" 
-                               (change)="onVentasTasa05Change($event)" 
-                               [checked]="showVentasTasa05">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_05" value="no" class="mr-1" 
-                               (change)="onVentasTasa05Change($event)"
-                               [checked]="!showVentasTasa05">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Bienes y servicios afectos al 0.5%</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(0)}}
-                </span>
-            </div>
+        <!-- III. VENTAS EXENTAS -->
+        <app-exempt-sales
+            [simulationPeriod]="simulationPeriod"
+            [simulationName]="simulationName"
+            [simulationIdentification]="simulationIdentification"
+            [simulation]="simulation">
+        </app-exempt-sales>
 
-            <div *ngIf="showVentasTasa05" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de bienes y servicios afectos al 0.5%</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Bienes gravados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Servicios gravados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
+        <!-- IV. VENTAS NO SUJETAS -->
+        <app-sales-not-subject
+            [simulationPeriod]="simulationPeriod"
+            [simulationName]="simulationName"
+            [simulationIdentification]="simulationIdentification"
+            [simulation]="simulation">
+        </app-sales-not-subject>
 
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_1" value="si" class="mr-1" 
-                               (change)="onVentasTasa1Change($event)" 
-                               [checked]="showVentasTasa1">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_1" value="no" class="mr-1" 
-                               (change)="onVentasTasa1Change($event)"
-                               [checked]="!showVentasTasa1">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Bienes y servicios afectos al 1%</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(0)}}
-                </span>
-            </div>
-
-            <div *ngIf="showVentasTasa1" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de bienes y servicios afectos al 1%</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Bienes gravados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Servicios gravados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_2" value="si" class="mr-1" 
-                               (change)="onVentasTasa2Change($event)" 
-                               [checked]="showVentasTasa2">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_2" value="no" class="mr-1" 
-                               (change)="onVentasTasa2Change($event)"
-                               [checked]="!showVentasTasa2">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Bienes y servicios afectos al 2%</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(0)}}
-                </span>
-            </div>
-
-            <div *ngIf="showVentasTasa2" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de bienes y servicios afectos al 2%</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Bienes gravados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Servicios gravados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_4" value="si" class="mr-1" 
-                               (change)="onVentasTasa4Change($event)" 
-                               [checked]="showVentasTasa4">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_4" value="no" class="mr-1" 
-                               (change)="onVentasTasa4Change($event)"
-                               [checked]="!showVentasTasa4">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Bienes y servicios afectos al 4%</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(0)}}
-                </span>
-            </div>
-
-            <div *ngIf="showVentasTasa4" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de bienes y servicios afectos al 4%</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Bienes gravados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Servicios gravados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_8" value="si" class="mr-1" 
-                               (change)="onVentasTasa8Change($event)" 
-                               [checked]="showVentasTasa8">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_8" value="no" class="mr-1" 
-                               (change)="onVentasTasa8Change($event)"
-                               [checked]="!showVentasTasa8">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Servicios afectos al 8%</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(0)}}
-                </span>
-            </div>
-
-            <div *ngIf="showVentasTasa8" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de servicios afectos al 8%</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Servicios profesionales independientes</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Servicios técnicos especializados</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Otros servicios gravados al 8%</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bienes y servicios afectos al 13% -->
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_13" value="si" class="mr-1" 
-                               (change)="onVentasTasa13Change($event)" 
-                               [checked]="showVentasTasa13">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_tasa_13" value="no" class="mr-1" 
-                               (change)="onVentasTasa13Change($event)"
-                               [checked]="!showVentasTasa13">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Bienes y servicios afectos al 13%</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(getTotalVentasSujetas())}}
-                </span>
-            </div>
-
-            <!-- Tabla detallada para tasa 13% -->
-            <div *ngIf="showVentasTasa13" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de bienes y servicios afectos al 13%</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Bienes gravados al 13%</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Servicios gravados al 13%</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Importaciones afectas al 13%</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Autoconsumos afectos al 13%</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ventas exentas -->
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_exentas" value="si" class="mr-1" 
-                               (change)="onVentasExentasChange($event)" 
-                               [checked]="showVentasExentas">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_exentas" value="no" class="mr-1" 
-                               (change)="onVentasExentasChange($event)"
-                               [checked]="!showVentasExentas">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Ventas exentas (Art.8)</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(0)}}
-                </span>
-            </div>
-
-            <!-- Tabla detallada para ventas exentas -->
-            <div *ngIf="showVentasExentas" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de ventas exentas</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Exportaciones de bienes</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Exportaciones de servicios</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Ventas en zona franca</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Actividades agropecuarias</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Medicamentos</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Alimentos básicos</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Otras ventas exentas</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ventas no sujetas al impuesto -->
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_no_sujetas" value="si" class="mr-1" 
-                               (change)="onVentasNoSujetasChange($event)" 
-                               [checked]="showVentasNoSujetas">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="ventas_no_sujetas" value="no" class="mr-1" 
-                               (change)="onVentasNoSujetasChange($event)"
-                               [checked]="!showVentasNoSujetas">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Ventas no sujetas al impuesto</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(0)}}
-                </span>
-            </div>
-
-            <!-- Tabla detallada para ventas no sujetas -->
-            <div *ngIf="showVentasNoSujetas" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de ventas no sujetas</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Ventas a organismos internacionales</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Ventas en tránsito</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Otras ventas no sujetas</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- II. Compras del período -->
-        <div class="flex flex-col space-y-4 w-full">
-            <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
-                II. Compras del período
-            </h1>
-
-            <!-- Compras con IVA acreditable -->
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="compras_iva_acreditable" value="si" class="mr-1" 
-                               (change)="onComprasIvaAcreditableChange($event)" 
-                               [checked]="showComprasIvaAcreditable">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="compras_iva_acreditable" value="no" class="mr-1" 
-                               (change)="onComprasIvaAcreditableChange($event)"
-                               [checked]="!showComprasIvaAcreditable">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| Compras con IVA acreditable</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(getTotalBaseImponibleCredito())}}
-                </span>
-            </div>
-
-            <!-- Tabla detallada para compras -->
-            <div *ngIf="showComprasIvaAcreditable" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de compras con IVA acreditable</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Compras de bienes</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Compras de servicios</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Importaciones</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Gastos generales</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">Activos fijos</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- IVA no acreditable -->
-            <div class="flex flex-row items-center w-full justify-between">
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="iva_no_acreditable" value="si" class="mr-1" 
-                               (change)="onIvaNoAcreditableChange($event)" 
-                               [checked]="showIvaNoAcreditable">
-                        <label class="text-sm font-medium text-crater-brown">Sí</label>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <input type="radio" name="iva_no_acreditable" value="no" class="mr-1" 
-                               (change)="onIvaNoAcreditableChange($event)"
-                               [checked]="!showIvaNoAcreditable">
-                        <label class="text-sm font-medium text-crater-brown">No</label>
-                    </div>
-                    <p class="text-crater-brown">|| IVA no acreditable</p>
-                </div>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(0)}}
-                </span>
-            </div>
-
-            <!-- Tabla detallada para IVA no acreditable -->
-            <div *ngIf="showIvaNoAcreditable" class="ml-6 mb-4 p-4 bg-isabelline border border-zorba rounded-lg">
-                <h4 class="text-sm font-bold text-crater-brown mb-4">Detalle de IVA no acreditable</h4>
-                <div class="space-y-2">
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">IVA por ventas exentas</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">IVA por gastos no deducibles</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                    <div class="flex flex-row items-center w-full justify-between">
-                        <p class="text-crater-brown">IVA por uso personal</p>
-                        <span class="w-60 px-4 py-3 rounded-md text-right border-2 border-crater-brown text-crater-brown">
-                            {{formatCurrency(0)}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- III. Resumen de liquidación -->
-        <div class="flex flex-col space-y-4 w-full">
-            <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
-                III. Resumen de liquidación
-            </h1>
-
-            <div class="flex flex-row items-center w-full justify-between">
-                <p class="text-crater-brown">Total IVA débito</p>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(getSafeValue(simulation.totalIvaDebito))}}
-                </span>
-            </div>
-
-            <div class="flex flex-row items-center w-full justify-between">
-                <p class="text-crater-brown">Total IVA crédito</p>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown">
-                    {{formatCurrency(getSafeValue(simulation.totalIvaCredito))}}
-                </span>
-            </div>
-
-            <div class="flex flex-row items-center w-full justify-between">
-                <p class="text-crater-brown font-bold">IVA neto por pagar</p>
-                <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right text-crater-brown font-bold">
-                    {{formatCurrency(getSafeValue(simulation.ivaNetoPorPagar))}}
-                </span>
-            </div>
-        </div>
+        <!-- V. TOTAL DE COMPRAS -->
+        <app-total-sales
+            [simulationPeriod]="simulationPeriod"
+            [simulationName]="simulationName"
+            [simulationIdentification]="simulationIdentification"
+            [simulation]="simulation">
+        </app-total-sales>
     </div>
 </div>

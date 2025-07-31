@@ -1,16 +1,155 @@
 <div class="flex flex-col space-y-4 w-full">
-    <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
-        {{sectionTitle}}
-    </h1>
+    <div class="flex items-center">
+        <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold mr-4">
+            {{sectionTitle}}
+        </h1>
+        
+        <div *ngIf="hasToggle" class="flex space-x-4">
+            <button 
+                (click)="handleToggle(true)" 
+                [class.bg-flamenco]="toggleState" 
+                [class.text-bisque]="toggleState"
+                [class.bg-zorba]="!toggleState" 
+                [class.text-crater-brown]="!toggleState"
+                class="px-4 py-2 rounded-md font-semibold transition-colors hover:bg-golden-glow hover:text-crater-brown">SÍ</button>
+            <button 
+                (click)="handleToggle(false)" 
+                [class.bg-flamenco]="!toggleState" 
+                [class.text-bisque]="!toggleState"
+                [class.bg-zorba]="toggleState" 
+                [class.text-crater-brown]="toggleState"
+                class="px-4 py-2 rounded-md font-semibold transition-colors hover:bg-golden-glow hover:text-crater-brown">NO</button>
+        </div>
+    </div>
 
-    @for (item of items; track item.label) {
-    <div class="flex flex-row items-center w-full justify-between">
-        <p class="w-auto text-crater-brown">{{ item.label }}</p>
-        <span
-            [ngClass]="item.isAutocalculated ? 'w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown' : 'w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown'">
-            {{ item.value }}
-        </span>
+    <div *ngIf="!hasToggle || toggleState">
+        
+        <div *ngIf="items.length > 0" class="space-y-6">
+            @for (item of items; track item.label) {
+            <div class="flex flex-row items-center w-full justify-between">
+                <p class="w-auto text-crater-brown">{{ item.label }}</p>
+                <span
+                    [ngClass]="item.isAutocalculated ? 'w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown' : 'w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown'">
+                    {{ item.value }}
+                </span>
+            </div>
+            }
+        </div>
+
+        <div *ngIf="tableData" class="mt-4">
+            <table class="min-w-full table-auto border border-crater-brown">
+                <thead>
+                    <tr class="bg-crater-brown text-white">
+                        <th *ngFor="let header of tableData.headers" class="px-4 py-3 border border-crater-brown text-left font-bold">{{ header }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of tableData.rows; let i = index" class="hover:bg-gray-50">
+                        <td class="border border-crater-brown px-4 py-3 text-crater-brown font-medium">{{ row }}</td>
+                        <td *ngFor="let header of tableData.headers.slice(1); let j = index" class="border border-crater-brown px-4 py-3 text-center">
+                            <input type="number" 
+                                   class="w-full p-2 border rounded text-center"
+                                   [value]="tableData.values[i] ? (tableData.values[i][header] || 0) : 0"
+                                   placeholder="₡0,00">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="subsections && subsections.length > 0" class="ml-4 space-y-8">
+            <div *ngFor="let subsection of subsections" class="mb-8">
+                
+                <div class="flex items-center mb-6">
+                    <span class="text-crater-brown font-semibold mr-6">{{ subsection.title }}</span>
+                    <div class="flex space-x-4">
+                        <button 
+                            (click)="handleSubsectionToggle(subsection, true)" 
+                            [class.bg-flamenco]="subsection.toggleState" 
+                            [class.text-bisque]="subsection.toggleState"
+                            [class.bg-zorba]="!subsection.toggleState" 
+                            [class.text-crater-brown]="!subsection.toggleState"
+                            class="px-4 py-2 rounded-md font-semibold transition-colors hover:bg-golden-glow hover:text-crater-brown">SÍ</button>
+                        <button 
+                            (click)="handleSubsectionToggle(subsection, false)" 
+                            [class.bg-flamenco]="!subsection.toggleState" 
+                            [class.text-bisque]="!subsection.toggleState"
+                            [class.bg-zorba]="subsection.toggleState" 
+                            [class.text-crater-brown]="subsection.toggleState"
+                            class="px-4 py-2 rounded-md font-semibold transition-colors hover:bg-golden-glow hover:text-crater-brown">NO</button>
+                    </div>
+                </div>
+
+                <div *ngIf="subsection.toggleState && subsection.tableData" class="ml-4">
+                    <table class="min-w-full table-auto border border-crater-brown">
+                        <thead>
+                            <tr class="bg-crater-brown text-white">
+                                <th *ngFor="let header of subsection.tableData.headers" class="px-4 py-3 border border-crater-brown text-left font-bold">{{ header }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of subsection.tableData.rows; let i = index" class="hover:bg-gray-50">
+                                <td class="border border-crater-brown px-4 py-3 text-crater-brown font-medium">{{ row }}</td>
+                                <td *ngFor="let header of subsection.tableData.headers.slice(1); let j = index" class="border border-crater-brown px-4 py-3 text-center">
+                                    <input type="number" 
+                                           class="w-full p-2 border rounded text-center"
+                                           [value]="subsection.tableData.values[i] ? (subsection.tableData.values[i][header] || 0) : 0"
+                                           placeholder="₡0,00">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div *ngIf="subsection.toggleState && subsection.subsections" class="ml-6 space-y-6">
+                    <div *ngFor="let nested of subsection.subsections" class="mb-6">
+                        
+                        <div class="flex items-center mb-4">
+                            <span class="text-crater-brown mr-6">{{ nested.title }}</span>
+                            <div class="flex space-x-4">
+                                <button 
+                                    (click)="nested.onToggle(true)" 
+                                    [class.bg-flamenco]="nested.toggleState" 
+                                    [class.text-bisque]="nested.toggleState"
+                                    [class.bg-zorba]="!nested.toggleState" 
+                                    [class.text-crater-brown]="!nested.toggleState"
+                                    class="px-4 py-2 rounded-md font-semibold transition-colors hover:bg-golden-glow hover:text-crater-brown">SÍ</button>
+                                <button 
+                                    (click)="nested.onToggle(false)" 
+                                    [class.bg-flamenco]="!nested.toggleState" 
+                                    [class.text-bisque]="!nested.toggleState"
+                                    [class.bg-zorba]="nested.toggleState" 
+                                    [class.text-crater-brown]="nested.toggleState"
+                                    class="px-4 py-2 rounded-md font-semibold transition-colors hover:bg-golden-glow hover:text-crater-brown">NO</button>
+                            </div>
+                        </div>
+
+                        <div *ngIf="nested.toggleState && nested.tableData" class="ml-4">
+                            <table class="min-w-full table-auto border border-crater-brown">
+                                <thead>
+                                    <tr class="bg-crater-brown text-white">
+                                        <th *ngFor="let header of nested.tableData.headers" class="px-4 py-3 border border-crater-brown text-left font-bold">{{ header }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of nested.tableData.rows; let i = index" class="hover:bg-gray-50">
+                                        <td class="border border-crater-brown px-4 py-3 text-crater-brown font-medium">{{ row }}</td>
+                                        <td *ngFor="let header of nested.tableData.headers.slice(1); let j = index" class="border border-crater-brown px-4 py-3 text-center">
+                                            <input type="number" 
+                                                   class="w-full p-2 border rounded text-center"
+                                                   [value]="nested.tableData.values[i] ? (nested.tableData.values[i][header] || 0) : 0"
+                                                   placeholder="₡0,00">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
     </div>
-    }
 </div>
