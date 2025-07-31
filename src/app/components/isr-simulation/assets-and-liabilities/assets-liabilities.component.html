@@ -1,0 +1,55 @@
+<div class="flex flex-col space-y-4 w-full">
+    <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
+        I. Activos y pasivos
+    </h1>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            20 - Efectivo, bancos, inversiones transitorias, documentos y cuentas por cobrar
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ currentAssets }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">21 - Acciones y aportes en sociedades</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ equityInvestments }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">22 - Inventarios</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ inventory }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">23 - Activos fijos (descuente la depreciacion acumulada)</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ netFixedAssets }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">23 - Activos fijos (descuente la depreciacion acumulada)</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ netFixedAssets }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">24 - Total activo neto</p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ totalNetAssets }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">25 - Total pasivo</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ totalLiabilities }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">26 - Capital neto</p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ netEquity }}
+        </span>
+    </div>
+</div>

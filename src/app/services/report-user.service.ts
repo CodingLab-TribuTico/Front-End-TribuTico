@@ -2,12 +2,14 @@ import { inject, Injectable, signal } from '@angular/core';
 import { IManualInvoice, IResponse, ISearch } from '../interfaces';
 import { BaseService } from './base-service';
 import { InvoiceService } from './invoice.service';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportUserService extends BaseService<IResponse<any>> {
   protected override source: string = 'reports-user';
+  private alertService: AlertService = inject(AlertService);
   public invoiceService: InvoiceService = inject(InvoiceService);
   private invoicesMonthlyIncomesAndExpenses = signal<any[]>([]);
   private invoicesMonthlyCashFlow = signal<any[]>([]);
@@ -80,8 +82,8 @@ export class ReportUserService extends BaseService<IResponse<any>> {
           }
         ]);
       },
-      error: (err: any) => {
-        console.error("error", err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió al obtener ingresos y gastos mensuales');
       },
     });
   }
@@ -115,8 +117,8 @@ export class ReportUserService extends BaseService<IResponse<any>> {
           }
         ]);
       },
-      error: (err: any) => {
-        console.error("error", err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió al obtener el flujo de caja mensual');
       },
     });
   }
@@ -176,8 +178,8 @@ export class ReportUserService extends BaseService<IResponse<any>> {
           ]
         }]);
       },
-      error: (err: any) => {
-        console.error("Error al obtener top 5 categorías de gastos:", err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener top 5 categorías de gastos');
       },
     });
   }

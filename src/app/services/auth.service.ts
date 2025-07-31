@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../interfaces';
 import { Observable, tap } from 'rxjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class AuthService {
   private expiresIn!: number;
   private user: IUser = { email: '', authorities: [] };
   private http: HttpClient = inject(HttpClient);
+  private alertService: AlertService = inject(AlertService);
   public tokenIsExpired: boolean = false;
   public userStatus: string = 'active';
 
@@ -53,8 +55,8 @@ export class AuthService {
         this.save();
         window.location.reload();
       },
-      error: (err) => {
-        console.error('Error al cargar el usuario:', err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener los datos del usuario');
       }
     });
   }

@@ -33,15 +33,9 @@ export class InputFileFormComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
       this.selectedFile = file;
-
-      if (fileExtension === 'xml') {
-        this.xmlService.scanFile(file);
-      } else {
-        this.callScanMethod.emit(file);
-      }
+      this.callScanMethod.emit(file);
     }
   }
 
@@ -71,20 +65,8 @@ export class InputFileFormComponent {
 
     if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
       const file = event.dataTransfer.files[0];
-      this.handleFileSelection(file);
-    }
-  }
-
-  private handleFileSelection(file: File): void {
-    const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    this.selectedFile = file;
-
-    if (fileExtension === 'xml') {
-      this.xmlService.scanFile(file);
-    } else if (fileExtension === 'pdf') {
+      this.selectedFile = file;
       this.callScanMethod.emit(file);
-    } else {
-      this.alertService.displayAlert('error', 'Tipo de archivo no válido. Solo se aceptan PDF o XML.', 'center', 'top', ['error-snackbar']);
     }
   }
 
