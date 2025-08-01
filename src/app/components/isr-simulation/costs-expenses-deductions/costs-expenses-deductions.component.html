@@ -1,0 +1,85 @@
+<div class="flex flex-col space-y-4 w-full">
+    <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
+        III. Costos, gastos y deducciones
+    </h1>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            36 - Inventario inicial
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ initialInventory }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            37 - Compras
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ purchases }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            38 - Inventario final
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ finalInventory }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            39 - Costo de ventas
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ costOfGoodsSold }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            40 - Intereses y gastos financieros
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ financialExpenses }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            41 - Gastos de ventas y administrativos
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ administrativeExpenses }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            42 - Depreciación, amortización y agotamiento
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ depreciationAndAmortization }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            43 - Aportes de regimenes voluntarios de pensiones complementias (Max 10% renta bruta)
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ pensionContributions }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            44 - Otros costos, gastos y deducciones permitidos por la ley
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ otherAllowableDeductions }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            45 - Total de costos, gastos y deducciones permitidos por la ley (autocalculado)
+        </p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ totalAllowableDeductions }}
+        </span>
+    </div>
+</div>

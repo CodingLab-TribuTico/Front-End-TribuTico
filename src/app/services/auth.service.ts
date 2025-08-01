@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { IAuthority, ILoginResponse, IResponse, IRoleType, IUser } from '../interfaces';
 import { Observable, tap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,9 @@ export class AuthService {
   private expiresIn!: number;
   private user: IUser = { email: '', authorities: [] };
   private http: HttpClient = inject(HttpClient);
+  private alertService: AlertService = inject(AlertService);
   public tokenIsExpired: boolean = false;
-  public userStatus: boolean = true;
+  public userStatus: string = 'active';
 
   constructor() {
     this.load();
@@ -36,10 +38,6 @@ export class AuthService {
     if (exp) this.expiresIn = JSON.parse(exp);
     const user = localStorage.getItem('auth_user');
     if (user) this.user = JSON.parse(user);
-
-    console.log(this.accessToken);
-    console.log(this.expiresIn);
-    console.log(this.user);
   }
 
   public setOAuthLogin(token: string, expiresIn: number, email: string): void {
@@ -48,26 +46,30 @@ export class AuthService {
     this.expiresIn = Number(expiresIn);
 
     this.http.get<IUser>(`auth/me/${userEmail}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  }).subscribe({
-    next: (userData) => {
-      this.user = userData;
-      this.save();
-      window.location.reload();
-    },
-    error: (err) => {
-      console.error('Error al cargar el usuario:', err);
-    }
-  });
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).subscribe({
+      next: (userData) => {
+        this.user = userData;
+        this.save();
+        window.location.reload();
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener los datos del usuario');
+      }
+    });
   }
 
-  
+
 
 
   public getUser(): IUser | undefined {
     return this.user;
+  }
+
+  public getCurrentUserId(): number | undefined {
+    return this.user?.id;
   }
 
   public getAccessToken(): string | null {
@@ -92,14 +94,15 @@ export class AuthService {
         this.user.email = credentials.email;
         this.expiresIn = response.expiresIn;
         this.user = response.authUser;
-        this.userStatus = this.user.status ? this.user.status : false;
+        this.userStatus = this.user.status ?? 'active';
         this.save();
       })
     );
   }
 
+
   changePassword(userId: number, password: { currentPassword: string; newPassword: string }) {
-  return this.http.patch(`users/change-password/${userId}`, password);
+    return this.http.patch(`users/change-password/${userId}`, password);
   }
   public blockUser(credentials: {
     email: string;

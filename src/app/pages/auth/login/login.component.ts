@@ -12,7 +12,6 @@ import { GoogleAuthComponent } from '../../../components/google-auth/google-auth
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, GoogleAuthComponent, ModalComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   public loginError!: string;
@@ -20,6 +19,7 @@ export class LoginComponent {
   @ViewChild('password') passwordModel!: NgModel;
   @ViewChild('expiredTokenModal') public expiredTokenModal: any;
   @ViewChild('blockedUserModal') public blockedUserModal: any;
+  @ViewChild('disabledUserModal') public disabledUserModal: any;
   public modalService: ModalService = inject(ModalService);
   private previousEmail: string = '';
   private actualEmail: string = '';
@@ -51,9 +51,9 @@ export class LoginComponent {
       const email = params['email'];
 
       if (token && expiresIn) {
-        this.authService.setOAuthLogin(token, expiresIn,email);
+        this.authService.setOAuthLogin(token, expiresIn, email);
       }
-      
+
     });
   }
 
@@ -69,10 +69,13 @@ export class LoginComponent {
 
       this.authService.login(this.loginForm).subscribe({
         next: () => {
-          if (this.authService.userStatus) {
+          if (this.authService.userStatus === 'active') {
             this.router.navigateByUrl('/app/home');
-          } else {
+          } else if (this.authService.userStatus === 'blocked') {
             this.modalService.displayModal(this.blockedUserModal);
+            this.authService.logout();
+          } else if (this.authService.userStatus === 'disabled') {
+            this.modalService.displayModal(this.disabledUserModal);
             this.authService.logout();
           }
         },
@@ -91,7 +94,7 @@ export class LoginComponent {
                   this.modalService.displayModal(this.blockedUserModal);
                 },
                 error: (err: any) => {
-                  this.loginError = err.description;
+                  this.loginError = err.message;
                   return;
                 }
               });
@@ -100,7 +103,7 @@ export class LoginComponent {
             this.previousEmail = this.actualEmail;
           }
 
-          this.loginError = err.description;
+          this.loginError = err.message;
         },
       });
     }

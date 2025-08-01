@@ -1,11 +1,11 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { IUser } from '../../interfaces';
 import { ProfileService } from '../../services/profile.service';
 import { FormBuilder, Validators } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-
+import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -18,36 +18,30 @@ import { RouterModule } from '@angular/router';
   ]
 })
 export class ProfileComponent {
-  public profileService = inject(ProfileService);
   @Output() cancelEdit = new EventEmitter<void>();
+  public profileService = inject(ProfileService);
+  public userService = inject(UserService);
   public fb: FormBuilder = inject(FormBuilder);
-  userForm: FormGroup;
-  currentUser: IUser = {};
-  userInfo: IUser = {}; 
-  originalInfoUser: IUser = {};
   isEditing = false;
-  birthDateError?: string | null = null;
   
+  public userForm = this.fb.group({
+    id: [''],
+    name: ['', Validators.required], 
+    lastname: ['', Validators.required],
+    lastname2: [''],
+    email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]], 
+    birthDate: ['', Validators.required] 
+  });
+
   constructor() {
-    this.userForm = this.fb.group({
-      id: [''],
-      name: ['', Validators.required], 
-      lastname: ['', Validators.required],
-      lastname2: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]], 
-      identification: ['', Validators.required], 
-      birthDate: ['', Validators.required] 
-    });
     this.profileService.getUserInfoSignal();
-    this.currentUser = this.profileService.user$();
-    console.log("objetoo ", this.currentUser);
   }
   
-  editForm() {
+  updateUser(user: IUser) {
     this.isEditing = true;
-    const user = this.currentUser ?? this.profileService.user$();
     this.userForm.patchValue({
-      id: user.id,
+      id: JSON.stringify(user.id),
       name: user.name,
       lastname: user.lastname,
       lastname2: user.lastname2,
@@ -55,26 +49,39 @@ export class ProfileComponent {
       identification: user.identification,
       birthDate: user.birthDate
     });
-    this.originalInfoUser = { ...user };
   }
   
-  saveChanges() {
-    if (this.userForm.invalid) {
-      this.userForm.markAllAsTouched();
-      return; 
-    }
-    const updateUser: IUser = this.userForm.value;
+  saveChanges(update: any) {
+  const user: IUser = {
+    
+    name: update.name,
+    lastname: update.lastname,
+    lastname2: update.lastname2,
+    email: update.email,
+    identification: update.identification,
+    birthDate: update.birthDate
+  };
 
-    this.profileService.updateUserInfo(updateUser);
-    this.currentUser = { ...updateUser };
-    this.isEditing = false;
-    this.cancelEdit.emit();
+   const userToSave = this.profileService.user$();
+
+  if (this.userForm.valid) {
+      if (userToSave?.id) {
+      user.id = userToSave.id;
+  
+      this.profileService.updateUserInfo(user);
+      this.isEditing = false;
+      
+      } else if (this.userForm.invalid) {
+        this.userForm.markAllAsTouched(); 
+        return;
+      }
+    }
   }
 
   cancelChanges() {
-    this.userForm.patchValue(this.originalInfoUser);
     this.cancelEdit.emit();
     this.isEditing = false; 
+    this.userForm.markAsPristine();
   }
 
 }

@@ -1,0 +1,52 @@
+<div class="bg-crater-brown border-2 border-zorba rounded-md p-2 text-xs text-bisque shadow-sm leading-tight">
+    <div class="font-semibold mb-1">{{ description }}</div>
+
+    <table class="w-full text-left">
+        <tbody>
+            <tr>
+                <td class="pr-2 font-medium">Cabys:</td>
+                <td>{{ cabys }}</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">Cant:</td>
+                <td>{{ quantity }} {{ unit }}</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">P/U:</td>
+                <td>{{ unitPrice }}</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">Desc:</td>
+                <td>{{ discount }}</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">Imp:</td>
+                <td>{{ tax }}% ({{ taxAmount }})</td>
+            </tr>
+            <tr>
+                <td class="pr-2 font-medium">Cat:</td>
+                <td>{{ category }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="border-t border-crater-brown/20 pt-1 mt-1 text-sm font-bold flex justify-between items-center">
+        <span>Total: {{ total }}</span>
+        <div class="flex ml-6">
+            <button (click)="onEdit()"
+                class="bg-flamenco text-bisque hover:bg-golden-glow hover:text-flamenco rounded-md w-7 h-7 flex items-center justify-center font-bold"
+                title="Editar">
+                <span class="material-symbols-rounded text-base">
+                    edit
+                </span>
+            </button>
+            <button (click)="onDelete()"
+                class="ml-1.5 bg-golden-glow hover:bg-bisque text-crater-brown rounded-md w-7 h-7 flex items-center justify-center font-bold"
+                title="Eliminar">
+                <span class="material-symbols-rounded text-base">
+                    delete
+                </span>
+            </button>
+        </div>
+    </div>
+</div>

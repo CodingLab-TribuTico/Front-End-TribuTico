@@ -1,5 +1,5 @@
-import { Component, inject, Input, ViewChild, OnInit, Output, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Component, inject, Input, Output, EventEmitter, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderComponent } from '../loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule
   ],
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ModalComponent {

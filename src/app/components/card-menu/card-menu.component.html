@@ -1,0 +1,33 @@
+<div
+    [ngClass]="[backgroundColor, 'p-6 rounded-md h-full flex flex-col justify-center items-center border border-crater-brown/30']">
+    <div class="w-fit">
+        <div class="flex flex-row space-x-2 mb-2">
+            @for(icon of icons; track $index) {
+            <span class="material-symbols-rounded {{iconsColor}} text-4xl">{{icon}}</span>
+            }
+        </div>
+        <h5 [ngClass]="[textColor, 'font-black mb-2 text-2xl w-full text-left']">
+            {{title}}
+        </h5>
+        <p [ngClass]="[textColor, 'text-sm 2xl:text-base font-normal']">
+            {{description}}
+        </p>
+        <div class="flex flex-row space-x-2 mt-4">
+            @if(firstButtonText != "") {
+            <button
+                [ngClass]="[firstButtonBackgroundColor, firstButtonTextColor, firstButtonHoverTextColor, firstButtonHoverBgColor, 'px-4 py-2 rounded-md font-bold text-lg']"
+                [routerLink]="firstButtonRoute ? ['/app', firstButtonRoute] : null">
+                {{firstButtonText}}
+            </button>
+            }
+            @if(secondButtonText != "") {
+            <button
+                [ngClass]="[secondButtonBackgroundColor, secondButtonTextColor, secondButtonHoverTextColor, secondButtonHoverBgColor, 'px-4 py-2 rounded-md font-bold text-lg']"
+                [routerLink]="secondButtonRoute ? ['/app', secondButtonRoute] : null">
+                {{secondButtonText}}
+            </button>
+            }
+        </div>
+    </div>
+
+</div>

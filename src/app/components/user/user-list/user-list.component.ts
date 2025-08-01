@@ -14,7 +14,6 @@ import { ModalService } from '../../../services/modal.service';
     ModalComponent
   ],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss'
 })
 export class UserListComponent {
   public idUser: number | null = Number(JSON.parse(localStorage.getItem('auth_user') || 'null')?.id) || null;
@@ -42,5 +41,18 @@ export class UserListComponent {
       this.callDeleteAction.emit(user);
     }
     this.selectedUser = null;
+  }
+
+  statusText(status: IUser["status"]): string {
+    switch (status) {
+      case 'active':
+        return 'Activo';
+      case 'blocked':
+        return 'Bloqueado';
+      case 'disabled':
+        return 'Desactivado';
+      default:
+        return 'Desconocido';
+    }
   }
 }

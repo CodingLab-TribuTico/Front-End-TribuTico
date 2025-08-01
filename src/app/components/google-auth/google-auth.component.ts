@@ -6,7 +6,6 @@ import { GoogleAuthService } from '../../services/google-auth.service';
   standalone: true,
   imports: [],
   templateUrl: './google-auth.component.html',
-  styleUrl: './google-auth.component.scss'
 })
 export class GoogleAuthComponent {
 

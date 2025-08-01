@@ -1,0 +1,111 @@
+<form [formGroup]="notificationForm" class="max-w-2xl mx-auto">
+    <div>
+        <h1 class="text-bisque text-xl font-bold">Crear Notificación Global</h1>
+    </div>
+    <div class="grid grid-cols-2">
+        <div class="w-full">
+            <div class="mb-2">
+                <label class="block my-2 text-base font-bold text-bisque" for="name">Nombre<span
+                        class="text-burnt-umber">*</span></label>
+                <input id="name" formControlName="name" type="text"
+                    class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+                    placeholder="Nombre de la notificación">
+
+                <div class="min-h-[1.5rem]">
+                    @if (notificationForm.controls['name'].errors?.['required'] &&
+                    (notificationForm.controls['name'].dirty || notificationForm.controls['name'].touched)) {
+                    <p class="text-burnt-umber text-sm">El nombre es obligatorio</p>
+                    }
+                    @if (notificationForm.controls['name'].errors?.['maxlength'] &&
+                    (notificationForm.controls['name'].dirty || notificationForm.controls['name'].touched)) {
+                    <p class="text-burnt-umber text-sm">El nombre no puede exceder los 100 caracteres</p>
+                    }
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label class="block my-2 text-base font-bold text-bisque" for="type">Tipo<span
+                        class="text-burnt-umber">*</span></label>
+                <select id="type" formControlName="type"
+                    class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow">
+                    <option [value]="''" disabled selected>Seleccione un tipo</option>
+                    @for (type of notificationTypes; track type.value) {
+                    <option [value]="type.value">{{type.label}}</option>
+                    }
+                </select>
+
+                <div class="min-h-[1.5rem]">
+                    @if (notificationForm.controls['type'].invalid && (notificationForm.controls['type'].dirty ||
+                    notificationForm.controls['type'].touched)) {
+                    <p class="text-burnt-umber text-sm">El tipo es obligatorio</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="ml-4">
+            <div class="mb-2">
+                <label class="block my-2 text-base font-bold text-bisque" for="date">Fecha Finalización<span
+                        class="text-burnt-umber">*</span></label>
+                <input id="date" formControlName="date" type="date"
+                    class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow">
+
+                <div class="min-h-[1.5rem]">
+                    @if (notificationForm.controls['date'].invalid && (notificationForm.controls['date'].dirty ||
+                    notificationForm.controls['date'].touched)) {
+                    <p class="text-burnt-umber text-sm">La fecha y hora son obligatorias</p>
+                    }
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label class="block my-2 text-base font-bold text-bisque" for="state">Estado<span
+                        class="text-burnt-umber">*</span></label>
+                <select id="state" formControlName="state"
+                    class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow">
+                    <option [value]="''" disabled selected>Selecciona un estado</option>
+                    @for (state of notificationStates; track state.value) {
+                    <option [value]="state.value">{{state.label}}</option>
+                    }
+                </select>
+
+                <div class="min-h-[1.5rem]">
+                    @if (notificationForm.controls['state'].invalid && (notificationForm.controls['state'].dirty ||
+                    notificationForm.controls['state'].touched)) {
+                    <p class="text-burnt-umber text-sm">El estado es obligatorio</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 col-span-2 w-full">
+            <label class="block mb-2 text-base font-bold text-bisque" for="description">Descripción<span
+                    class="text-burnt-umber">*</span></label>
+            <textarea id="description" formControlName="description" rows="3"
+                class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+                placeholder="Descripción detallada de la notificación"></textarea>
+
+            <div class="min-h-[1.5rem]">
+                @if (notificationForm.controls['description'].errors?.['required'] &&
+                (notificationForm.controls['description'].dirty || notificationForm.controls['description'].touched)) {
+                <p class="text-burnt-umber text-sm">La descripción es obligatoria</p>
+                }
+                @if (notificationForm.controls['description'].errors?.['maxlength'] &&
+                (notificationForm.controls['description'].dirty || notificationForm.controls['description'].touched)) {
+                <p class="text-burnt-umber text-sm">La descripción no puede exceder los 500 caracteres</p>
+                }
+            </div>
+        </div>
+
+        <div class="col-span-2 flex justify-center items-center w-full">
+            <button (click)="callSave()" [disabled]="notificationForm.invalid"
+                class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque font-bold hover:bg-golden-glow hover:text-flamenco transition-colors"
+                type="button">Guardar</button>
+            @if (cancelOption) {
+            <button (click)="callCancel()"
+                class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer ml-2 font-bold hover:bg-bisque transition-colors"
+                type="button">Cancelar</button>
+            }
+        </div>
+    </div>
+</form>

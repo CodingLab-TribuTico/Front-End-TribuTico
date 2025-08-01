@@ -16,4 +16,8 @@ export class AlertService {
       duration: 3000
     });
   }
+
+  public showAlert(type: 'success' | 'error', message: string) {
+    return this.displayAlert(type, message, 'center', 'top', [`${type}-snackbar`]);
+  }
 }

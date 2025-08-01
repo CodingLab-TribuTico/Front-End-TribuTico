@@ -1,0 +1,35 @@
+@defer {
+<div class="p-4">
+    <div class="pb-2 justify-between flex flex-row items-end">
+        <h1 class="text-lg text-crater-brown font-bold">{{title}}</h1>
+        <div class="flex items-center bg-crater-brown rounded-md px-2 py-1">
+            <span class="material-symbols-rounded text-2xl pr-2 text-bisque">
+                search
+            </span>
+            <input (keyup)="search($event)" type="text"
+                class="bg-crater-brown text-bisque placeholder:text-bisque text-base font-bold w-full"
+                placeholder="Buscar">
+        </div>
+    </div>
+
+    <div>
+        <app-invoice-list (callModalAction)="callEdition($event)" (callDeleteAction)="invoiceService.delete($event)"
+            [invoices]="invoiceService.invoices$()" />
+        @if(invoiceService.invoices$().length) {
+        <app-pagination [service]="invoiceService" />
+        }
+    </div>
+</div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}
+
+@if (showEditInvoiceModal) {
+<div class="fixed inset-0 flex justify-center items-start bg-black bg-opacity-30 overflow-y-auto pt-10 pb-5">
+    <div class="bg-crater-brown rounded-md p-6 shadow-lg mt-10 ml-44">
+        <app-manual-invoices-form [invoiceForm]="invoiceForm" [detailForm]="detailForm" [details]="details"
+            (callSaveMethod)="saveInvoice($event)" (callUpdateMethod)="updateInvoice($event)"
+            (callCancelMethod)="cancelUpdate()" [isEditing]="isEditing" />
+    </div>
+</div>
+}

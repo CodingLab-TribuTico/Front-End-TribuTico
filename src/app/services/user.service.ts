@@ -9,6 +9,7 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 })
 export class UserService extends BaseService<IUser> {
   protected override source: string = 'users';
+  private alertService: AlertService = inject(AlertService);
   private userListSignal = signal<IUser[]>([]);
   get users$() {
 
@@ -19,8 +20,7 @@ export class UserService extends BaseService<IUser> {
     size: 5,
     search: "",
   }
-  public totalItems: any = [];
-  private alertService: AlertService = inject(AlertService);
+  public totalItems: number[] = [];
 
   getAll() {
     this.findAllWithParams({ page: this.search.page, size: this.search.size, search: this.search.search }).subscribe({
@@ -29,8 +29,8 @@ export class UserService extends BaseService<IUser> {
         this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
         this.userListSignal.set(response.data);
       },
-      error: (err: any) => {
-        console.error('error', err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al recuperar los usuarios');
       }
     });
   }
@@ -39,12 +39,11 @@ export class UserService extends BaseService<IUser> {
   save(user: IUser) {
     this.add(user).subscribe({
       next: (response: any) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.alertService.showAlert('success', response.message);
         this.getAll();
       },
-      error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error al agregar el usuario', 'center', 'top', ['error-snackbar']);
-        console.error('error', err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al agregar el usuario');
       }
     });
   }
@@ -52,12 +51,11 @@ export class UserService extends BaseService<IUser> {
   update(user: IUser) {
     this.editCustomSource(`${user.id}`, user).subscribe({
       next: (response: any) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.alertService.showAlert('success', response.message);
         this.getAll();
       },
-      error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar el usuario', 'center', 'top', ['error-snackbar']);
-        console.error('error', err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al actualizar el usuario');
       }
     });
   }
@@ -65,12 +63,11 @@ export class UserService extends BaseService<IUser> {
   delete(user: IUser) {
     this.delCustomSource(`${user.id}`).subscribe({
       next: (response: any) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.alertService.showAlert('success', response.message);
         this.getAll();
       },
-      error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error eliminando al usuario', 'center', 'top', ['error-snackbar']);
-        console.error('error', err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al eliminar el usuario');
       }
     });
   }
@@ -78,13 +75,11 @@ export class UserService extends BaseService<IUser> {
   updatePatch(user: IUser): Observable<any> {
     return this.patchCustomSource(`${user.id}`, user).pipe(
       tap((response: any) => {
-        const message = 'Usuario modificado exitosamente';
-        this.alertService.displayAlert('success', message, 'center', 'top', ['success-snackbar']);
-        this.getAll(); 
+        this.alertService.showAlert('success', response.message);
+        this.getAll();
       }),
       catchError((err: any) => {
-        this.alertService.displayAlert('error', 'Error al modificar usuario', 'center', 'top', ['error-snackbar']);
-        console.error('error', err);
+        this.alertService.showAlert('error', 'Ocurrió un error al actualizar el usuario');
         return throwError(() => err);
       })
     );
