@@ -15,7 +15,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
     size: 5,
     search: "",
   };
-  
+
   public totalItems: any = [];
   private alertService: AlertService = inject(AlertService);
 
@@ -44,6 +44,18 @@ export class NotificationService extends BaseService<IResponse<any>> {
       },
       error: (err: any) => {
         this.alertService.displayAlert('error', 'Ocurrió un error al agregar la notificación', 'center', 'top', ['error-snackbar']);
+      }
+    });
+  }
+
+  updateNotification(notification: INotificationGlobal) {
+    this.edit(notification.id, notification).subscribe({
+      next: (response: IResponse<any>) => {
+        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.getAll();
+      },
+      error: (err: any) => {
+        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar la notificación', 'center', 'top', ['error-snackbar']);
       }
     });
   }
