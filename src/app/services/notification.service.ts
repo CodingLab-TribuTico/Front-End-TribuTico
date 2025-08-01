@@ -9,6 +9,7 @@ import { AlertService } from './alert.service';
 export class NotificationService extends BaseService<IResponse<any>> {
   protected override source: string = 'notifications';
   private notificationsList = signal<INotificationGlobal[]>([]);
+  private alertService: AlertService = inject(AlertService);
 
   public search: ISearch = {
     page: 1,
@@ -17,7 +18,6 @@ export class NotificationService extends BaseService<IResponse<any>> {
   };
 
   public totalItems: any = [];
-  private alertService: AlertService = inject(AlertService);
 
   get notifications$() {
     return this.notificationsList;
@@ -31,7 +31,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
         this.notificationsList.set(response.data);
       },
       error: (err: any) => {
-        console.error('error', err);
+        this.alertService.showAlert('error', err);
       }
     });
   }
@@ -39,11 +39,11 @@ export class NotificationService extends BaseService<IResponse<any>> {
   saveNotification(notification: INotificationGlobal) {
     this.add(notification).subscribe({
       next: (response: IResponse<any>) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.alertService.showAlert('success', response.message);
         this.getAll();
       },
-      error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error al agregar la notificación', 'center', 'top', ['error-snackbar']);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al guardar la notificación');
       }
     });
   }
@@ -63,14 +63,12 @@ export class NotificationService extends BaseService<IResponse<any>> {
   delete(notification: INotificationGlobal) {
     this.delCustomSource(`${notification.id}`).subscribe({
       next: (response: any) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.alertService.showAlert('success', response.message);
         this.getAll();
       },
-      error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error eliminando la notificación', 'center', 'top', ['error-snackbar']);
-        console.error('error', err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al eliminar la notificación');
       }
     });
   }
-
 }

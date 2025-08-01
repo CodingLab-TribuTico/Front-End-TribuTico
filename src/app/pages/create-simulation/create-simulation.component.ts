@@ -1,16 +1,24 @@
-import { Component, effect, inject } from '@angular/core';
-import { IsrSimulationComponent } from '../../components/isr-simulation/isr-simulation.component';
+import { Component, inject } from '@angular/core';
 import { IsrSimulationService } from '../../services/isr-simulation.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InvoiceService } from '../../services/invoice.service';
 import { IManualInvoice } from '../../interfaces';
 import { LoaderComponent } from '../../components/loader/loader.component';
+import { AssetsLiabilitiesComponent } from '../../components/isr-simulation/assets-and-liabilities/assets-liabilities.component';
+import { IncomeComponent } from '../../components/isr-simulation/income/income.component';
+import { CostsExpensesDeductionsComponent } from '../../components/isr-simulation/costs-expenses-deductions/costs-expenses-deductions.component';
+import { TaxBaseComponent } from '../../components/isr-simulation/tax-base/tax-base.component';
+import { CreditsComponent } from '../../components/isr-simulation/credits/credits.component';
+import { SettlementTaxDebtComponent } from '../../components/isr-simulation/settlement-tax-debt/settlement-tax-debt.component';
+import { GeneralDataComponent } from '../../components/isr-simulation/general-data/general-data.component';
 
 @Component({
   selector: 'app-create-simulation',
   standalone: true,
-  imports: [IsrSimulationComponent, CommonModule, ReactiveFormsModule, LoaderComponent],
+  imports: [GeneralDataComponent, CommonModule, ReactiveFormsModule, LoaderComponent,
+    AssetsLiabilitiesComponent, IncomeComponent, CostsExpensesDeductionsComponent, TaxBaseComponent, CreditsComponent, SettlementTaxDebtComponent
+  ],
   templateUrl: './create-simulation.component.html',
 })
 export class CreateSimulationComponent {
@@ -51,14 +59,11 @@ export class CreateSimulationComponent {
   onSubmit() {
     if (this.formIsrSimulation.invalid || this.type !== 'isr') return;
     const { year, childrenNumber, hasSpouse } = this.formIsrSimulation.value;
-    const user = localStorage.getItem('auth_user') && JSON.parse(localStorage.getItem('auth_user') || '{}');
-    const userId = user.id;
 
     this.isrSimulationShown = false;
 
-    this.isrSimulationService.createSimulation(year, childrenNumber, hasSpouse, userId);
+    this.isrSimulationService.createSimulation(year, childrenNumber, hasSpouse);
 
-    console.log('ISR Simulation:', this.isrSimulation);
     setTimeout(() => {
       this.isrSimulation = this.isrSimulationService.isrSimulation;
       if (this.isrSimulation) {
