@@ -52,8 +52,8 @@ export class CreateSimulationComponent {
 
   public formIvaSimulation: FormGroup = this.fb.group({
     simulationType: ['iva', Validators.required],
-    year: [new Date().getFullYear(), Validators.required],
-    month: [new Date().getMonth() + 1, Validators.required]
+    year: ['', Validators.required],
+    month: ['', Validators.required]
   });
 
   constructor() {
@@ -62,28 +62,17 @@ export class CreateSimulationComponent {
     this.invoiceService.getByUserId(userId);
     this.generateYears();
     
-    // Effect para ISR
     effect(() => {
       this.isrSimulation = this.isrSimulationService.isrSimulation;
       if (this.isrSimulation) {
         this.isrSimulationShown = true;
       }
     });
-
-    // Effect para IVA - usamos el observable para reactividad
-    effect(() => {
-      this.ivaSimulationService.ivaSimulation$.subscribe(simulation => {
-        this.ivaSimulation = simulation;
-        if (simulation) {
-          this.ivaSimulationShown = true;
-          console.log('IVA Simulation actualizada en el componente padre:', simulation);
-        }
-      });
-    });
   }
 
-  changeType(Event: any) {
-    this.type = Event.target.value;
+  changeType(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.type = target.value;
 
     if (this.type === 'isr') {
       this.type = 'isr';
@@ -116,13 +105,17 @@ export class CreateSimulationComponent {
     const user = localStorage.getItem('auth_user') && JSON.parse(localStorage.getItem('auth_user') || '{}');
     const userId = user.id;
 
-    console.log('Enviando simulación IVA con datos:', { year, month, userId });
-    
     this.ivaSimulationShown = false;
-    this.ivaSimulation = null; // Reset previous simulation
+    this.ivaSimulation = null; 
 
-    this.ivaSimulationService.createSimulation(year, month, userId);
-    // El effect se encargará de mostrar la simulación cuando llegue la respuesta
+    this.ivaSimulationService.createSimulation(year, month, userId, (simulation) => {
+      if (simulation) {
+        this.ivaSimulation = simulation;
+        this.ivaSimulationShown = true;
+      } else {
+        console.error('Error: No se pudo cargar la simulación IVA');
+      }
+    });
   }
 
   closeSimulation() {
@@ -148,5 +141,57 @@ export class CreateSimulationComponent {
       this.years = Array.from(new Set(issueDates.map(date => parseInt(date))));
     }
     return this.years.sort((a, b) => b - a);
+  }
+
+  getIvaSimulationPeriod(): string {
+    if (!this.ivaSimulation) return '';
+    const { year, month } = this.formIvaSimulation.value;
+    const monthName = this.months.find(m => m.value === month)?.name || '';
+    return `${monthName} ${year}`;
+  }
+
+  getIvaSimulationName(): string {
+    const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
+    return `${user.name || ''} ${user.lastname || ''}`.trim();
+  }
+
+  getIvaSimulationIdentification(): string {
+    const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
+    return user.identification || '';
+  }
+
+  getAvailableMonths(): { value: number, name: string }[] {
+    const invoices = this.invoiceService.invoices$();
+    
+    if (!invoices || invoices.length === 0) {
+      return this.months; 
+    }
+
+    const availableMonths = new Set<number>();
+    invoices.forEach(invoice => {
+      if (invoice.issueDate) {
+        const month = new Date(invoice.issueDate).getMonth() + 1; 
+        availableMonths.add(month);
+      }
+    });
+
+    const filteredMonths = this.months.filter(month => availableMonths.has(month.value));
+    
+    return filteredMonths;
+  }
+
+  isIvaFormValid(): boolean {
+    return this.formIvaSimulation.valid;
+  }
+
+  getIvaButtonText(): string {
+    if (this.type !== 'iva') return 'Crear simulación IVA';
+    
+    const { year, month } = this.formIvaSimulation.value;
+    
+    if (!year) return 'Seleccione un año';
+    if (!month) return 'Seleccione un mes';
+    
+    return 'Crear simulación IVA';
   }
 }

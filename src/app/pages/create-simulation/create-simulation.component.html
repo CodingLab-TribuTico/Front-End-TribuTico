@@ -12,7 +12,6 @@
     </select>
 
     @if (type === 'isr') {
-    <!-- Formulario ISR -->
     <label for="year" class="text-base font-semibold text-bisque">Año<span class="text-burnt-umber">*</span></label>
     <select id="year"
         class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
@@ -53,13 +52,12 @@
     }
 
     @if (type === 'iva') {
-    <!-- Formulario IVA -->
     <label for="ivaYear" class="text-base font-semibold text-bisque">Año<span class="text-burnt-umber">*</span></label>
     <select id="ivaYear"
         class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
         formControlName="year">
-        <option value="" disabled>Seleccione un año</option>
-        @for (year of years; track year) {
+        <option value="" disabled selected>Seleccione un año</option>
+        @for (year of loadInvoicesYears(invoiceService.invoices$()); track year) {
         <option [value]="year">{{ year }}</option>
         }
     </select>
@@ -72,8 +70,8 @@
     <select id="ivaMonth"
         class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
         formControlName="month">
-        <option value="" disabled>Seleccione un mes</option>
-        @for (month of months; track month.value) {
+        <option value="" disabled selected>Seleccione un mes</option>
+        @for (month of getAvailableMonths(); track month.value) {
         <option [value]="month.value">{{ month.name }}</option>
         }
     </select>
@@ -85,8 +83,8 @@
 
     <button type="submit" 
         [disabled]="type === 'isr' ? formIsrSimulation.invalid : formIvaSimulation.invalid"
-        class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque disabled:bg-flamenco">
-        Crear simulación {{type === 'isr' ? 'ISR' : 'IVA'}}
+        class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-flamenco disabled:hover:text-bisque">
+        {{ type === 'isr' ? 'Crear simulación ISR' : getIvaButtonText() }}
     </button>
 </form>
 }
@@ -134,7 +132,11 @@
 
 @if (ivaSimulationShown && ivaSimulation) {
 <div>
-    <app-iva-simulation [simulation]="ivaSimulation" />
+    <app-iva-simulation 
+        [simulation]="ivaSimulation"
+        [simulationPeriod]="getIvaSimulationPeriod()"
+        [simulationName]="getIvaSimulationName()"
+        [simulationIdentification]="getIvaSimulationIdentification()" />
     <div class="flex justify-center mt-4">
         <button (click)="closeSimulation()"
             class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">

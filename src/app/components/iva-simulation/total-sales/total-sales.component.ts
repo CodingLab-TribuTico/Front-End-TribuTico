@@ -16,19 +16,54 @@ export class TotalSalesComponent {
 
     get totalComprasSection() {
         return {
-            sectionTitle: 'TOTAL DE COMPRAS',
+            sectionTitle: 'TOTAL DE COMPRAS E IVA LIQUIDADO',
             hasToggle: false, 
             toggleState: false,
             onToggle: () => {},
             items: [
                 { 
-                    label: 'COMPRAS CON IVA SOPORTANDO ACREDITABLE', 
-                    value: this.simulation?.comprasIvaAcreditable || 0, 
+                    label: 'IVA COMPRAS BIENES', 
+                    value: this.simulation?.ivaComprasBienes || 0, 
                     isAutocalculated: true 
                 },
                 { 
-                    label: 'COMPRA DE BIENES Y SERVICIOS LOCALES', 
-                    value: this.simulation?.compraBienesServicios || 0, 
+                    label: 'IVA COMPRAS SERVICIOS', 
+                    value: this.simulation?.ivaComprasServicios || 0, 
+                    isAutocalculated: true 
+                },
+                { 
+                    label: 'IVA IMPORTACIONES', 
+                    value: this.simulation?.ivaImportaciones || 0, 
+                    isAutocalculated: true 
+                },
+                { 
+                    label: 'IVA GASTOS GENERALES', 
+                    value: this.simulation?.ivaGastosGenerales || 0, 
+                    isAutocalculated: true 
+                },
+                { 
+                    label: 'IVA ACTIVOS FIJOS', 
+                    value: this.simulation?.ivaActivosFijos || 0, 
+                    isAutocalculated: true 
+                },
+                { 
+                    label: 'TOTAL IVA CRÉDITO', 
+                    value: this.simulation?.totalIvaCredito || 0, 
+                    isAutocalculated: true 
+                },
+                { 
+                    label: 'TOTAL IVA DÉBITO', 
+                    value: this.simulation?.totalIvaDebito || 0, 
+                    isAutocalculated: true 
+                },
+                { 
+                    label: 'IVA NETO A PAGAR', 
+                    value: this.simulation?.ivaNetoPorPagar || 0, 
+                    isAutocalculated: true 
+                },
+                { 
+                    label: 'IVA A FAVOR', 
+                    value: this.simulation?.ivaAFavor || 0, 
                     isAutocalculated: true 
                 }
             ],

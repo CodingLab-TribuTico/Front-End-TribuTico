@@ -47,10 +47,9 @@
                     <tr *ngFor="let row of tableData.rows; let i = index" class="hover:bg-gray-50">
                         <td class="border border-crater-brown px-4 py-3 text-crater-brown font-medium">{{ row }}</td>
                         <td *ngFor="let header of tableData.headers.slice(1); let j = index" class="border border-crater-brown px-4 py-3 text-center">
-                            <input type="number" 
-                                   class="w-full p-2 border rounded text-center"
-                                   [value]="tableData.values[i] ? (tableData.values[i][header] || 0) : 0"
-                                   placeholder="₡0,00">
+                            <span class="w-full p-2 rounded text-center text-crater-brown font-medium">
+                                ₡{{ (tableData.values[i] ? (tableData.values[i][header] || 0) : 0) | number:'1.0-0' }}
+                            </span>
                         </td>
                     </tr>
                 </tbody>
@@ -91,10 +90,9 @@
                             <tr *ngFor="let row of subsection.tableData.rows; let i = index" class="hover:bg-gray-50">
                                 <td class="border border-crater-brown px-4 py-3 text-crater-brown font-medium">{{ row }}</td>
                                 <td *ngFor="let header of subsection.tableData.headers.slice(1); let j = index" class="border border-crater-brown px-4 py-3 text-center">
-                                    <input type="number" 
-                                           class="w-full p-2 border rounded text-center"
-                                           [value]="subsection.tableData.values[i] ? (subsection.tableData.values[i][header] || 0) : 0"
-                                           placeholder="₡0,00">
+                                    <span class="w-full p-2 rounded text-center text-crater-brown font-medium">
+                                        ₡{{ (subsection.tableData.values[i] ? (subsection.tableData.values[i][header] || 0) : 0) | number:'1.0-0' }}
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>
@@ -135,10 +133,9 @@
                                     <tr *ngFor="let row of nested.tableData.rows; let i = index" class="hover:bg-gray-50">
                                         <td class="border border-crater-brown px-4 py-3 text-crater-brown font-medium">{{ row }}</td>
                                         <td *ngFor="let header of nested.tableData.headers.slice(1); let j = index" class="border border-crater-brown px-4 py-3 text-center">
-                                            <input type="number" 
-                                                   class="w-full p-2 border rounded text-center"
-                                                   [value]="nested.tableData.values[i] ? (nested.tableData.values[i][header] || 0) : 0"
-                                                   placeholder="₡0,00">
+                                            <span class="w-full p-2 rounded text-center text-crater-brown font-medium">
+                                                ₡{{ (nested.tableData.values[i] ? (nested.tableData.values[i][header] || 0) : 0) | number:'1.0-0' }}
+                                            </span>
                                         </td>
                                     </tr>
                                 </tbody>

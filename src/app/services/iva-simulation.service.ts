@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BaseService } from './base-service';
 import { IIvaCalculation, IResponse } from '../interfaces';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -9,99 +10,97 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 export class IvaSimulationService extends BaseService<IResponse<IIvaCalculation>> {
   protected override source: string = 'iva-simulation';
   private currentSubscription: Subscription | null = null;
-  
-  private ivaSimulationSubject = new BehaviorSubject<IIvaCalculation | null>(null);
-  public ivaSimulation$ = this.ivaSimulationSubject.asObservable();
-  
-  public get ivaSimulation(): IIvaCalculation | null {
-    return this.ivaSimulationSubject.value;
-  }
+  public ivaSimulation: IIvaCalculation | null = null;
 
-  createSimulation(year: number, month: number, userId: number) {
+  createSimulation(year: number, month: number, userId: number, callback?: (simulation: IIvaCalculation | null) => void) {
+    if (this.currentSubscription) {
+      this.currentSubscription.unsubscribe();
+    }
     
+    const params = { 
+      year: year, 
+      month: month, 
+      userId: userId, 
+      _t: Date.now()
+    };
     
-    this.getExistingSimulations(year, month, userId);
-  }
-
-  getExistingSimulations(year: number, month: number, userId: number) {
-    
-    this.currentSubscription = this.findAllWithParams({
-      year: year,
-      month: month,
-      userId: userId
-    }).subscribe({
+    this.currentSubscription = this.findAllWithParams(params).subscribe({
       next: (response: any) => {
-        console.log('Simulaciones IVA existentes:', response);
-        console.log('Datos de las simulaciones (raw):', response.data);
+        this.ivaSimulation = response.data;
         
-        let simulationData: IIvaCalculation | null = null;
-        
-        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
-          simulationData = this.selectBestSimulation(response.data);
-          console.log('Simulación seleccionada (con más actividad):', simulationData);
-        } else if (response.data && !Array.isArray(response.data)) {
-          simulationData = response.data;
-          console.log('Simulación única:', simulationData);
-        } else {
-          console.warn('No se encontraron simulaciones en la respuesta');
+       
+        if (callback) {
+          callback(this.ivaSimulation);
         }
-        
-        this.ivaSimulationSubject.next(simulationData);
       },
       error: (err: any) => {
-        console.error('Error al obtener simulaciones de IVA:', err);
-        this.ivaSimulationSubject.next(null);
+        console.error('Error al crear simulación IVA:', err);
+        this.ivaSimulation = null;
+        
+        if (callback) {
+          callback(null);
+        }
       },
     });
   }
 
-  private selectBestSimulation(simulations: IIvaCalculation[]): IIvaCalculation {
-    console.log('Seleccionando la mejor simulación entre', simulations.length, 'opciones');
+  refreshSimulation(callback?: (simulation: IIvaCalculation | null) => void) {
+    if (!this.ivaSimulation) {
+      if (callback) callback(null);
+      return;
+    }
     
-    const simulationsWithScore = simulations.map(sim => {
-      const activityScore = 
-        (sim.ivaVentasBienes || 0) +
-        (sim.ivaVentasServicios || 0) +
-        (sim.ivaExportaciones || 0) +
-        (sim.ivaActividadesAgropecuarias || 0) +
-        (sim.ivaComprasBienes || 0) +
-        (sim.ivaComprasServicios || 0) +
-        (sim.ivaImportaciones || 0) +
-        (sim.ivaGastosGenerales || 0) +
-        (sim.ivaActivosFijos || 0);
-      
-      console.log(`Simulación ID ${sim.id}: Score de actividad = ${activityScore}`);
-      
-      return {
-        simulation: sim,
-        score: activityScore,
-        hasData: activityScore > 0
-      };
-    });
-    
-    simulationsWithScore.sort((a, b) => {
-      if (a.score !== b.score) {
-        return b.score - a.score; 
-      }
-      return (b.simulation.id || 0) - (a.simulation.id || 0); 
-    });
-    
-    const selected = simulationsWithScore[0].simulation;
-    console.log(`Simulación seleccionada: ID ${selected.id} con score ${simulationsWithScore[0].score}`);
-    
-    return selected;
+    this.forceRecalculation(
+      this.ivaSimulation.year, 
+      this.ivaSimulation.month, 
+      this.ivaSimulation.user?.id || 0,
+      callback
+    );
   }
 
-  
-  cancelCurrentSubscription() {
+  forceRecalculation(year: number, month: number, userId: number, callback?: (simulation: IIvaCalculation | null) => void) {
+    if (this.currentSubscription) {
+      this.currentSubscription.unsubscribe();
+    }
+
+    const requestBody = { year, month, userId };
+    
+    this.currentSubscription = this.add(requestBody).subscribe({
+      next: (response: any) => {
+        this.ivaSimulation = response.data;
+        
+        if (callback) {
+          callback(this.ivaSimulation);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error al recalcular simulación IVA:', err);
+        
+        this.createSimulation(year, month, userId, callback);
+      }
+    });
+  }
+
+  forceCompleteRefresh(year: number, month: number, userId: number, callback?: (simulation: IIvaCalculation | null) => void) {
+    if (this.ivaSimulation?.id) {
+      this.http.delete(`${this.source}/${this.ivaSimulation.id}`).subscribe({
+        next: () => {
+          this.forceRecalculation(year, month, userId, callback);
+        },
+        error: (err) => {
+          this.forceRecalculation(year, month, userId, callback);
+        }
+      });
+    } else {
+      this.forceRecalculation(year, month, userId, callback);
+    }
+  }
+
+  clearSimulation() {
+    this.ivaSimulation = null;
     if (this.currentSubscription) {
       this.currentSubscription.unsubscribe();
       this.currentSubscription = null;
     }
-  }
-
-  
-  clearSimulation() {
-    this.ivaSimulationSubject.next(null);
   }
 }

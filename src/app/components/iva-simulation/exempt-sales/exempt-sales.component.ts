@@ -44,29 +44,18 @@ export class ExemptSalesComponent {
                     'ARANCELES POR MATRÍCULA Y CRÉDITOS DE CURSOS EN UNIVERSIDADES PÚBLICAS Y SERVICIOS DE EDUCACIÓN'
                 ],
                 values: [
-                    // Fila 1: EXPORTACIÓN DE SERVICIOS
                     { 'MONTO': this.simulation?.exportServices || 0 },
-                    // Fila 2: VENTA LOCAL DE BIENES
                     { 'MONTO': this.simulation?.localSaleGoods || 0 },
-                    // Fila 3: SERVICIOS PRESTACIONES A NIVEL LOCAL
                     { 'MONTO': this.simulation?.localServices || 0 },
-                    // Fila 4: CRÉDITOS PARA DESCUENTO DE FACTURAS
                     { 'MONTO': this.simulation?.invoiceDiscountCredits || 0 },
-                    // Fila 5: ARRENDAMIENTOS DESTINADOS A LA VIVIENDA
+                    { 'MONTO': this.simulation?.invoiceDiscountCredits || 0 },
                     { 'MONTO': this.simulation?.housingLeases || 0 },
-                    // Fila 6: ARRENDAMIENTOS UTILIZADOS POR MICRO Y PEQUEÑAS EMPRESAS
                     { 'MONTO': this.simulation?.microEnterpriseLeases || 0 },
-                    // Fila 7: SUMINISTRO DE ENERGÍA ELÉCTRICA RESIDENCIAL
                     { 'MONTO': this.simulation?.residentialElectricity || 0 },
-                    // Fila 8: AGUA RESIDENCIAL
                     { 'MONTO': this.simulation?.residentialWater || 0 },
-                    // Fila 9: AUTOCONSUMO
                     { 'MONTO': this.simulation?.selfConsumption || 0 },
-                    // Fila 10: SILLAS DE RUEDAS Y EQUIPO MÉDICO
                     { 'MONTO': this.simulation?.medicalEquipment || 0 },
-                    // Fila 11: SERVICIOS EDUCATIVOS
                     { 'MONTO': this.simulation?.educationalServices || 0 },
-                    // Fila 12: ARANCELES UNIVERSITARIOS
                     { 'MONTO': this.simulation?.universityTuition || 0 }
                 ]
             }

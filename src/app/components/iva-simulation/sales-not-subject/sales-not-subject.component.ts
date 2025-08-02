@@ -12,12 +12,10 @@ export class SalesNotSubjectComponent {
     @Input() simulationPeriod: string = '';
     @Input() simulationName: string = '';
     @Input() simulationIdentification: string = '';
-    @Input() simulation?: any; // Temporal hasta definir las propiedades
+    @Input() simulation?: any; 
 
-    // Estado para controlar si se muestra la tabla
     salesNotSubjectEnabled: boolean = false;
 
-    // Método para manejar el toggle
     toggleSalesNotSubject = (value: boolean) => {
         this.salesNotSubjectEnabled = value;
     }
@@ -37,18 +35,14 @@ export class SalesNotSubjectComponent {
                     'OTRAS VENTAS NO SUJETAS'
                 ],
                 values: [
-                    // Fila 1: BIENES Y SERVICIOS A LA CCSS
                     { 'MONTO': this.simulation?.goodsServicesCCSS || 0 },
-                    // Fila 2: BIENES Y SERVICIOS A LAS CORPORACIONES MUNICIPALES
                     { 'MONTO': this.simulation?.goodsServicesMunicipal || 0 },
-                    // Fila 3: OTRAS VENTAS NO SUJETAS
                     { 'MONTO': this.simulation?.otherNonSubjectSales || 0 }
                 ]
             }
         };
     }
 
-    // Método para formatear moneda
     formatCurrency(value: number): string {
         return new Intl.NumberFormat('es-CR', {
             style: 'currency',
