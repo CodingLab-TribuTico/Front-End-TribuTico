@@ -164,18 +164,17 @@ export interface IIsrSimulation {
 }
 
 export interface INotification {
-  id: number;
-  title: string;
-  message: string;
-  read: boolean;
-  timestamp: string;
-  type: string;
-}
-export interface INotificationGlobal{
   id?: number;
   name?: string;
   description?: string;
   type?: string;
-  state?: string;
   closeDate?: string;
+  state?: string;
+}
+
+export interface IUserNotificationStatus {
+  id?: number;
+  isRead?: boolean;
+  notification: INotification;
+  userId?: number;
 }

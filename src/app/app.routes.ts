@@ -69,7 +69,7 @@ export const routes: Routes = [
         component: NotificationsComponent,
         data: {
           authorities: [IRoleType.user],
-          name: 'Notificaciones',
+          name: 'Ver Notificaciones',
           showInSidebar: true
         }
       },

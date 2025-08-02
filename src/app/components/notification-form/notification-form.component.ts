@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { INotificationGlobal } from '../../interfaces';
+import { INotification } from '../../interfaces';
 
 @Component({
   selector: 'app-notification-form',
@@ -16,8 +16,8 @@ export class NotificationFormComponent {
   @Input() notificationForm!: FormGroup;
   @Input() cancelOption: boolean = false;
   @Input() isEditMode: boolean = false;
-  @Output() callSaveMethod: EventEmitter<INotificationGlobal> = new EventEmitter<INotificationGlobal>();
-  @Output() callUpdateMethod: EventEmitter<INotificationGlobal> = new EventEmitter<INotificationGlobal>();
+  @Output() callSaveMethod: EventEmitter<INotification> = new EventEmitter<INotification>();
+  @Output() callUpdateMethod: EventEmitter<INotification> = new EventEmitter<INotification>();
   @Output() callCancelMethod: EventEmitter<void> = new EventEmitter<void>();
 
   notificationTypes = [
@@ -36,7 +36,7 @@ export class NotificationFormComponent {
       return;
     }
 
-    const notification: INotificationGlobal = {
+    const notification: INotification = {
       id: this.notificationForm.controls['id']?.value,
       name: this.notificationForm.controls['name'].value,
       description: this.notificationForm.controls['description'].value,
