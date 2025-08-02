@@ -29,11 +29,11 @@ describe('UserService', () => {
   const testUser = {
     id: 1,
     identification: '101110111',
-    name: 'Diego',
+    name: 'luis',
     lastname: 'Nunez',
     lastname2: 'Brenes',
-    birthDate: '14/5/2000',
-    email: 'diego@gmail.com',
+    birthDate: '2000-05-14',
+    email: 'luis@gmail.com',
     password: '123'
   };
 
@@ -53,14 +53,12 @@ describe('UserService', () => {
     req.flush(response);
 
     expect(userService.users$()).toEqual([testUser]);
-
   });
 
   it('debería crear un usuario', () => {
-    userService.save(testUser);
-  
-    spyOn(alertService, 'displayAlert');
+    spyOn(alertService, 'showAlert');
     spyOn(userService, 'getAll');
+    userService.save(testUser);
 
     const req = http.expectOne('users');
     expect(req.request.method).toBe('POST');
@@ -69,46 +67,38 @@ describe('UserService', () => {
       data: testUser,
       message: 'El usuario fue correctamente registrado'
     });
-  
+
     expect(userService.getAll).toHaveBeenCalled();
-    expect(alertService.displayAlert).toHaveBeenCalledWith(
+    expect(alertService.showAlert).toHaveBeenCalledWith(
       'success',
-      'El usuario fue correctamente registrado',
-      'center',
-      'top',
-      ['success-snackbar']
+      'El usuario fue correctamente registrado'
     );
   });
 
   it('debería actualizar los datos de un usuario', () => {
-    userService.updatePatch(testUser).subscribe();
-
-    spyOn(alertService, 'displayAlert');
+    spyOn(alertService, 'showAlert');
     spyOn(userService, 'getAll');
-
+    userService.updatePatch(testUser).subscribe();
+    
     const req = http.expectOne(`users/${testUser.id}`);
     expect(req.request.method).toBe('PATCH');
     expect(req.request.body).toEqual(testUser);
     req.flush({ 
-      data: testUser 
+      data: testUser,
+      message: 'Usuario modificado exitosamente'
     });  
-  
+
     expect(userService.getAll).toHaveBeenCalled();
-    expect(alertService.displayAlert).toHaveBeenCalledWith(
+    expect(alertService.showAlert).toHaveBeenCalledWith(
       'success',
-      'Usuario modificado exitosamente',
-      'center',
-      'top',
-      ['success-snackbar']
+      'Usuario modificado exitosamente'
     );
   });
-
+      
   it('debería eliminar un usuario', () => {
-    userService.delete(testUser);
-    
-    spyOn(alertService, 'displayAlert');
+    spyOn(alertService, 'showAlert');
     spyOn(userService, 'getAll');
-
+    userService.delete(testUser);
 
     const req = http.expectOne(`users/${testUser.id}`);
     expect(req.request.method).toBe('DELETE');
@@ -116,12 +106,10 @@ describe('UserService', () => {
       message: 'Usuario eliminado con éxito' 
     });
 
-    expect(alertService.displayAlert).toHaveBeenCalledWith(
+    expect(userService.getAll).toHaveBeenCalled();
+    expect(alertService.showAlert).toHaveBeenCalledWith(
       'success',
-      'Usuario eliminado con éxito',
-      'center',
-      'top',
-      ['success-snackbar']
+      'Usuario eliminado con éxito'
     );
   });
 
