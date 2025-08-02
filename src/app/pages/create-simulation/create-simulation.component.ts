@@ -59,8 +59,10 @@ export class CreateSimulationComponent {
   constructor() {
     const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
     const userId = user.id;
-    this.invoiceService.getByUserId(userId);
+    // Temporalmente deshabilitado para evitar error del backend
+    // this.invoiceService.getByUserId(userId);
     this.generateYears();
+    this.initializeMockData(); // Inicializar datos mock
     
     effect(() => {
       this.isrSimulation = this.isrSimulationService.isrSimulation;
@@ -68,6 +70,37 @@ export class CreateSimulationComponent {
         this.isrSimulationShown = true;
       }
     });
+
+    effect(() => {
+      this.ivaSimulation = this.ivaSimulationService.ivaSimulation;
+      if (this.ivaSimulation) {
+        this.ivaSimulationShown = true;
+      }
+    });
+  }
+
+  // Método temporal para inicializar datos mock
+  initializeMockData() {
+    // Simular facturas mock para que los formularios funcionen
+    const mockInvoices: IManualInvoice[] = [
+      {
+        id: 1,
+        issueDate: '2025-07-15',
+        type: 'ingreso',
+        consecutive: '001',
+        key: 'mock-key-1'
+      },
+      {
+        id: 2,
+        issueDate: '2025-07-20',
+        type: 'gasto',
+        consecutive: '002',
+        key: 'mock-key-2'
+      }
+    ];
+    
+    // Establecer los datos mock en el servicio
+    this.invoiceService['invoicesList'].set(mockInvoices);
   }
 
   changeType(event: Event) {
@@ -134,12 +167,14 @@ export class CreateSimulationComponent {
   }
 
   loadInvoicesYears(invoices: IManualInvoice[] = []) {
-    if (invoices.length > 0) {
+    if (invoices && invoices.length > 0) {
       const issueDates = invoices
         .filter(invoice => typeof invoice.issueDate === 'string')
         .map(invoice => invoice.issueDate!.split('-')[0]);
       this.years = Array.from(new Set(issueDates.map(date => parseInt(date))));
+      return this.years.sort((a, b) => b - a);
     }
+    // Si no hay facturas, devolver años generados
     return this.years.sort((a, b) => b - a);
   }
 
@@ -164,6 +199,7 @@ export class CreateSimulationComponent {
     const invoices = this.invoiceService.invoices$();
     
     if (!invoices || invoices.length === 0) {
+      // Si no hay facturas, devolver todos los meses
       return this.months; 
     }
 
@@ -177,11 +213,27 @@ export class CreateSimulationComponent {
 
     const filteredMonths = this.months.filter(month => availableMonths.has(month.value));
     
-    return filteredMonths;
+    return filteredMonths.length > 0 ? filteredMonths : this.months;
   }
 
   isIvaFormValid(): boolean {
     return this.formIvaSimulation.valid;
+  }
+
+  isIsrFormValid(): boolean {
+    return this.formIsrSimulation.valid;
+  }
+
+  getIsrButtonText(): string {
+    if (this.type !== 'isr') return 'Crear simulación ISR';
+    
+    const { year, childrenNumber, hasSpouse } = this.formIsrSimulation.value;
+    
+    if (!year) return 'Seleccione un año';
+    if (childrenNumber === null || childrenNumber === undefined) return 'Ingrese número de hijos';
+    if (hasSpouse === null || hasSpouse === undefined) return 'Seleccione si tiene cónyuge';
+    
+    return 'Crear simulación ISR';
   }
 
   getIvaButtonText(): string {
