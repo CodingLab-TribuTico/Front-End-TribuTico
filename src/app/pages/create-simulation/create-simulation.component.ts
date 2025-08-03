@@ -59,10 +59,8 @@ export class CreateSimulationComponent {
   constructor() {
     const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
     const userId = user.id;
-    // Temporalmente deshabilitado para evitar error del backend
-    // this.invoiceService.getByUserId(userId);
     this.generateYears();
-    this.initializeMockData(); // Inicializar datos mock
+    this.initializeMockData(); 
     
     effect(() => {
       this.isrSimulation = this.isrSimulationService.isrSimulation;
@@ -79,9 +77,7 @@ export class CreateSimulationComponent {
     });
   }
 
-  // Método temporal para inicializar datos mock
   initializeMockData() {
-    // Simular facturas mock para que los formularios funcionen
     const mockInvoices: IManualInvoice[] = [
       {
         id: 1,
@@ -99,7 +95,6 @@ export class CreateSimulationComponent {
       }
     ];
     
-    // Establecer los datos mock en el servicio
     this.invoiceService['invoicesList'].set(mockInvoices);
   }
 
@@ -174,7 +169,6 @@ export class CreateSimulationComponent {
       this.years = Array.from(new Set(issueDates.map(date => parseInt(date))));
       return this.years.sort((a, b) => b - a);
     }
-    // Si no hay facturas, devolver años generados
     return this.years.sort((a, b) => b - a);
   }
 
@@ -199,7 +193,6 @@ export class CreateSimulationComponent {
     const invoices = this.invoiceService.invoices$();
     
     if (!invoices || invoices.length === 0) {
-      // Si no hay facturas, devolver todos los meses
       return this.months; 
     }
 
