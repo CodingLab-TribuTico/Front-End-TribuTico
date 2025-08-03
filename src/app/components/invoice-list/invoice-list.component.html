@@ -6,9 +6,10 @@
                 <th class="p-3">Consecutivo</th>
                 <th class="p-3">Fecha</th>
                 <th class="p-3">Proveedor</th>
-                <th class="p-3">Total</th>
                 <th class="p-3">Correo Electrónico</th>
+                <th class="p-3">Total</th>
                 <th class="p-3">Acciones</th>
+
             </tr>
         </thead>
         <tbody>
@@ -18,8 +19,8 @@
                 <td class="p-3">{{item.consecutive || 'N/A'}}</td>
                 <td class="p-3">{{item.issueDate | date: 'dd/MM/yyyy'}}</td>
                 <td class="p-3">{{item.issuer?.name || 'N/A'}}</td>
-                <td class="p-3">{{calculateTotal(item.details) | currency: '₡': 'symbol':'1.2-2'}}</td>
                 <td class="p-3">{{item.issuer?.email}}</td>
+                <td class="p-3">{{calculateTotal(item.details) | currency: '₡': 'symbol':'1.2-2'}}</td>
                 <td class="p-3 space-x-1 flex flex-row">
                     <button (click)="callModalAction.emit(item)"
                         class="bg-flamenco px-2 p-0.5 rounded-md hover:bg-golden-glow hover:text-flamenco text-bisque flex items-center"
