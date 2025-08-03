@@ -6,6 +6,7 @@ import { routes } from '../../../../app.routes';
 import { MatIconModule } from '@angular/material/icon';
 import { ModalService } from '../../../../services/modal.service';
 import { ModalComponent } from '../../../modal/modal.component';
+import { InvoiceService } from '../../../../services/invoice.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,6 +25,7 @@ export class SidebarComponent {
   public modalService: ModalService = inject(ModalService);
   public width: any = window.innerWidth;
   public authService = inject(AuthService);
+  public invoicesService = inject(InvoiceService);
   public permittedRoutes: Route[] = [];
   private service = inject(AuthService);
   public userName: string = '';
@@ -35,6 +37,9 @@ export class SidebarComponent {
     'Usuarios': 'group',
     'Cargar Facturas': 'add_notes',
     'Crear Simulación': 'interactive_space',
+    'Facturas': 'list_alt',
+    'Notificaciones': 'notifications',
+    'Reportes': 'bar_chart_4_bars',
   }
 
   constructor(public router: Router

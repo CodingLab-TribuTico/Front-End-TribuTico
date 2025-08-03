@@ -51,97 +51,66 @@
     </div>
     }
 
-    @if (type === 'iva') {
-    <label for="ivaYear" class="text-base font-semibold text-bisque">Año<span class="text-burnt-umber">*</span></label>
-    <select id="ivaYear"
-        class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
-        formControlName="year">
-        <option value="" disabled selected>Seleccione un año</option>
-        @for (year of loadInvoicesYears(invoiceService.invoices$()); track year) {
-        <option [value]="year">{{ year }}</option>
-        }
-    </select>
-    @if (formIvaSimulation.controls['year'].invalid && (formIvaSimulation.controls['year'].dirty ||
-    formIvaSimulation.controls['year'].touched)) {
-    <div class="text-burnt-umber text-sm">El año es obligatorio.</div>
-    }
-
-    <label for="ivaMonth" class="text-base font-semibold text-bisque">Mes<span class="text-burnt-umber">*</span></label>
-    <select id="ivaMonth"
-        class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
-        formControlName="month">
-        <option value="" disabled selected>Seleccione un mes</option>
-        @for (month of getAvailableMonths(); track month.value) {
-        <option [value]="month.value">{{ month.name }}</option>
-        }
-    </select>
-    @if (formIvaSimulation.controls['month'].invalid && (formIvaSimulation.controls['month'].dirty ||
-    formIvaSimulation.controls['month'].touched)) {
-    <div class="text-burnt-umber text-sm">El mes es obligatorio.</div>
-    }
-    }
-
-    <button type="submit" 
-        [disabled]="type === 'isr' ? !isIsrFormValid() : !isIvaFormValid()"
-        class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-flamenco disabled:hover:text-bisque">
-        {{ type === 'isr' ? getIsrButtonText() : getIvaButtonText() }}
+    <button type="submit" [disabled]="formIsrSimulation.invalid"
+        class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque disabled:bg-burnt-umber">
+        Crear simulación
     </button>
 </form>
-}
-
-@if (isrSimulationShown && isrSimulation) {
-<div>
-    <app-isr-simulation [simulationPeriod]="isrSimulation.simulationPeriod"
-        [simulationName]="isrSimulation.simulationName"
-        [simulationIdentification]="isrSimulation.simulationIdentification"
-        [currentAssets]="isrSimulation.currentAssets" [equityInvestments]="isrSimulation.equityInvestments"
-        [inventory]="isrSimulation.inventory" [netFixedAssets]="isrSimulation.netFixedAssets"
-        [totalNetAssets]="isrSimulation.totalNetAssets" [totalLiabilities]="isrSimulation.totalLiabilities"
-        [netEquity]="isrSimulation.netEquity" [salesRevenue]="isrSimulation.salesRevenue"
-        [professionalFees]="isrSimulation.professionalFees" [commissions]="isrSimulation.commissions"
-        [interestsAndYields]="isrSimulation.interestsAndYields" [dividendsAndShares]="isrSimulation.dividendsAndShares"
-        [rents]="isrSimulation.rents" [otherIncome]="isrSimulation.otherIncome"
-        [nonTaxableIncome]="isrSimulation.nonTaxableIncome" [grossIncomeTotal]="isrSimulation.grossIncomeTotal"
-        [initialInventory]="isrSimulation.initialInventory" [purchases]="isrSimulation.purchases"
-        [finalInventory]="isrSimulation.finalInventory" [costOfGoodsSold]="isrSimulation.costOfGoodsSold"
-        [financialExpenses]="isrSimulation.financialExpenses"
-        [administrativeExpenses]="isrSimulation.administrativeExpenses"
-        [depreciationAndAmortization]="isrSimulation.depreciationAndAmortization"
-        [pensionContributions]="isrSimulation.pensionContributions"
-        [otherAllowableDeductions]="isrSimulation.otherAllowableDeductions"
-        [totalAllowableDeductions]="isrSimulation.totalAllowableDeductions"
-        [netTaxableIncome]="isrSimulation.netTaxableIncome"
-        [nonTaxableSalaryAmount]="isrSimulation.nonTaxableSalaryAmount" [incomeTax]="isrSimulation.incomeTax"
-        [freeTradeZoneExemption]="isrSimulation.freeTradeZoneExemption"
-        [otherExemptions]="isrSimulation.otherExemptions"
-        [netIncomeTaxAfterExemptions]="isrSimulation.netIncomeTaxAfterExemptions"
-        [familyCredit]="isrSimulation.familyCredit" [otherCredits]="isrSimulation.otherCredits"
-        [periodTax]="isrSimulation.periodTax" [twoPercentWithholdings]="isrSimulation.twoPercentWithholdings"
-        [otherWithholdings]="isrSimulation.otherWithholdings" [partialPayments]="isrSimulation.partialPayments"
-        [totalNetTax]="isrSimulation.totalNetTax" [interests]="isrSimulation.interests"
-        [totalTaxDebt]="isrSimulation.totalTaxDebt" [requestedCompensation]="isrSimulation.requestedCompensation"
-        [totalDebtToPay]="isrSimulation.totalDebtToPay" />
-    <div class="flex justify-center mt-4">
-        <button (click)="closeSimulation()"
-            class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
-            Regresar
-        </button>
+} @else {
+@defer {
+<div class="w-full">
+    <div class="flex flex-col w-full space-y-10">
+        <app-general-data [simulationPeriod]="isrSimulation.simulationPeriod"
+            [simulationName]="isrSimulation.simulationName"
+            [simulationIdentification]="isrSimulation.simulationIdentification">
+        </app-general-data>
+        <app-assets-liabilities [currentAssets]="isrSimulation.currentAssets"
+            [equityInvestments]="isrSimulation.equityInvestments" [inventory]="isrSimulation.inventory"
+            [netFixedAssets]="isrSimulation.netFixedAssets" [totalNetAssets]="isrSimulation.totalNetAssets"
+            [totalLiabilities]="isrSimulation.totalLiabilities" [netEquity]="isrSimulation.netEquity">
+        </app-assets-liabilities>
+        <app-income [salesRevenue]="isrSimulation.salesRevenue" [professionalFees]="isrSimulation.professionalFees"
+            [commissions]="isrSimulation.commissions" [interestsAndYields]="isrSimulation.interestsAndYields"
+            [dividendsAndShares]="isrSimulation.dividendsAndShares" [rents]="isrSimulation.rents"
+            [otherIncome]="isrSimulation.otherIncome" [nonTaxableIncome]="isrSimulation.nonTaxableIncome"
+            [grossIncomeTotal]="isrSimulation.grossIncomeTotal">
+        </app-income>
+        <app-costs-expenses-deductions [initialInventory]="isrSimulation.initialInventory"
+            [purchases]="isrSimulation.purchases" [finalInventory]="isrSimulation.finalInventory"
+            [costOfGoodsSold]="isrSimulation.costOfGoodsSold" [financialExpenses]="isrSimulation.financialExpenses"
+            [administrativeExpenses]="isrSimulation.administrativeExpenses"
+            [depreciationAndAmortization]="isrSimulation.depreciationAndAmortization"
+            [pensionContributions]="isrSimulation.pensionContributions"
+            [otherAllowableDeductions]="isrSimulation.otherAllowableDeductions"
+            [totalAllowableDeductions]="isrSimulation.totalAllowableDeductions">
+        </app-costs-expenses-deductions>
+        <app-tax-base [netTaxableIncome]="isrSimulation.netTaxableIncome"
+            [nonTaxableSalaryAmount]="isrSimulation.nonTaxableSalaryAmount" [incomeTax]="isrSimulation.incomeTax"
+            [freeTradeZoneExemption]="isrSimulation.freeTradeZoneExemption"
+            [otherExemptions]="isrSimulation.otherExemptions"
+            [netIncomeTaxAfterExemptions]="isrSimulation.netIncomeTaxAfterExemptions">
+        </app-tax-base>
+        <app-credits [familyCredit]="isrSimulation.familyCredit" [otherCredits]="isrSimulation.otherCredits"
+            [periodTax]="isrSimulation.periodTax" [twoPercentWithholdings]="isrSimulation.twoPercentWithholdings"
+            [otherWithholdings]="isrSimulation.otherWithholdings" [partialPayments]="isrSimulation.partialPayments"
+            [totalNetTax]="isrSimulation.totalNetTax">
+        </app-credits>
+        <app-settlement-tax-debt [interests]="isrSimulation.interests" [totalTaxDebt]="isrSimulation.totalTaxDebt"
+            [requestedCompensation]="isrSimulation.requestedCompensation"
+            [totalDebtToPay]="isrSimulation.totalDebtToPay">
+        </app-settlement-tax-debt>
+        <div class="flex justify-center mt-4">
+            <button (click)="closeSimulation()"
+                class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+                Regresar
+            </button>
+        </div>
     </div>
 </div>
+
+
+} @loading (minimum 1s){
+<app-loader></app-loader>
+}
 }
 
-@if (ivaSimulationShown && ivaSimulation) {
-<div>
-    <app-iva-simulation 
-        [simulation]="ivaSimulation"
-        [simulationPeriod]="getIvaSimulationPeriod()"
-        [simulationName]="getIvaSimulationName()"
-        [simulationIdentification]="getIvaSimulationIdentification()" />
-    <div class="flex justify-center mt-4">
-        <button (click)="closeSimulation()"
-            class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
-            Regresar
-        </button>
-    </div>
-</div>
-}

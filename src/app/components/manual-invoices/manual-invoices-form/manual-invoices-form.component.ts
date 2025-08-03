@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, Output, Signal } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, Output, signal, Signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice, IInvoiceUser } from '../../../interfaces';
 import { CardDetailComponent } from '../../card-detail/card-detail.component';
-import { ModalComponent } from '../../modal/modal.component';
 
 @Component({
   selector: "app-manual-invoices-form",
@@ -13,7 +12,6 @@ import { ModalComponent } from '../../modal/modal.component';
     ReactiveFormsModule,
     CommonModule,
     CardDetailComponent,
-    ModalComponent
   ],
 })
 export class ManualInvoicesFormComponent {
@@ -21,21 +19,27 @@ export class ManualInvoicesFormComponent {
   @Input() invoiceForm!: FormGroup;
   @Input() detailForm!: FormGroup;
   @Input() responseScan!: any;
-  public details: IDetailInvoice[] = [];
+  @Input() details: IDetailInvoice[] = [];
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
-  public type: string = 'ingreso';
-  
-  // Variables para el modal de confirmación
+  @Output() callUpdateMethod = new EventEmitter<IManualInvoice>();
+  @Output() callCancelMethod = new EventEmitter<void>();
+  @Input() isEditing: boolean = false;
+
+  public isEditingDetail: boolean = false;
+  public editingIndex: number = -1;
+
   public showDeleteModal: boolean = false;
   public indexToDelete: number = -1;
 
+  public typeInvoice: string = 'ingreso';
+
   constructor() {
     effect(() => {
+      if (!this.responseScan) return;
       const response = this.responseScan();
-      if (response) {
-        this.fillInvoiceFromAutocomplete(response);
-      }
+      this.fillInvoiceFromAutocomplete(response);
+      this.callResetScanMethod.emit();
     });
   }
 
@@ -100,7 +104,13 @@ export class ManualInvoicesFormComponent {
       manualInvoice.id = this.invoiceForm.controls["id"].value;
     }
 
-    this.callSavedMethod.emit(manualInvoice);
+    if (manualInvoice.id) {
+      this.callUpdateMethod.emit(manualInvoice);
+    } else {
+      this.callSavedMethod.emit(manualInvoice);
+      this.invoiceForm.reset();
+    }
+
     this.details = [];
     this.detailForm.reset({
       category: '',
@@ -109,7 +119,6 @@ export class ManualInvoicesFormComponent {
     this.invoiceForm.reset({
       type: '',
     });
-    this.type = 'ingreso';
   }
 
   callSaveDetail() {
@@ -127,6 +136,7 @@ export class ManualInvoicesFormComponent {
     };
 
     this.details.push(detail);
+
     this.detailForm.reset({
       category: '',
       tax: '',
@@ -134,26 +144,62 @@ export class ManualInvoicesFormComponent {
   }
 
   fillInvoiceFromAutocomplete(response: any) {
-    console.log(response);
-    if (response.data !== undefined) {
-      const data = response.data;
-      const type = data.type || 'ingreso';
-      this.type = type;
-      const person = type === 'ingreso' ? data.receiver : data.issuer;
+    if (!response) return;
+    const data = response.data || response;
+    this.updateFormForType(data);
+  }
 
-      this.invoiceForm.controls['type'].setValue(data.type ?? '');
-      this.invoiceForm.controls['consecutive'].setValue(data.consecutive ?? '');
-      this.invoiceForm.controls['key'].setValue(data.key ?? '');
+  updateFormForType(data: any) {
+    const personData = data.receiver || data.issuer;
+    const person = personData || {};
 
-      this.invoiceForm.controls['issueDate'].setValue(data.issueDate ?? '');
+    let firstName = '';
+    let lastName = '';
+    if (person.name) {
+      const fullName = person.name.trim().split(/\s+/);
+      if (fullName.length > 0) {
+        firstName = fullName[0];
+        lastName = fullName.slice(2).join(' ');
+      }
+    }
 
-      this.invoiceForm.controls['identification'].setValue(person?.identification ?? '');
-      this.invoiceForm.controls['name'].setValue(person?.name ?? '');
-      this.invoiceForm.controls['lastName'].setValue(person?.lastName ?? '');
-      this.invoiceForm.controls['email'].setValue(person?.email ?? '');
+    if (data.type == "ingreso") {
+      this.typeInvoice = 'ingreso';
+    } else {
+      this.typeInvoice = 'gasto';
+    }
 
-      this.details = data.details || [];
-      this.callResetScanMethod.emit();
+    this.invoiceForm.patchValue({
+      type: data.type || '',
+      consecutive: data.consecutive || '',
+      key: data.key || '',
+      issueDate: data.issueDate || '',
+      identification: person.identification || '',
+      name: firstName,
+      lastName: lastName,
+      email: person.email || ''
+    });
+
+    this.details = [];
+
+    if (data.details && data.details.length > 0) {
+      const firstDetail = data.details[0];
+      this.detailForm.patchValue({
+        cabys: firstDetail.cabys || '',
+        quantity: firstDetail.quantity || 0,
+        unit: firstDetail.unit || '',
+        unitPrice: firstDetail.unitPrice || 0,
+        discount: firstDetail.discount || 0,
+        tax: firstDetail.tax || 0,
+        category: firstDetail.category || '',
+        description: firstDetail.description || ''
+      });
+      this.calculateTotal();
+    } else {
+      this.detailForm.reset({
+        category: '',
+        tax: ''
+      });
     }
   }
 
@@ -171,26 +217,13 @@ export class ManualInvoicesFormComponent {
   }
 
   callCancel() {
-    this.details = [];
-    this.detailForm.reset({
-      category: '',
-      tax: '',
-    });
-    this.invoiceForm.reset({
-      type: '',
-    });
+    this.callCancelMethod.emit();
   }
 
-  changeType(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    this.type = selectElement.value;
-  }
-
-  
   editDetailItem(index: number) {
     const detail = this.details[index];
-    
-    
+
+
     this.detailForm.patchValue({
       cabys: detail.cabys,
       quantity: detail.quantity,
@@ -203,8 +236,11 @@ export class ManualInvoicesFormComponent {
     });
 
     this.details.splice(index, 1);
-    
+
     this.calculateTotal();
+
+    this.isEditingDetail = true;
+    this.editingIndex = index;
   }
 
   deleteDetailItem(index: number) {
@@ -218,6 +254,17 @@ export class ManualInvoicesFormComponent {
       this.indexToDelete = -1;
     }
     this.hideDeleteModal();
+  }
+
+  changeType(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedType = selectElement.value as 'ingreso' | 'gasto';
+
+    if (selectedType === 'ingreso') {
+      this.typeInvoice = 'ingreso';
+    } else if (selectedType === 'gasto') {
+      this.typeInvoice = 'gasto';
+    }
   }
 
   hideDeleteModal() {

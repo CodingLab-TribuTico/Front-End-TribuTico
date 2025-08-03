@@ -1,4 +1,4 @@
-import { Component, effect, inject, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, input, ViewChild } from '@angular/core';
 import { LlamaLoaderComponent } from '../../components/llama-loader/llama-loader.component';
 import { CommonModule } from '@angular/common';
 import { OcrService } from '../../services/ocr.service';
@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { ManualInvoicesFormComponent } from "../../components/manual-invoices/manual-invoices-form/manual-invoices-form.component";
 import { InputFileFormComponent } from "../../components/input-file-form/input-file-form.component";
+import { XmlService } from '../../services/xml.service';
 
 @Component({
   selector: 'app-upload-invoices',
@@ -26,11 +27,22 @@ export class UploadInvoicesComponent {
   public importInvoicesText: string = "Ocultar importar";
   public importInvoicesIcon: string = "receipt_long_off";
   public ocrService: OcrService = inject(OcrService);
+  public xmlService: XmlService = inject(XmlService);
   public modalService: ModalService = inject(ModalService);
   public fb: FormBuilder = inject(FormBuilder);
   public type: string = 'ingreso';
   public details: IDetailInvoice[] = [];
   @ViewChild('cancelSubscriptionModal') public cancelSubscriptionModal: any;
+  @ViewChild('inputFileForm') inputFileForm!: InputFileFormComponent;
+
+  public combinedResponse = computed(() => {
+    console.log(this.xmlService.responseScan$(), this.ocrService.responseScan$());
+    return this.xmlService.responseScan$() || this.ocrService.responseScan$();
+  });
+
+  public isLoading = computed(() => {
+    return this.ocrService.isLoading$() || this.xmlService.isLoading$();
+  });
 
   public invoiceForm = this.fb.group({
     id: [''],
@@ -78,7 +90,28 @@ export class UploadInvoicesComponent {
   }
 
   cancelCurrentRequest() {
+    this.xmlService.cancelCurrentRequest();
     this.ocrService.cancelCurrentRequest();
+    this.invoiceForm.reset({
+      type: '',
+      issueDate: '',
+      consecutive: '',
+      key: '',
+      identification: '',
+      name: '',
+      lastName: '',
+      email: ''
+    });
+
+    this.detailForm.reset({
+      category: '',
+      tax: ''
+    });
+
+    if (this.inputFileForm) {
+      this.inputFileForm.removeFile();
+    }
+
     this.hideModal();
   }
 
@@ -91,17 +124,7 @@ export class UploadInvoicesComponent {
       return;
     }
 
-    console.log('Enviando factura al backend:', item);
-
-    // El backend ahora obtiene el usuario del token JWT automáticamente
-    this.invoicesService.saveInvoice(item).subscribe({
-      next: (response) => {
-        console.log('Factura guardada exitosamente:', response);
-      },
-      error: (error) => {
-        console.error('Error al guardar la factura:', error);
-      }
-    });
+    this.invoicesService.save(item);
   }
 
   changeType(type: string) {
@@ -110,5 +133,31 @@ export class UploadInvoicesComponent {
     } else if (type === 'gasto') {
       this.type = 'ingreso';
     }
+  }
+
+  resetScanResponse() {
+    this.xmlService.responseScan.set(null);
+    this.ocrService.resetResponseScan();
+  }
+
+  handleScanFile(file: File) {
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+    if (fileExtension === 'xml') {
+      this.xmlService.scanFile(file, this.type);
+    } else {
+      this.ocrService.scanFile(file, this.type);
+    }
+  }
+
+  callCancel() {
+    this.details = [];
+    this.detailForm.reset({
+      category: '',
+      tax: '',
+    });
+    this.invoiceForm.reset({
+      type: '',
+    });
   }
 }

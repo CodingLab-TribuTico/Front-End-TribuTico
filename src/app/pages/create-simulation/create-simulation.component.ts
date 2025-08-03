@@ -1,17 +1,25 @@
-import { Component, effect, inject } from '@angular/core';
-import { IsrSimulationComponent } from '../../components/isr-simulation/isr-simulation.component';
-import { IvaSimulationComponent } from '../../components/iva-simulation/iva-simulation.component';
+import { Component, inject } from '@angular/core';
 import { IsrSimulationService } from '../../services/isr-simulation.service';
 import { IvaSimulationService } from '../../services/iva-simulation.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InvoiceService } from '../../services/invoice.service';
 import { IManualInvoice, IIsrSimulation, IIvaCalculation } from '../../interfaces';
+import { LoaderComponent } from '../../components/loader/loader.component';
+import { AssetsLiabilitiesComponent } from '../../components/isr-simulation/assets-and-liabilities/assets-liabilities.component';
+import { IncomeComponent } from '../../components/isr-simulation/income/income.component';
+import { CostsExpensesDeductionsComponent } from '../../components/isr-simulation/costs-expenses-deductions/costs-expenses-deductions.component';
+import { TaxBaseComponent } from '../../components/isr-simulation/tax-base/tax-base.component';
+import { CreditsComponent } from '../../components/isr-simulation/credits/credits.component';
+import { SettlementTaxDebtComponent } from '../../components/isr-simulation/settlement-tax-debt/settlement-tax-debt.component';
+import { GeneralDataComponent } from '../../components/isr-simulation/general-data/general-data.component';
 
 @Component({
   selector: 'app-create-simulation',
   standalone: true,
-  imports: [IsrSimulationComponent, IvaSimulationComponent, CommonModule, ReactiveFormsModule],
+  imports: [GeneralDataComponent, CommonModule, ReactiveFormsModule, LoaderComponent,
+    AssetsLiabilitiesComponent, IncomeComponent, CostsExpensesDeductionsComponent, TaxBaseComponent, CreditsComponent, SettlementTaxDebtComponent
+  ],
   templateUrl: './create-simulation.component.html',
 })
 export class CreateSimulationComponent {
@@ -25,8 +33,8 @@ export class CreateSimulationComponent {
   public fb: FormBuilder = inject(FormBuilder);
   public isrSimulationShown: boolean = false;
   public ivaSimulationShown: boolean = false;
-  public isrSimulation: IIsrSimulation | null = null;
-  public ivaSimulation: IIvaCalculation | null = null;
+  public isrSimulation: any = null;
+  public ivaSimulation: any = null;
   public years: number[] = [];
   public months: { value: number, name: string }[] = [
     { value: 1, name: 'Enero' },
@@ -112,12 +120,10 @@ export class CreateSimulationComponent {
   onSubmit() {
     if (this.formIsrSimulation.invalid || this.type !== 'isr') return;
     const { year, childrenNumber, hasSpouse } = this.formIsrSimulation.value;
-    const user = localStorage.getItem('auth_user') && JSON.parse(localStorage.getItem('auth_user') || '{}');
-    const userId = user.id;
 
     this.isrSimulationShown = false;
 
-    this.isrSimulationService.createSimulation(year, childrenNumber, hasSpouse, userId);
+    this.isrSimulationService.createSimulation(year, childrenNumber, hasSpouse);
 
     setTimeout(() => {
       this.isrSimulation = this.isrSimulationService.isrSimulation;
@@ -240,3 +246,7 @@ export class CreateSimulationComponent {
     return 'Crear simulación IVA';
   }
 }
+function effect(arg0: () => void) {
+  throw new Error('Function not implemented.');
+}
+

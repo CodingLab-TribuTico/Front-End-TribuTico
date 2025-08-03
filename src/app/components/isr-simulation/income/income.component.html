@@ -1,0 +1,61 @@
+<div class="flex flex-col space-y-4 w-full">
+    <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
+        II. Ingresos
+    </h1>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            27 - Venta de bienes y servicios, excepto los servicios profesionales
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ salesRevenue }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">28 - Servicios profesionales y honorarios</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ professionalFees }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">29 - Comisiones</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ commissions }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">30 - Intereses y rendimientos</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ interestsAndYields }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">31 - Dividendos y participaciones</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ dividendsAndShares }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">32 - Alquileres</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ rents }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">33 - Otros ingresos diferentes a los anteriores</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ otherIncome }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">34 - Ingresos no gravables incluidos dentro de los anteriores</p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ nonTaxableIncome }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">35 - Total de renta bruta</p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ grossIncomeTotal }}
+        </span>
+    </div>
+</div>

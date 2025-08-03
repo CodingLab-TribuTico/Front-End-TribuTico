@@ -1,11 +1,11 @@
 export interface ILoginResponse {
   accessToken: string;
-  expiresIn: number
+  expiresIn: number;
 }
 
 export interface IResponse<T> {
   data: T;
-  message: string,
+  message: string;
   meta: T;
 }
 
@@ -18,12 +18,11 @@ export interface IUser {
   birthDate?: string;
   email?: string;
   password?: string;
-  status?: boolean;
+  status?: string;
   createdAt?: string;
   updatedAt?: string;
   authorities?: IAuthority[];
-  role?: IRole
-
+  role?: IRole;
 }
 
 export interface IAuthority {
@@ -38,13 +37,13 @@ export interface IFeedBackMessage {
 export enum IFeedbackStatus {
   success = "SUCCESS",
   error = "ERROR",
-  default = ''
+  default = "",
 }
 
 export enum IRoleType {
   admin = "ROLE_ADMIN",
   user = "ROLE_USER",
-  superAdmin = 'ROLE_SUPER_ADMIN'
+  superAdmin = "ROLE_SUPER_ADMIN",
 }
 
 export interface IRole {
@@ -59,6 +58,7 @@ export interface ISearch {
   query?: string;
   page?: number;
   size?: number;
+  year?: number;
   pageNumber?: number;
   pageSize?: number;
   totalElements?: number;
@@ -76,7 +76,7 @@ export interface IDetailInvoice {
   category?: string;
   total?: number;
   description?: string;
-  
+
 }
 
 export interface IInvoiceUser {
@@ -192,4 +192,20 @@ export interface IIvaCalculation {
   ivaExento: number;
   
   user?: IUser;
+}
+export interface INotification {
+  id: number;
+  title: string;
+  message: string;
+  read: boolean;
+  timestamp: string;
+  type: string;
+}
+export interface INotificationGlobal{
+  id?: number;
+  name?: string;
+  description?: string;
+  type?: string;
+  state?: string;
+  closeDate?: string;
 }

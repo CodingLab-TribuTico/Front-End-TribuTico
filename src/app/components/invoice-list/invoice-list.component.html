@@ -1,0 +1,57 @@
+<div class="overflow-hidden rounded-md border border-crater-brown">
+    <table class="w-full border-collapse p-3">
+        <thead>
+            <tr class="text-center border border-crater-brown bg-crater-brown text-bisque">
+                <th class="p-3">ID</th>
+                <th class="p-3">Consecutivo</th>
+                <th class="p-3">Fecha</th>
+                <th class="p-3">Proveedor</th>
+                <th class="p-3">Correo Electrónico</th>
+                <th class="p-3">Total</th>
+                <th class="p-3">Acciones</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of invoices; track item.id) {
+            <tr class="text-center text-crater-brown font-semibold border-t border-crater-brown">
+                <td class="p-3">{{item.id || 'N/A'}}</td>
+                <td class="p-3">{{item.consecutive || 'N/A'}}</td>
+                <td class="p-3">{{item.issueDate | date: 'dd/MM/yyyy'}}</td>
+                <td class="p-3">{{item.issuer?.name || 'N/A'}}</td>
+                <td class="p-3">{{item.issuer?.email}}</td>
+                <td class="p-3">{{calculateTotal(item.details) | currency: '₡': 'symbol':'1.2-2'}}</td>
+                <td class="p-3 space-x-1 flex flex-row">
+                    <button (click)="callModalAction.emit(item)"
+                        class="bg-flamenco px-2 p-0.5 rounded-md hover:bg-golden-glow hover:text-flamenco text-bisque flex items-center"
+                        type="button">
+                        <span class="material-symbols-rounded text-lg">edit</span>
+                    </button>
+                    <a [routerLink]="['/app/invoice-detail', item.id]"
+                        class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2 hover:bg-golden-glow hover:text-flamenco text-bisque"
+                        type="button">
+                        <span class="material-symbols-rounded text-lg">visibility</span>
+                        <span class="text-sm ml-2 font-bold">Ver</span>
+                    </a>
+                </td>
+            </tr>
+            } @empty {
+            <tr>
+                <td colspan="8">
+                    <div class="flex justify-center items-center w-full">
+                        <p class="p-3 text-crater-brown font-bold">No hay facturas</p>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<ng-template #confirmationModal>
+    <app-modal (callConfirmationMethod)="deleteInvoice(selectedInvoice?.id!)" (callCancelMethod)="hideModal()"
+        [cancelAction]="'Cancelar'" [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'"
+        [textCenter]="true" [icon]="'error'">
+        <p class="text-bisque text-base max-w-lg">Esta acción eliminará la factura permanentemente.</p>
+    </app-modal>
+</ng-template>

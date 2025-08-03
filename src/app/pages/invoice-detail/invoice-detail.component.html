@@ -1,0 +1,161 @@
+@defer {
+<div class="p-4 bg-bisque rounded-md shadow-md max-w-6xl mx-auto">
+
+    @if (invoice(); as invoiceData) {
+    <h2 class="text-2xl font-bold text-crater-brown mb-4">Detalle de Factura</h2>
+
+    <div class="grid grid-cols-3 gap-5 mb-6">
+        <div>
+            <p class="font-semibold text-crater-brown">ID:</p>
+            <p class="text-crater-brown">{{invoiceData?.id || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Consecutivo:</p>
+            <p class="text-crater-brown">{{invoiceData?.consecutive || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Fecha:</p>
+            <p class="text-crater-brown">{{invoiceData?.issueDate | date: 'dd/MM/yyyy'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Tipo:</p>
+            <p class="text-crater-brown">{{invoiceData?.type || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Clave:</p>
+            <p class="text-crater-brown">{{invoiceData?.key || 'N/A'}}</p>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold text-crater-brown mb-4">Datos del Cliente</h2>
+    <div class="grid grid-cols-4 gap-5 mb-6">
+        <div>
+            <p class="font-semibold text-crater-brown">Nombre:</p>
+            <p class="text-crater-brown">{{invoiceData?.receiver?.name || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Apellido:</p>
+            <p class="text-crater-brown">{{invoiceData?.receiver?.lastName || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Identificación:</p>
+            <p class="text-crater-brown">{{invoiceData?.receiver?.identification || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Correo:</p>
+            <p class="text-crater-brown">{{invoiceData?.receiver?.email || 'N/A'}}</p>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold text-crater-brown mb-4">Datos del Proveedor</h2>
+    <div class="grid grid-cols-4 gap-5 mb-6">
+        <div>
+            <p class="font-semibold text-crater-brown">Nombre:</p>
+            <p class="text-crater-brown">{{invoiceData?.issuer?.name || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Apellido:</p>
+            <p class="text-crater-brown">{{invoiceData?.issuer?.lastName || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Identificación:</p>
+            <p class="text-crater-brown">{{invoiceData?.issuer?.identification || 'N/A'}}</p>
+        </div>
+        <div>
+            <p class="font-semibold text-crater-brown">Correo:</p>
+            <p class="text-crater-brown">{{invoiceData?.issuer?.email || 'N/A'}}</p>
+        </div>
+    </div>
+
+    <h3 class="text-xl font-bold text-crater-brown mb-2">Detalles de Productos/Servicios</h3>
+    <table class="w-full border-collapse mb-6">
+        <thead>
+            <tr class="bg-crater-brown text-bisque">
+                <th class="p-2 text-left">Descripción</th>
+                <th class="p-2 text-left">Categoría</th>
+                <th class="p-2 text-left">Cabys</th>
+                <th class="p-2 text-right">Cantidad</th>
+                <th class="p-2 text-right">Precio Unitario</th>
+                <th class="p-2 text-right">Impuesto %</th>
+                <th class="p-2 text-right">Monto Impuesto</th>
+                <th class="p-2 text-right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of invoiceData?.details; track $index) {
+            <tr class="border-b border-crater-brown/20">
+                <td class="p-2 text-crater-brown">{{item.description || 'N/A'}}</td>
+                <td class="p-2 text-crater-brown">{{item.category || 'N/A'}}</td>
+                <td class="p-2 text-crater-brown">{{item.cabys || 'N/A'}}</td>
+                <td class="p-2 text-right text-crater-brown">{{item.quantity || 0}}</td>
+                <td class="p-2 text-right text-crater-brown">{{item.unitPrice | currency: '₡': 'symbol':'1.2-2'}}
+                </td>
+                <td class="p-2 text-right text-crater-brown">{{item.tax || 0 | number}}%</td>
+                <td class="p-2 text-right text-crater-brown">{{item.taxAmount | currency: '₡': 'symbol':'1.2-2'}}
+                </td>
+                <td class="p-2 text-right text-crater-brown">{{item.total | currency: '₡': 'symbol':'1.2-2'}}</td>
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="font-bold border-t-2 border-crater-brown">
+                <td colspan="7" class="p-2 text-right text-crater-brown">Subtotal:</td>
+                <td class="p-2 text-right text-crater-brown">{{calculateSubtotal(invoiceData?.details ?? []) | currency:
+                    '₡': 'symbol':'1.2-2'}}</td>
+                <td></td>
+            </tr>
+            <tr class="font-bold">
+                <td colspan="7" class="p-2 text-right text-crater-brown">Total Impuestos:</td>
+                <td class="p-2 text-right text-crater-brown">{{calculateTotalTaxes(invoiceData?.details ?? []) |
+                    currency: '₡': 'symbol':'1.2-2'}}</td>
+                <td></td>
+            </tr>
+            <tr class="font-bold border-t-2 border-crater-brown">
+                <td colspan="7" class="p-2 text-right text-crater-brown">Total General:</td>
+                <td class="p-2 text-right text-crater-brown">{{calculateTotal(invoiceData?.details ?? []) | currency:
+                    '₡': 'symbol':'1.2-2'}}
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="flex justify-between">
+
+        <div class="flex justify-end">
+            <button (click)="onBack()"
+                class="group bg-flamenco px-2 p-0.5 rounded-md hover:bg-golden-glow text-bisque flex items-center">
+                <span class="material-symbols-rounded text-lg text-bisque group-hover:text-flamenco">
+                    arrow_left_alt
+                </span>
+                <span class="text-bisque text-sm font-bold ml-2 group-hover:text-flamenco">
+                    Volver
+                </span>
+            </button>
+        </div>
+
+        <div class="flex justify-start">
+
+            <button (click)="openDeleteModal()"
+                class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer font-bold hover:bg-bisque transition-colors flex items-center"
+                type="button">
+                <span class="material-symbols-rounded text-lg text-crater-brown">delete</span>
+                <span class="text-crater-brown text-sm font-bold ml-2">Eliminar</span>
+            </button>
+        </div>
+    </div>
+    } @else {
+    <p>No se ha seleccionado ninguna factura</p>
+    }
+
+</div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}
+
+<ng-template #confirmationModal>
+    <app-modal (callConfirmationMethod)="deleteInvoice()" (callCancelMethod)="hideModal()" [cancelAction]="'Cancelar'"
+        [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'" [textCenter]="true"
+        [icon]="'error'">
+        <p class="text-bisque text-base max-w-lg">Esta acción eliminará la factura permanentemente.</p>
+    </app-modal>
+</ng-template>

@@ -1,0 +1,55 @@
+<div class="overflow-hidden rounded-md border border-crater-brown">
+  <table class="w-full border-collapse p-3">
+    <thead>
+      <tr class="text-center border border-crater-brown bg-crater-brown text-bisque">
+        <th class="p-3" scope="col">ID</th>
+        <th class="p-3" scope="col">Asunto</th>
+        <th class="p-3" scope="col">Descripción</th>
+        <th class="p-3" scope="col">Fecha de Finalización</th>
+        <th class="p-3" scope="col">Tipo</th>
+        <th class="p-3" scope="col">Estado</th>
+        <th class="p-3" scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of notifications; track item.id) {
+      <tr class="text-center text-crater-brown font-semibold border-t border-crater-brown">
+        <td class="p-3" scope="row">{{item.id}}</td>
+        <td class="p-3" scope="row">{{item.name}}</td>
+        <td class="p-3 max-w-xs break-words leading-tight" scope="row">
+          {{item.description}}
+        </td>
+        <td class="p-3" scope="row">{{ item.closeDate | date: 'dd-MM-yyyy' }}</td>
+        <td class="p-3" scope="row">{{item.type}}</td>
+        <td class="p-3" scope="row">{{item.state}}</td>
+        <td class="p-3 space-x-1">
+
+          <button (click)="openModal(item)"
+            class="group bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-golden-glow hover:bg-bisque ml-2"
+            type="button">
+            <span class="material-symbols-rounded text-lg text-crater-brown">
+              delete
+            </span>
+          </button>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="9">
+          <div class="flex justify-center items-center w-full">
+            <p class="p-3 text-crater-brown font-bold">No hay notificaciones</p>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<ng-template #confirmationModal>
+  <app-modal (callConfirmationMethod)="deleteNotification(selectedNotification?.id!)" (callCancelMethod)="hideModal()"
+    [cancelAction]="'Cancelar'" [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'"
+    [textCenter]="true" [icon]="'error'">
+    <p class="text-bisque text-base max-w-lg">Esta acción eliminará la notificación permanentemente.</p>
+  </app-modal>
+</ng-template>

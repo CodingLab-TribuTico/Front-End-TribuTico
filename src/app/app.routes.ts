@@ -12,13 +12,24 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
-import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { InvoiceComponent } from './pages/invoice/invoice.component';
+import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.component';
+import { LandingPageTributicoComponent } from './pages/landing-page-tributico/landing-page-tributico.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { NotificationDetailComponent } from './pages/notification/notification-list/notification-detail.component';
+import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
+import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
 
 export const routes: Routes = [
   {
-    path: 'landing-page',
-    component: LandingPageComponent,
+    path: 'landing-page-team',
+    component: LandingPageTeamComponent,
+    canActivate: [GuestGuard],
+  },
+  {
+    path: 'landing-page-tributico',
+    component: LandingPageTributicoComponent,
     canActivate: [GuestGuard],
   },
   {
@@ -37,7 +48,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'landing-page',
+    redirectTo: 'landing-page-team',
     pathMatch: 'full',
   },
   {
@@ -51,13 +62,49 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
+        path: 'reports-user',
+        component: ReportsUserComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Reportes',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'notifications',
+        component: NotificationsComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Notificaciones',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'notification',
+        component: NotificationDetailComponent,
+        data: {
+          authorities: [IRoleType.superAdmin],
+          name: 'Notificaciones',
+          showInSidebar: true
+        }
+      },
+      {
         path: 'create-simulation',
         component: CreateSimulationComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Crear Simulación',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'invoice',
+        component: InvoiceComponent,
         data: {
           authorities: [
             IRoleType.user
           ],
-          name: 'Crear Simulación',
+          name: 'Facturas',
           showInSidebar: true
         }
       },
@@ -120,6 +167,18 @@ export const routes: Routes = [
           showInSidebar: false
         }
       },
+      {
+        path: 'invoice-detail/:id',
+        component: InvoiceDetailComponent,
+        data: {
+          authorities: [
+            IRoleType.superAdmin,
+            IRoleType.user
+          ],
+          name: 'Detalle de Factura',
+          showInSidebar: false
+        }
+      }
     ],
   },
 ];

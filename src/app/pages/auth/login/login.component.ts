@@ -19,6 +19,7 @@ export class LoginComponent {
   @ViewChild('password') passwordModel!: NgModel;
   @ViewChild('expiredTokenModal') public expiredTokenModal: any;
   @ViewChild('blockedUserModal') public blockedUserModal: any;
+  @ViewChild('disabledUserModal') public disabledUserModal: any;
   public modalService: ModalService = inject(ModalService);
   private previousEmail: string = '';
   private actualEmail: string = '';
@@ -68,10 +69,13 @@ export class LoginComponent {
 
       this.authService.login(this.loginForm).subscribe({
         next: () => {
-          if (this.authService.userStatus) {
+          if (this.authService.userStatus === 'active') {
             this.router.navigateByUrl('/app/home');
-          } else {
+          } else if (this.authService.userStatus === 'blocked') {
             this.modalService.displayModal(this.blockedUserModal);
+            this.authService.logout();
+          } else if (this.authService.userStatus === 'disabled') {
+            this.modalService.displayModal(this.disabledUserModal);
             this.authService.logout();
           }
         },

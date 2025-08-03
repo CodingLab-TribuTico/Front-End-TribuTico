@@ -44,8 +44,8 @@
         </div>
 
         <button
-          class="bg-flamenco text-bisque font-semibold rounded-md py-2 mt-4 hover:bg-golden-glow hover:text-flamenco transition-colors"
-          type="submit">
+          class="bg-flamenco text-bisque font-semibold rounded-md py-2 mt-4 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:cursor-not-allowed disabled:text-bisque disabled:bg-flamenco disabled:opacity-80"
+          type="submit" [disabled]="!frm.valid">
           Iniciar sesión
         </button>
       </form>
@@ -89,6 +89,16 @@
     <p class="text-bisque text-base max-w-lg">
       Has excedido el número máximo de intentos fallidos (3) para ingresar tu contraseña. Por favor, contacta al
       administrador para restablecer el acceso.
+    </p>
+  </app-modal>
+</ng-template>
+
+<ng-template #disabledUserModal>
+  <app-modal (callConfirmationMethod)="hideModal()" [confirmAction]="'Cerrar'" [title]="'Cuenta desactivada.'"
+    [textCenter]="true" [icon]="'block'">
+    <p class="text-bisque text-base max-w-lg">
+      Tu cuenta ha sido desactivada. Si crees que se trata de un error, por favor comunícate con el administrador del
+      sistema.
     </p>
   </app-modal>
 </ng-template>
