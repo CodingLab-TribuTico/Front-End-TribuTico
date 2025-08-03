@@ -5,9 +5,9 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class GoogleAuthService {
-  private base: string = environment.apiUrl;
+  private base: string = environment.apiGoogleUrl;
 
   public loginWithGoogle(): void {
-    window.location.href = `${this.base}/auth/google`;
+    window.location.href = this.base;
   }
 }

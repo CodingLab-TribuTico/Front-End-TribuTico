@@ -14,6 +14,11 @@ module.exports = {
         'burnt-umber': '#B5473A',
         'goblin': '#3E885B',
         'isabelline': '#F2F1EC',
+        'heather-feather': '#252525',
+        'grayish-cyan': '#92B4A7',
+        'grayish-yellow': '#BDC4A7',
+        'light-grayish-yellow': '#F3F9D2',
+        'dark-grayish-red': '#93827F'
       },
       keyframes: {
         ripple: {

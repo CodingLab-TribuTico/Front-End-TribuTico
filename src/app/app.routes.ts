@@ -14,16 +14,22 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.component';
-import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { LandingPageTributicoComponent } from './pages/landing-page-tributico/landing-page-tributico.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { NotificationDetailComponent } from './pages/notification/notification-list/notification-detail.component';
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
+import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
 
 export const routes: Routes = [
   {
-    path: 'landing-page',
-    component: LandingPageComponent,
+    path: 'landing-page-team',
+    component: LandingPageTeamComponent,
+    canActivate: [GuestGuard],
+  },
+  {
+    path: 'landing-page-tributico',
+    component: LandingPageTributicoComponent,
     canActivate: [GuestGuard],
   },
   {
@@ -42,7 +48,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'landing-page',
+    redirectTo: 'landing-page-team',
     pathMatch: 'full',
   },
   {
@@ -64,7 +70,7 @@ export const routes: Routes = [
           showInSidebar: true
         }
       },
-       {
+      {
         path: 'notifications',
         component: NotificationsComponent,
         data: {
