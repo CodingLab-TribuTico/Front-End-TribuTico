@@ -15,14 +15,19 @@ import { NotificationBellComponent } from '../../components/notification-bell/no
 export class NotificationsComponent {
   private notificationService = inject(NotificationService);
 
-  notifications = this.notificationService.notifications$;
+  allNotifications = this.notificationService.allNotifications$;
+  selectedNotification: INotification | null = null;
 
   ngOnInit() {
     this.loadNotifications();
   }
 
   loadNotifications() {
-    this.notificationService.getPending();
+    this.notificationService.getAllByUserId();
+  }
+
+  selectNotification(notification: INotification){
+      this.selectedNotification = notification;
   }
 
   handleToggleDropdown(open: boolean) {
@@ -31,12 +36,12 @@ export class NotificationsComponent {
     }
   }
 
-  handleMarkAsRead(notification: INotification) {
-    this.notificationService.updateNotification({
-      ...notification,
-      state: 'read'
-    });
+  handleMarkAsRead(notificationId: number) {
+    this.notificationService.markNotificationRead(notificationId);
+    this.loadNotifications();
   }
+
+  
 
   // handleMarkAllAsRead() {
   //   const currentNotifications = this.notifications();
@@ -47,8 +52,8 @@ export class NotificationsComponent {
   //   });
   // }
 
-  traer() {
-    this.notificationService.getPending;
+  traer(selectedNotification: INotification) {
+    console.log('Prueba', selectedNotification.isRead);
   }
 
 }

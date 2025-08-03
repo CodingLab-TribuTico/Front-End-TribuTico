@@ -10,6 +10,7 @@ import { tap } from 'rxjs';
 export class NotificationService extends BaseService<IResponse<any>> {
   protected override source: string = 'notifications';
   private notificationsList = signal<INotification[]>([]);
+  private allNotificationList =  signal<INotification[]>([]);
   private alertService: AlertService = inject(AlertService);
 
   public search: ISearch = {
@@ -22,6 +23,10 @@ export class NotificationService extends BaseService<IResponse<any>> {
 
   get notifications$() {
     return this.notificationsList.asReadonly();
+  }
+
+  get allNotifications$(){
+    return  this.allNotificationList.asReadonly();
   }
 
   public unreadCount = computed(() =>
@@ -43,10 +48,9 @@ export class NotificationService extends BaseService<IResponse<any>> {
   }
 
   getPending() {
-    this.findAllWithParamsAndCustomSource('pending', { page: this.search.page, size: this.search.size, search: this.search.search }).subscribe({
+    this.findAllWithParamsAndCustomSource('pending').subscribe({
       next: (response: any) => {
         console.log(response);
-        this.search = { ...this.search, ...response.meta };
         this.notificationsList.set(response.data);
       }, error: (err: any) => {
         this.alertService.showAlert('error', 'Ocurrió un error al recuperar las notificaciones pendientes');
@@ -54,6 +58,20 @@ export class NotificationService extends BaseService<IResponse<any>> {
     });
   }
 
+  getAllByUserId(){
+    this.findAllWithParamsAndCustomSource('all').subscribe({
+      next: (response: any) => {
+        const notifications = response.data.map((item: any) => ({
+        ...item.notification, 
+        isRead: item.read
+      }));
+        console.log(response);
+        this.allNotificationList.set(notifications);
+      }, error: (err: any) => {
+        this.alertService.showAlert('error', 'Ocurrio un error al recuperar las notificaciones');
+      }
+    })
+  }
 
   saveNotification(notification: INotification) {
     this.add(notification).subscribe({
@@ -78,6 +96,25 @@ export class NotificationService extends BaseService<IResponse<any>> {
       }
     });
   }
+
+  markNotificationRead(notificationId: number) {
+  return this.patchCustomSource('read',{notificationId} as any).pipe(
+    tap({
+      next: (response: IResponse<any>) => {
+        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        // Actualizar el estado local
+        this.allNotificationList.update(notifications => 
+          notifications.map(n => 
+            n.id === notificationId ? {...n, isRead: true} : n
+          )
+        );
+      },
+      error: (err: any) => {
+        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar la notificación', 'center', 'top', ['error-snackbar']);
+      }
+    })
+  );
+}
 
   delete(notification: INotification) {
     this.delCustomSource(`${notification.id}`).subscribe({
