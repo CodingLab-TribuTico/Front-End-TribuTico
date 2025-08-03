@@ -13,12 +13,13 @@ import { TaxBaseComponent } from '../../components/isr-simulation/tax-base/tax-b
 import { CreditsComponent } from '../../components/isr-simulation/credits/credits.component';
 import { SettlementTaxDebtComponent } from '../../components/isr-simulation/settlement-tax-debt/settlement-tax-debt.component';
 import { GeneralDataComponent } from '../../components/isr-simulation/general-data/general-data.component';
+import { IvaSimulationComponent } from '../../components/iva-simulation/iva-simulation.component';
 
 @Component({
   selector: 'app-create-simulation',
   standalone: true,
   imports: [GeneralDataComponent, CommonModule, ReactiveFormsModule, LoaderComponent,
-    AssetsLiabilitiesComponent, IncomeComponent, CostsExpensesDeductionsComponent, TaxBaseComponent, CreditsComponent, SettlementTaxDebtComponent
+    AssetsLiabilitiesComponent, IncomeComponent, CostsExpensesDeductionsComponent, TaxBaseComponent, CreditsComponent, SettlementTaxDebtComponent, IvaSimulationComponent
   ],
   templateUrl: './create-simulation.component.html',
 })
@@ -52,14 +53,12 @@ export class CreateSimulationComponent {
   ];
 
   public formIsrSimulation: FormGroup = this.fb.group({
-    simulationType: ['isr', Validators.required],
     year: ["", Validators.required],
     childrenNumber: [0, [Validators.required, Validators.min(0)]],
     hasSpouse: [false],
   });
 
   public formIvaSimulation: FormGroup = this.fb.group({
-    simulationType: ['iva', Validators.required],
     year: ['', Validators.required],
     month: ['', Validators.required]
   });
@@ -69,20 +68,6 @@ export class CreateSimulationComponent {
     const userId = user.id;
     this.generateYears();
     this.initializeMockData(); 
-    
-    effect(() => {
-      this.isrSimulation = this.isrSimulationService.isrSimulation;
-      if (this.isrSimulation) {
-        this.isrSimulationShown = true;
-      }
-    });
-
-    effect(() => {
-      this.ivaSimulation = this.ivaSimulationService.ivaSimulation;
-      if (this.ivaSimulation) {
-        this.ivaSimulationShown = true;
-      }
-    });
   }
 
   initializeMockData() {
@@ -110,11 +95,10 @@ export class CreateSimulationComponent {
     const target = event.target as HTMLSelectElement;
     this.type = target.value;
 
-    if (this.type === 'isr') {
-      this.type = 'isr';
-    } else {
-      this.type = 'iva';
-    }
+    this.isrSimulationShown = false;
+    this.ivaSimulationShown = false;
+    this.isrSimulation = null;
+    this.ivaSimulation = null;
   }
 
   onSubmit() {
@@ -122,6 +106,7 @@ export class CreateSimulationComponent {
     const { year, childrenNumber, hasSpouse } = this.formIsrSimulation.value;
 
     this.isrSimulationShown = false;
+    this.isrSimulation = null;
 
     this.isrSimulationService.createSimulation(year, childrenNumber, hasSpouse);
 
@@ -246,7 +231,5 @@ export class CreateSimulationComponent {
     return 'Crear simulación IVA';
   }
 }
-function effect(arg0: () => void) {
-  throw new Error('Function not implemented.');
-}
+
 
