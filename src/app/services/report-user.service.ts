@@ -1,7 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { IManualInvoice, IResponse, ISearch } from '../interfaces';
+import { IResponse, ISearch } from '../interfaces';
 import { BaseService } from './base-service';
-import { InvoiceService } from './invoice.service';
 import { AlertService } from './alert.service';
 
 @Injectable({
@@ -10,10 +9,9 @@ import { AlertService } from './alert.service';
 export class ReportUserService extends BaseService<IResponse<any>> {
   protected override source: string = 'reports-user';
   private alertService: AlertService = inject(AlertService);
-  public invoiceService: InvoiceService = inject(InvoiceService);
   private invoicesMonthlyIncomesAndExpenses = signal<any[]>([]);
   private invoicesMonthlyCashFlow = signal<any[]>([]);
-  private invoicesTrimesterCashFlow = signal<any[]>([])
+  private invoicesTrimesterCashFlow = signal<any[]>([]);
   private invoicesTop5ExpenseCategories = signal<any[]>([]);
 
   public categories: Record<string, string> = {
@@ -64,20 +62,29 @@ export class ReportUserService extends BaseService<IResponse<any>> {
     year: 0
   };
 
+  private mapObjectToArray(dataObj: Record<string, number>): number[] {
+    return Object.keys(dataObj)
+      .sort((a, b) => Number(a) - Number(b))
+      .map(key => dataObj[key]);
+  }
+
   getAllIncomeAndExpenses() {
     this.findAllWithParamsAndCustomSource("income-and-expenses", {
       year: this.search.year,
     }).subscribe({
-      next: (response: IResponse<any[]>) => {
+      next: (response: IResponse<any>) => {
+        const incomes = this.mapObjectToArray(response.data.income);
+        const expenses = this.mapObjectToArray(response.data.expenses);
+
         this.invoicesMonthlyIncomesAndExpenses.set([
           {
             label: "Ingresos",
-            data: response.data[0],
+            data: incomes,
             backgroundColor: '#4A403D'
           },
           {
             label: "Gastos",
-            data: response.data[1],
+            data: expenses,
             backgroundColor: '#EA804C'
           }
         ]);
@@ -92,25 +99,29 @@ export class ReportUserService extends BaseService<IResponse<any>> {
     this.findAllWithParamsAndCustomSource("monthly-cash-flow", {
       year: this.search.year,
     }).subscribe({
-      next: (response: IResponse<any[]>) => {
+      next: (response: IResponse<any>) => {
+        const incomes = this.mapObjectToArray(response.data.income);
+        const expenses = this.mapObjectToArray(response.data.expenses);
+        const cashFlow = this.mapObjectToArray(response.data.cashFlow);
+
         this.invoicesMonthlyCashFlow.set([
           {
             label: "Ingresos",
-            data: response.data[0],
+            data: incomes,
             backgroundColor: '#3E885B',
             borderColor: '#3E885B',
             borderWidth: 2,
           },
           {
             label: "Gastos",
-            data: response.data[1],
+            data: expenses,
             backgroundColor: '#8B2F25',
             borderColor: '#8B2F25',
             borderWidth: 2,
           },
           {
             label: "Flujo de Caja",
-            data: response.data[2],
+            data: cashFlow,
             backgroundColor: '#4A403D',
             borderColor: '#4A403D',
             borderWidth: 2,
@@ -127,25 +138,29 @@ export class ReportUserService extends BaseService<IResponse<any>> {
     this.findAllWithParamsAndCustomSource("trimester-cash-flow", {
       year: this.search.year,
     }).subscribe({
-      next: (response: IResponse<any[]>) => {
+      next: (response: IResponse<any>) => {
+        const incomes = this.mapObjectToArray(response.data.income);
+        const expenses = this.mapObjectToArray(response.data.expenses);
+        const cashFlow = this.mapObjectToArray(response.data.cashFlow);
+
         this.invoicesTrimesterCashFlow.set([
           {
             label: "Ingresos",
-            data: response.data[0],
+            data: incomes,
             backgroundColor: '#3E885B',
             borderColor: '#3E885B',
             borderWidth: 2,
           },
           {
             label: "Gastos",
-            data: response.data[1],
+            data: expenses,
             backgroundColor: '#8B2F25',
             borderColor: '#8B2F25',
             borderWidth: 2,
           },
           {
             label: "Flujo de Caja",
-            data: response.data[2],
+            data: cashFlow,
             backgroundColor: '#4A403D',
             borderColor: '#4A403D',
             borderWidth: 2,
@@ -165,7 +180,7 @@ export class ReportUserService extends BaseService<IResponse<any>> {
       next: (response: IResponse<any[]>) => {
         const top5 = response.data;
         const labels = top5.map(item => this.categories[item.category] ?? item.category);
-        const data = top5.map(item => item.total)
+        const data = top5.map(item => item.total);
         const colors = ['#B5473A', '#FACF7D', '#EA804C', '#FFF1C1', '#4A403D'];
 
         this.invoicesTop5ExpenseCategories.set([{

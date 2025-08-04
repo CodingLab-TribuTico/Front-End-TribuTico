@@ -20,6 +20,7 @@ import { NotificationsComponent } from './pages/notifications/notifications.comp
 import { NotificationDetailComponent } from './pages/notification/notification-list/notification-detail.component';
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
 import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
+import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
 
 export const routes: Routes = [
   {
@@ -60,6 +61,15 @@ export const routes: Routes = [
         path: 'app',
         redirectTo: 'users',
         pathMatch: 'full',
+      },
+      {
+        path: 'reports-admin',
+        component: ReportsAdminComponent,
+        data: {
+          authorities: [IRoleType.superAdmin],
+          name: 'Reportes',
+          showInSidebar: true
+        }
       },
       {
         path: 'reports-user',
