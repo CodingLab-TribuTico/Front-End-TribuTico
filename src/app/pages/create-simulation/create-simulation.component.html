@@ -1,10 +1,11 @@
-@if(!isrSimulationShown) {
-<form [formGroup]="formIsrSimulation" (ngSubmit)="onSubmit()"
-    class="flex flex-col space-y-4 bg-crater-brown p-6 rounded-md">
+@if(!isrSimulationShown && !ivaSimulationShown) {
+<form [formGroup]="type === 'isr' ? formIsrSimulation : formIvaSimulation" 
+      (ngSubmit)="type === 'isr' ? onSubmit() : onSubmitIVA()"
+      class="flex flex-col space-y-4 bg-crater-brown p-6 rounded-md">
     <label for="type" class="text-base font-semibold text-bisque">Tipo de simulación:</label>
     <select id="simulationType"
         class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
-        (change)="changeType($event)" formControlName="simulationType">
+        (change)="changeType($event)" [value]="type">
         <option value="isr">Impuesto sobre la Renta (ISR)</option>
         <option value="iva">Impuesto sobre el Valor Agregado (IVA)</option>
     </select>
@@ -18,18 +19,16 @@
         @for (year of loadInvoicesYears(invoiceService.invoicesByUserId$()); track year) {
         <option [value]="year">{{ year }}</option>
         }
-        @if (formIsrSimulation.controls['year'].invalid && (formIsrSimulation.controls['year'].dirty ||
-        formIsrSimulation.controls['year'].touched)) {
-        <div class="text-burnt-umber text-sm">El año es obligatorio.</div>
-        }
     </select>
+    @if (formIsrSimulation.get('year')?.invalid && (formIsrSimulation.get('year')?.dirty || formIsrSimulation.get('year')?.touched)) {
+    <div class="text-burnt-umber text-sm">El año es obligatorio.</div>
+    }
 
     <label for="childrenNumber" class="text-base font-semibold text-bisque">Número de hijos<span
             class="text-burnt-umber">*</span></label>
     <input type="number" id="childrenNumber" formControlName="childrenNumber"
         class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow" />
-    @if (formIsrSimulation.controls['childrenNumber'].invalid && (formIsrSimulation.controls['childrenNumber'].dirty ||
-    formIsrSimulation.controls['childrenNumber'].touched)) {
+    @if (formIsrSimulation.get('childrenNumber')?.invalid && (formIsrSimulation.get('childrenNumber')?.dirty || formIsrSimulation.get('childrenNumber')?.touched)) {
     <div class="text-burnt-umber text-sm">El número de hijos es obligatorio.</div>
     }
 
@@ -49,12 +48,43 @@
     </div>
     }
 
-    <button type="submit" [disabled]="formIsrSimulation.invalid"
+    @if (type === 'iva') {
+    <label for="ivaYear" class="text-base font-semibold text-bisque">Año<span class="text-burnt-umber">*</span></label>
+    <select id="ivaYear"
+        class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+        formControlName="year">
+        <option value="" disabled selected>Seleccione un año</option>
+        @for (year of loadInvoicesYears(invoiceService.invoices$()); track year) {
+        <option [value]="year">{{ year }}</option>
+        }
+    </select>
+    @if (formIvaSimulation.get('year')?.invalid && (formIvaSimulation.get('year')?.dirty || formIvaSimulation.get('year')?.touched)) {
+    <div class="text-burnt-umber text-sm">El año es obligatorio.</div>
+    }
+
+    <label for="ivaMonth" class="text-base font-semibold text-bisque">Mes<span class="text-burnt-umber">*</span></label>
+    <select id="ivaMonth"
+        class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+        formControlName="month">
+        <option value="" disabled selected>Seleccione un mes</option>
+        @for (month of getAvailableMonths(); track month.value) {
+        <option [value]="month.value">{{ month.name }}</option>
+        }
+    </select>
+    @if (formIvaSimulation.get('month')?.invalid && (formIvaSimulation.get('month')?.dirty || formIvaSimulation.get('month')?.touched)) {
+    <div class="text-burnt-umber text-sm">El mes es obligatorio.</div>
+    }
+    }
+
+    <button type="submit" 
+        [disabled]="type === 'isr' ? !isIsrFormValid() : !isIvaFormValid()"
         class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque disabled:bg-burnt-umber">
-        Crear simulación
+        {{ type === 'isr' ? getIsrButtonText() : getIvaButtonText() }}
     </button>
 </form>
-} @else {
+}
+
+@if (isrSimulationShown && isrSimulation) {
 @defer {
 <div class="w-full">
     <div class="flex flex-col w-full space-y-10">
@@ -108,4 +138,20 @@
 } @loading (minimum 1s){
 <app-loader></app-loader>
 }
+}
+
+@if (ivaSimulationShown && ivaSimulation) {
+<div>
+    <app-iva-simulation 
+        [simulation]="ivaSimulation"
+        [simulationPeriod]="getIvaSimulationPeriod()"
+        [simulationName]="getIvaSimulationName()"
+        [simulationIdentification]="getIvaSimulationIdentification()" />
+    <div class="flex justify-center mt-4">
+        <button (click)="closeSimulation()"
+            class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+            Regresar
+        </button>
+    </div>
+</div>
 }
