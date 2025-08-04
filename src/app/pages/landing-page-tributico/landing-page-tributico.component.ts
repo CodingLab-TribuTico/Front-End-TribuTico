@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AccordionComponent } from '../../components/landing-page/accordion/accordion.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,14 +10,20 @@ import { RouterLink } from '@angular/router';
   selector: 'app-landing-page',
   standalone: true,
   imports: [AccordionComponent, CommonModule, MatIconModule, CardBenefitsComponent, CardHowWorksComponent, RouterLink],
-  templateUrl: './landing-page.component.html',
+  templateUrl: './landing-page-tributico.component.html',
 })
-export class LandingPageComponent {
+export class LandingPageTributicoComponent implements AfterViewInit {
   public burgerMenuOpen: boolean = false;
   @ViewChild('hero') heroSection!: ElementRef;
   @ViewChild('benefits') benefitsSection!: ElementRef;
   @ViewChild('howItWorks') howItWorksSection!: ElementRef;
   @ViewChild('faq') faqSection!: ElementRef;
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 0);
+  }
 
   toggleBurgerMenu(): void {
     this.burgerMenuOpen = !this.burgerMenuOpen;

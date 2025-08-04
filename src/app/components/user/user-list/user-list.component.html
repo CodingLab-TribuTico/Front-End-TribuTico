@@ -32,9 +32,10 @@
             </span>
           </button>
           <button (click)="openModal(item)" [disabled]="(item.id == idUser)"
-            class="group bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-golden-glow hover:bg-bisque ml-2"
+            class="group bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber hover:bg-bisque ml-2"
             type="button">
-            <span class="material-symbols-rounded text-lg text-crater-brown">
+            <span class="material-symbols-rounded text-lg"
+              [ngClass]="item.id === idUser ? 'text-bisque' : 'text-crater-brown'">
               delete
             </span>
           </button>
