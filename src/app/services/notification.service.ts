@@ -48,6 +48,18 @@ export class NotificationService extends BaseService<IResponse<any>> {
     });
   }
 
+  updateNotification(notification: INotificationGlobal) {
+    this.edit(notification.id, notification).subscribe({
+      next: (response: IResponse<any>) => {
+        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.getAll();
+      },
+      error: (err: any) => {
+        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar la notificación', 'center', 'top', ['error-snackbar']);
+      }
+    });
+  }
+
   delete(notification: INotificationGlobal) {
     this.delCustomSource(`${notification.id}`).subscribe({
       next: (response: any) => {

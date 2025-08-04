@@ -12,13 +12,13 @@
       </span>
       <input (keyup)="search($event)" type="text"
         class="bg-crater-brown text-bisque placeholder:text-bisque text-base font-bold w-full"
-        placeholder="Buscar por tipo">
+        placeholder="Buscar por Tipo">
     </div>
   </div>
 
   <div>
     <app-notification-list (callDeleteAction)="notificationService.delete($event)"
-      [notifications]="notificationService.notifications$()" />
+      (callEditAction)="editNotification($event)" [notifications]="notificationService.notifications$()" />
 
     @if(notificationService.notifications$().length) {
     <app-pagination [service]="notificationService" />
@@ -32,8 +32,9 @@
 <ng-template #addNotificationsModal>
   <app-modal [hideFooter]="true" (callCancelMethod)="hideModal()">
     <div>
-      <app-notification-form [notificationForm]="notificationForm" [cancelOption]="true"
-        (callSaveMethod)="saveNotification($event)" (callCancelMethod)="hideModal()" />
+      <app-notification-form [notificationForm]="notificationForm" [cancelOption]="true" [isEditMode]="isEditing"
+        (callSaveMethod)="saveNotification($event)" (callUpdateMethod)="saveNotification($event)"
+        (callCancelMethod)="cancelForm()" />
     </div>
   </app-modal>
 </ng-template>

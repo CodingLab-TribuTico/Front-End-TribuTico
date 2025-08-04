@@ -17,7 +17,7 @@ import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.co
 import { LandingPageTributicoComponent } from './pages/landing-page-tributico/landing-page-tributico.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { NotificationDetailComponent } from './pages/notification/notification-list/notification-detail.component';
+import { NotificationDetailComponent } from './pages/notification-list/notification-detail.component';
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
 import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
 import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
