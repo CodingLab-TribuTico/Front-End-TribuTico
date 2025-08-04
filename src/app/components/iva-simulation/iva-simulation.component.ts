@@ -22,7 +22,6 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
   @Input() simulationIdentification: string = '';
   @Input() simulation!: IIvaCalculation;
 
-  // Formulario para crear simulación
   selectedYear = new Date().getFullYear();
   selectedMonth = new Date().getMonth() + 1;
   loading = false;
@@ -37,7 +36,7 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
   ventasSujetas2Enabled: boolean = false;
   ventasSujetas4Enabled: boolean = false;
   ventasSujetas8Enabled: boolean = false;
-  ventasSujetas10Enabled: boolean = false; // ✅ NUEVO
+  ventasSujetas10Enabled: boolean = false; 
   ventasSujetas13Enabled: boolean = false;
 
   constructor(
@@ -47,7 +46,6 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    // Obtener datos del usuario actual si no hay simulación
     if (!this.simulation) {
       const currentUser = this.authService.getUser();
       if (currentUser) {
@@ -56,22 +54,18 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
 
-    // Auto-activar secciones que tienen datos
     this.autoActivateSectionsWithData();
   }
 
   ngOnChanges(changes: SimpleChanges): void {    
     if (changes['simulation'] && changes['simulation'].currentValue) {
-      // Re-activar secciones cuando cambian los datos
       setTimeout(() => {
         this.autoActivateSectionsWithData();
-        // Forzar detección de cambios
         this.cdr.detectChanges();
       }, 0);
     }
   }
 
-  // Auto-activar secciones que tienen datos
   autoActivateSectionsWithData(): void {
     const sim = this.currentSimulation;
     
@@ -79,13 +73,11 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    // Activar base imponible si hay datos
     if (sim.iva1Percent || sim.iva2Percent || sim.iva4Percent || sim.iva8Percent || sim.iva10Percent || sim.iva13Percent ||
         sim.ivaVentasBienes || sim.ivaVentasServicios) {
       this.ventasSujetasEnabled = true;
     }
 
-    // Activar cada sección específica si tiene datos
     if (sim.iva1Percent && sim.iva1Percent > 0) {
       this.ventasSujetas1Enabled = true;
     }
@@ -107,7 +99,6 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
       this.ventasSujetas13Enabled = true;
     }
     
-    // Activar también si hay ventas de bienes o servicios
     if (sim.ivaVentasBienes && sim.ivaVentasBienes > 0) {
       this.ventasSujetas13Enabled = true;
     }
@@ -115,7 +106,6 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
       this.ventasSujetas13Enabled = true;
     }
 
-    // Forzar detección de cambios
     this.cdr.detectChanges();
   }
 
@@ -123,12 +113,10 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     this.ivaService.clearSimulation();
   }
 
-  // Getter para obtener la simulación actual del servicio
   get currentSimulation(): IIvaCalculation | null {
     return this.simulation || this.ivaService.ivaSimulation;
   }
 
-  // Crear simulación
   createSimulation(): void {
     const currentUser = this.authService.getUser();
     const userId = this.authService.getCurrentUserId();
@@ -142,17 +130,14 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     
     this.ivaService.createSimulation(this.selectedYear, this.selectedMonth, userId);
     
-    // Simular un delay para mostrar el loading
     setTimeout(() => {
       this.loading = false;
-      // Actualizar los datos de periodo si se creó la simulación
       if (this.ivaService.ivaSimulation) {
         this.simulationPeriod = `${this.getMonthName(this.ivaService.ivaSimulation.month)} ${this.ivaService.ivaSimulation.year}`;
       }
     }, 1500);
   }
 
-  // Obtener nombre del mes
   getMonthName(month: number): string {
     const months = [
       'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -161,7 +146,6 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     return months[month - 1] || 'Mes desconocido';
   }
 
-  // Formatear moneda
   formatCurrency(value: number): string {
     return new Intl.NumberFormat('es-CR', {
       style: 'currency',
@@ -322,7 +306,6 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     };
   }
 
-  // Método para obtener los valores de la tabla según la tarifa
   getTableValues(percentage: number): { [key: string]: number }[] {
     const sim = this.currentSimulation;
     
@@ -335,30 +318,27 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
 
     switch (percentage) {
       case 10:
-        // Para 10%, usar directamente el campo iva10Percent
         rawValues = [
-          sim.iva10Percent || 0, // Bienes - usar directamente el valor del backend
-          0, // Bienes de capital
-          0, // Servicios - por ahora en 0, ajustar si hay campo específico
-          0, // Uso o consumo personal
-          0  // Transferencias
+          sim.iva10Percent || 0, 
+          0, 
+          0, 
+          0, 
+          0  
         ];
         break;
       case 13:
-        // Para 13%, usar los campos específicos del JSON
         rawValues = [
-          sim.ivaVentasBienes || 0, // Bienes (130 según tu JSON)
-          0, // Bienes de capital  
-          sim.ivaVentasServicios || 0, // Servicios (100 según tu JSON)
-          0, // Uso o consumo personal
-          0  // Transferencias
+          sim.ivaVentasBienes || 0, 
+          0, 
+          sim.ivaVentasServicios || 0, 
+          0, 
+          0  
         ];
         break;
       default:
         return [{}, {}, {}, {}, {}];
     }
 
-    // Convertir array simple a formato de objetos que espera la tabla
     const formattedValues = rawValues.map(value => ({ [percentageKey]: value }));
     
     return formattedValues;

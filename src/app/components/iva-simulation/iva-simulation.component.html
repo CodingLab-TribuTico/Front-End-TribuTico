@@ -26,9 +26,7 @@
             </div>
         </div>
 
-        <!-- Mostrar componentes solo si hay simulación -->
         <div *ngIf="currentSimulation">
-            <!-- I. TOTAL DE VENTAS SUJETAS, EXENTAS Y NO SUJETAS -->
             <app-section-iva-simulation 
                 [sectionTitle]="ventasSujetasSection.sectionTitle"
                 [hasToggle]="ventasSujetasSection.hasToggle"
@@ -38,7 +36,6 @@
                 [subsections]="ventasSujetasSection.subsections">
             </app-section-iva-simulation>
 
-            <!-- II. BASE IMPONIBLE -->
             <app-tax-base
                 [simulationPeriod]="simulationPeriod"
                 [simulationName]="simulationName"
@@ -46,7 +43,6 @@
                 [simulation]="currentSimulation">
             </app-tax-base>
 
-            <!-- III. VENTAS EXENTAS -->
             <app-exempt-sales
                 [simulationPeriod]="simulationPeriod"
                 [simulationName]="simulationName"
@@ -54,7 +50,6 @@
                 [simulation]="currentSimulation">
             </app-exempt-sales>
 
-            <!-- IV. VENTAS NO SUJETAS -->
             <app-sales-not-subject
                 [simulationPeriod]="simulationPeriod"
                 [simulationName]="simulationName"
@@ -62,7 +57,6 @@
                 [simulation]="currentSimulation">
             </app-sales-not-subject>
 
-            <!-- V. TOTAL DE COMPRAS -->
             <app-total-sales
                 [simulationPeriod]="simulationPeriod"
                 [simulationName]="simulationName"
@@ -71,7 +65,6 @@
             </app-total-sales>
         </div>
 
-        <!-- Mensaje cuando no hay simulación -->
         <div *ngIf="!currentSimulation && !loading" class="text-center py-8">
             <p class="text-gray-600">No hay datos de simulación disponibles.</p>
             <p class="text-gray-600">Complete el formulario anterior para crear una simulación.</p>
