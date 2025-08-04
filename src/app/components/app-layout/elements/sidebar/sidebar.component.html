@@ -24,6 +24,9 @@
       @if (route.data['name'] == "Notificaciones" && role == "USER") {
       <p class="px-2 font-semibold text-zorba pb-1 pt-3">ANALÍTICAS</p>
       }
+      @if (route.data['name'] == "Notificaciones" && role == "SUPER_ADMIN") {
+      <p class="px-2 font-semibold text-zorba pb-1 pt-3">ANALÍTICAS</p>
+      }
       }
       }
     </nav>

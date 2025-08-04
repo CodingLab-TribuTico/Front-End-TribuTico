@@ -11,6 +11,7 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() labels: string[] = [];
   @Input() datasets: any[] = [];
   @Input() type: ChartType = 'bar';
+  @Input() horizontal: boolean = false; // nuevo input
 
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   public chart!: Chart;
@@ -20,7 +21,7 @@ export class ChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['datasets'] || changes['labels']) {
+    if (changes['datasets'] || changes['labels'] || changes['horizontal']) {
       this.renderChart();
     }
   }
@@ -38,6 +39,7 @@ export class ChartComponent implements OnInit, OnChanges {
       },
       options: {
         responsive: true,
+        indexAxis: this.horizontal ? 'y' : 'x',
       }
     });
   }
