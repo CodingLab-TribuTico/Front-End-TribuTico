@@ -129,7 +129,7 @@ export class ReportUserService extends BaseService<IResponse<any>> {
         ]);
       },
       error: () => {
-        this.alertService.showAlert('error', 'Ocurrió al obtener el flujo de caja mensual');
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener el flujo de caja mensual');
       },
     });
   }
@@ -167,8 +167,8 @@ export class ReportUserService extends BaseService<IResponse<any>> {
           }
         ]);
       },
-      error: (err: any) => {
-        console.error("error", err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener el flujo de caja trimestral');
       },
     });
   }
