@@ -31,6 +31,9 @@ export class ReportsAdminComponent {
   public hasMonthlyVolumeInvoices = computed(() => this.hasPositiveValues(this.reportAdminService.monthlyVolumeInvoices$()));
   public hasProportionTotalIncomeAndExpenses = computed(() => this.hasPositiveValues(this.reportAdminService.proportionTotalIncomeAndExpenses$()))
   public hasTop10HighestUsersVolumeInvoices = computed(() => this.hasPositiveValues(this.reportAdminService.top10HighestUsersVolumeInvoices$()));
+  public hasTop10UsersByInvoiceCount = computed(() => this.hasPositiveValues(this.reportAdminService.top10UsersByInvoiceCount$()));
+  public hasMonthlyIncomeExpenses = computed(() => this.hasPositiveValues(this.reportAdminService.monthlyIncomeExpenses$()));
+  public hasTop10UsersByBalance = computed(() => this.hasPositiveValues(this.reportAdminService.top10UsersByBalance$()));
 
   private hasPositiveValues(data: any): boolean {
     if (!data) return false;
@@ -89,6 +92,9 @@ export class ReportsAdminComponent {
     this.reportAdminService.getAllMonthlyVolumeInvoices();
     this.reportAdminService.getAllProportionTotalIncomeAndExpenses();
     this.reportAdminService.getAllTop10HighestUsersVolumeInvoices();
+    this.reportAdminService.getAllTop10UsersByInvoiceCount();
+    this.reportAdminService.getAllMonthlyIncomeAndExpenses();
+    this.reportAdminService.getTop10UsersByBalance();
   }
 
   changeYear(event: Event, reportType: string) {
@@ -106,6 +112,10 @@ export class ReportsAdminComponent {
       case 'proportionTotalIncomeAndExpenses':
         this.reportAdminService.search.year = year;
         this.reportAdminService.getAllProportionTotalIncomeAndExpenses();
+        break;
+      case 'monthlyIncomeAndExpenses':
+        this.reportAdminService.search.year = year;
+        this.reportAdminService.getAllMonthlyIncomeAndExpenses();
         break;
     }
   }

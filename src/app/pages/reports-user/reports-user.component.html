@@ -28,7 +28,7 @@
             class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
             formControlName="year">
             <option value=0 selected>Todos</option>
-            @for (year of loadInvoicesYears(invoiceService.invoicesByUserId$()); track year) {
+            @for (year of loadInvoicesYears(this.invoiceService.invoices$()); track year) {
             <option [value]="year">{{ year }}</option>
             }
         </select>
@@ -71,7 +71,7 @@
                 class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
                 formControlName="year">
                 <option value=0 selected>Todos</option>
-                @for (year of loadInvoicesYears(invoiceService.invoicesByUserId$()); track year) {
+                @for (year of loadInvoicesYears(this.invoiceService.invoices$()); track year) {
                 <option [value]="year">{{ year }}</option>
                 }
             </select>
@@ -109,7 +109,7 @@
             class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
             formControlName="year">
             <option value=0 selected>Todos</option>
-            @for (year of loadInvoicesYears(this.invoiceService.invoicesByUserId$()); track year) {
+            @for (year of loadInvoicesYears(this.invoiceService.invoices$()); track year) {
             <option [value]="year">{{ year }}</option>
             }
         </select>

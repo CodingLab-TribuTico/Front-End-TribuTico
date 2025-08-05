@@ -66,19 +66,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
     });
   }
 
-  getByUserId(userId: number) {
-    this.findAllWithParams({ userId }).subscribe({
-      next: (response: IResponse<IManualInvoice[]>) => {
-        this.search = { ...this.search, ...response.meta };
-        this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-        this.invoicesList.set(response.data);
-      },
-      error: () => {
-        this.alertService.showAlert('error', 'Ocurrió un error al recuperar las facturas del usuario');
-      }
-    });
-  }
-
   save(item: IManualInvoice) {
     this.add(item).subscribe({
       next: (response: IResponse<IManualInvoice>) => {

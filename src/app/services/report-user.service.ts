@@ -108,15 +108,15 @@ export class ReportUserService extends BaseService<IResponse<any>> {
           {
             label: "Ingresos",
             data: incomes,
-            backgroundColor: '#3E885B',
-            borderColor: '#3E885B',
+            backgroundColor: '#FACF7D',
+            borderColor: '#FACF7D',
             borderWidth: 2,
           },
           {
             label: "Gastos",
             data: expenses,
-            backgroundColor: '#8B2F25',
-            borderColor: '#8B2F25',
+            backgroundColor: '#EA804C',
+            borderColor: '#EA804C',
             borderWidth: 2,
           },
           {
@@ -147,15 +147,15 @@ export class ReportUserService extends BaseService<IResponse<any>> {
           {
             label: "Ingresos",
             data: incomes,
-            backgroundColor: '#3E885B',
-            borderColor: '#3E885B',
+            backgroundColor: '#FACF7D',
+            borderColor: '#FACF7D',
             borderWidth: 2,
           },
           {
             label: "Gastos",
             data: expenses,
-            backgroundColor: '#8B2F25',
-            borderColor: '#8B2F25',
+            backgroundColor: '#EA804C',
+            borderColor: '#EA804C',
             borderWidth: 2,
           },
           {
