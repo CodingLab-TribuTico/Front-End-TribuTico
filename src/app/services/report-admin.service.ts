@@ -14,6 +14,9 @@ export class ReportAdminService extends BaseService<IResponse<any>> {
   private monthlyVolumeInvoices = signal<any[]>([]);
   private proportionTotalIncomeAndExpenses = signal<any[]>([]);
   private top10HighestUsersVolumeInvoices = signal<any[]>([]);
+  private top10UsersByInvoiceCount = signal<any[]>([]);
+  private monthlyIncomeExpenses = signal<any[]>([]);
+  private top10UsersByBalance = signal<any[]>([]);
 
   get registeredMonthlyUsers$() {
     return this.registeredMonthlyUsers;
@@ -35,21 +38,35 @@ export class ReportAdminService extends BaseService<IResponse<any>> {
     return this.top10HighestUsersVolumeInvoices;
   }
 
+  get top10UsersByInvoiceCount$() {
+    return this.top10UsersByInvoiceCount;
+  }
+
+  get monthlyIncomeExpenses$() {
+    return this.monthlyIncomeExpenses;
+  }
+
+  get top10UsersByBalance$() {
+    return this.top10UsersByBalance;
+  }
+
   public search: ISearch = {
     year: 0
   };
+
+  private generateMonthlyData(monthlyData: any, data: any): number[] {
+    for (let month = 1; month <= 12; month++) {
+      monthlyData[month - 1] = data[month] ?? 0;
+    }
+    return monthlyData;
+  }
 
   getAllRegisteredMonthlyUsers() {
     this.findAllWithParamsAndCustomSource("registered-users", {
       year: this.search.year,
     }).subscribe({
       next: (response: IResponse<any[]>) => {
-        const monthlyData: number[] = Array(12).fill(0);
-        const dataObj = response.data;
-
-        for (let month = 1; month <= 12; month++) {
-          monthlyData[month - 1] = dataObj[month] ?? 0;
-        }
+        const monthlyData = this.generateMonthlyData([], response.data);
 
         this.registeredMonthlyUsers.set([
           {
@@ -77,11 +94,7 @@ export class ReportAdminService extends BaseService<IResponse<any>> {
           labels: labels,
           datasets: [
             {
-              data: [
-                proportion.active ?? 0,
-                proportion.blocked ?? 0,
-                proportion.disabled ?? 0
-              ],
+              data: [proportion.active ?? 0, proportion.blocked ?? 0, proportion.disabled ?? 0],
               backgroundColor: colors,
             }
           ]
@@ -98,12 +111,7 @@ export class ReportAdminService extends BaseService<IResponse<any>> {
       year: this.search.year,
     }).subscribe({
       next: (response: IResponse<any[]>) => {
-        const monthlyData: number[] = Array(12).fill(0);
-        const dataObj = response.data;
-
-        for (let month = 1; month <= 12; month++) {
-          monthlyData[month - 1] = dataObj[month] ?? 0;
-        }
+        const monthlyData = this.generateMonthlyData([], response.data);
 
         this.monthlyVolumeInvoices.set([
           {
@@ -178,6 +186,105 @@ export class ReportAdminService extends BaseService<IResponse<any>> {
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al obtener los 10 usuarios de mayor volumen de facturación');
       },
+    });
+  }
+
+  getAllTop10UsersByInvoiceCount() {
+    this.findAllWithParamsAndCustomSource("top-users-invoice-volume", {
+      year: this.search.year,
+    }).subscribe({
+      next: (response: IResponse<any[]>) => {
+        const topUsers = response.data;
+
+        const labels = topUsers.map(user => `${user.name} ${user.lastname}`);
+        const countData = topUsers.map(user => user.totalCountInvoices ?? 0);
+
+        this.top10UsersByInvoiceCount.set([{
+          labels: labels,
+          datasets: [
+            {
+              label: 'Cantidad de Facturas',
+              data: countData,
+              backgroundColor: '#FACF7D',
+            }
+          ]
+        }]);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener los 10 usuarios con más facturas emitidas');
+      },
+    });
+  }
+
+  getAllMonthlyIncomeAndExpenses() {
+    this.findAllWithParamsAndCustomSource("monthly-income-expenses", {
+      year: this.search.year,
+    }).subscribe({
+      next: (response: IResponse<any>) => {
+        const incomeData: number[] = Array(12).fill(0);
+        const expensesData: number[] = Array(12).fill(0);
+        const dataObj = response.data;
+
+        for (let month = 1; month <= 12; month++) {
+          incomeData[month - 1] = dataObj[month]?.income ?? 0;
+          expensesData[month - 1] = dataObj[month]?.expenses ?? 0;
+        }
+
+        this.monthlyIncomeExpenses.set([
+          {
+            label: "Ingresos",
+            data: incomeData,
+            backgroundColor: 'rgba(250, 207, 125, 0.2)',
+            borderColor: '#FACF7D',
+            borderWidth: 2,
+            fill: {
+              target: 'origin',
+              above: 'rgba(250, 207, 125, 0.2)',
+            },
+          },
+          {
+            label: "Gastos",
+            data: expensesData,
+            backgroundColor: 'rgba(234, 128, 76, 0.2)',
+            borderColor: '#EA804C',
+            borderWidth: 2,
+            fill: {
+              target: 'origin',
+              above: 'rgba(234, 128, 76, 0.2)',
+            },
+          },
+        ]);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener los ingresos y gastos mensuales');
+      },
+    });
+  }
+
+  getTop10UsersByBalance() {
+    this.findAllWithParamsAndCustomSource("top-users-balance", {
+      year: this.search.year,
+    }).subscribe({
+      next: (response: IResponse<any[]>) => {
+        const users = response.data;
+
+        const labels = users.map(user => `${user.name} ${user.lastname}`);
+        const balances = users.map(user => user.balance ?? 0);
+
+        this.top10UsersByBalance.set([{
+          labels: labels,
+          datasets: [
+            {
+              label: 'Balance (Ingresos - Gastos)',
+              data: balances,
+              backgroundColor: balances.map(value => value >= 0 ? '#FACF7D' : '#EA804C'),
+            }
+          ]
+        }]);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener el balance de los usuarios');
+      }
     });
   }
 }
