@@ -22,31 +22,24 @@ export class ManualInvoicesFormComponent {
   @Input() details: IDetailInvoice[] = [];
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
-  public type = signal<'ingreso' | 'gasto'>('ingreso');
   @Output() callUpdateMethod = new EventEmitter<IManualInvoice>();
   @Output() callCancelMethod = new EventEmitter<void>();
   @Input() isEditing: boolean = false;
 
-
-  //variables para la edicion
   public isEditingDetail: boolean = false;
   public editingIndex: number = -1;
 
-  // Variables para el modal de confirmación
   public showDeleteModal: boolean = false;
   public indexToDelete: number = -1;
+
+  public typeInvoice: string = 'ingreso';
 
   constructor() {
     effect(() => {
       if (!this.responseScan) return;
       const response = this.responseScan();
-      const currentType = this.type();
-
-      if (response) {
-        const typeToUse = response.type || currentType;
-        this.fillInvoiceFromAutocomplete(response, typeToUse);
-        this.callResetScanMethod.emit();
-      }
+      this.fillInvoiceFromAutocomplete(response);
+      this.callResetScanMethod.emit();
     });
   }
 
@@ -150,14 +143,14 @@ export class ManualInvoicesFormComponent {
     });
   }
 
-  fillInvoiceFromAutocomplete(response: any, type: 'ingreso' | 'gasto') {
+  fillInvoiceFromAutocomplete(response: any) {
     if (!response) return;
     const data = response.data || response;
-    this.updateFormForType(type, data);
+    this.updateFormForType(data);
   }
 
-  updateFormForType(type: string, data: any) {
-    const personData = type === 'ingreso' ? data.receiver : data.issuer;
+  updateFormForType(data: any) {
+    const personData = data.receiver || data.issuer;
     const person = personData || {};
 
     let firstName = '';
@@ -170,8 +163,14 @@ export class ManualInvoicesFormComponent {
       }
     }
 
+    if (data.type == "ingreso") {
+      this.typeInvoice = 'ingreso';
+    } else {
+      this.typeInvoice = 'gasto';
+    }
+
     this.invoiceForm.patchValue({
-      type: type,
+      type: data.type || '',
       consecutive: data.consecutive || '',
       key: data.key || '',
       issueDate: data.issueDate || '',
@@ -221,20 +220,6 @@ export class ManualInvoicesFormComponent {
     this.callCancelMethod.emit();
   }
 
-  changeType(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    this.type.set(selectElement.value as 'ingreso' | 'gasto');
-
-    this.invoiceForm.patchValue({
-      identification: '',
-      name: '',
-      lastName: '',
-      email: ''
-    });
-  }
-
-
-
   editDetailItem(index: number) {
     const detail = this.details[index];
 
@@ -269,6 +254,17 @@ export class ManualInvoicesFormComponent {
       this.indexToDelete = -1;
     }
     this.hideDeleteModal();
+  }
+
+  changeType(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedType = selectElement.value as 'ingreso' | 'gasto';
+
+    if (selectedType === 'ingreso') {
+      this.typeInvoice = 'ingreso';
+    } else if (selectedType === 'gasto') {
+      this.typeInvoice = 'gasto';
+    }
   }
 
   hideDeleteModal() {

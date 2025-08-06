@@ -1,14 +1,17 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { IResponse } from '../interfaces';
 import { BaseService } from './base-service';
 import { Subscription } from 'rxjs';
+import { AlertService } from './alert.service';
+import { FileProcessingService } from './file-processing.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class XmlService extends BaseService<IResponse<any>> {
-
   protected override source: string = 'xml';
+  private alertService: AlertService = inject(AlertService);
+  private fileProcessor: FileProcessingService = inject(FileProcessingService);
   public isLoadingSignal = signal(false);
   public responseScan = signal<IResponse<any> | null>(null);
   private currentSubscription: Subscription | null = null;
@@ -20,30 +23,24 @@ export class XmlService extends BaseService<IResponse<any>> {
     return this.isLoadingSignal;
   }
 
-  scanFile(file: File) {
-    if (file) {
-      this.cancelCurrentRequest();
-
-      this.isLoadingSignal.set(true);
-      const formData = new FormData();
-      formData.append('file', file);
-
-      this.currentSubscription = this.addFile(formData).subscribe({
-        next: (response: any) => {
-          this.responseScan.set(response);
-        },
-        error: (err: any) => {
-          console.error('error', err);
-          this.isLoadingSignal.set(false);
-        },
-        complete: () => {
-          this.isLoadingSignal.set(false);
-          this.currentSubscription = null;
-        }
-      });
-    } else {
-      console.error('No file selected.');
-    }
+  scanFile(file: File, type: string = 'ingreso') {
+    this.cancelCurrentRequest();
+    const formData = this.fileProcessor.buildFormData(file, type);
+    this.isLoadingSignal.set(true);
+    this.currentSubscription = this.addFile(formData).subscribe({
+      next: (response: any) => {
+        this.responseScan.set(response);
+        this.alertService.showAlert('success', "Archivo escaneado correctamente");
+      },
+      error: () => {
+        this.isLoadingSignal.set(false);
+        this.alertService.showAlert('error', "Ocurrio un error al procesar el archivo");
+      },
+      complete: () => {
+        this.isLoadingSignal.set(false);
+        this.currentSubscription = null;
+      }
+    });
   }
 
   cancelCurrentRequest() {
@@ -55,4 +52,7 @@ export class XmlService extends BaseService<IResponse<any>> {
     }
   }
 
+  resetResponseScan() {
+    this.responseScan.set(null);
+  }
 }

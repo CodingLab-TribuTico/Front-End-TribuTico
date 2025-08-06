@@ -94,8 +94,8 @@ export interface IManualInvoice {
   key?: string;
   issueDate?: string;
   details?: IDetailInvoice[];
-  receiver?: IInvoiceUser;  // Usuario que recibe la factura
-  issuer?: IInvoiceUser;    // Usuario que emite la factura
+  receiver?: IInvoiceUser;  
+  issuer?: IInvoiceUser;    
   users?: IUser;
 }
 
@@ -163,6 +163,36 @@ export interface IIsrSimulation {
   totalDebtToPay: number;
 }
 
+export interface IIvaCalculation {
+  id?: number;
+  year: number;
+  month: number;
+  calculationDate: string;
+  ivaVentasBienes: number;
+  ivaVentasServicios: number;
+  ivaExportaciones: number;
+  ivaActividadesAgropecuarias: number;
+  ivaComprasBienes: number;
+  ivaComprasServicios: number;
+  ivaImportaciones: number;
+  ivaGastosGenerales: number;
+  ivaActivosFijos: number;
+  totalIvaDebito: number;
+  totalIvaCredito: number;
+  ivaNetoPorPagar: number;
+  ivaAFavor: number;
+  automaticCalculation: boolean;
+  
+  iva1Percent: number;
+  iva2Percent: number;
+  iva4Percent: number;
+  iva8Percent: number;
+  iva10Percent: number;  
+  iva13Percent: number;
+  ivaExento: number;
+  
+  user?: IUser;
+}
 export interface INotification {
   id: number;
   title: string;

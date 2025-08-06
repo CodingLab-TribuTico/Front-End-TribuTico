@@ -41,8 +41,7 @@
             </div>
             }
             <app-input-file-form [ngClass]="[ocrService.isLoading$() || xmlService.isLoading$() ? '' : 'h-full w-full']"
-                [isLoading]="isLoading" (callScanMethod)="ocrService.scanFile($event, type)"
-                (callOpenModalMethod)="openModal()" />
+                [isLoading]="isLoading" (callScanMethod)="handleScanFile($event)" (callOpenModalMethod)="openModal()" />
         </div>
         }
     </div>
