@@ -1,16 +1,40 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { BaseService } from './base-service';
-import { IIvaCalculation, IResponse } from '../interfaces';
+import { IIvaCalculation, IResponse, ISearch } from '../interfaces';
 import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class IvaSimulationService extends BaseService<IResponse<IIvaCalculation>> {
+export class IvaSimulationService extends BaseService<IIvaCalculation> {
   protected override source: string = 'iva-simulation';
   private currentSubscription: Subscription | null = null;
   public ivaSimulation: IIvaCalculation | null = null;
+  private alertService: AlertService = inject(AlertService);
+  private simulationsByUserIdList = signal<IIvaCalculation[]>([]);
+  private simulationListSignal = signal<IIvaCalculation[]>([]);
+  private currentSimulation = signal<IIvaCalculation | null>(null);
+  public totalItems: any = [];
+ 
+  get simulationsIva$() {
+    return this.simulationListSignal;
+  }
+   
+  get currentIvaSimulation$() {
+    return this.currentSimulation;
+  }
+ 
+  get simulationsByUserIdList$() {
+    return this.simulationsByUserIdList;
+  }
+ 
+  public search: ISearch = {
+    page: 1,
+    size: 5,
+    search: "",
+  }
 
   createSimulation(year: number, month: number, userId: number, callback?: (simulation: IIvaCalculation | null) => void) {
     if (this.currentSubscription) {
@@ -24,11 +48,10 @@ export class IvaSimulationService extends BaseService<IResponse<IIvaCalculation>
       _t: Date.now()
     };
     
-    this.currentSubscription = this.findAllWithParams(params).subscribe({
+    this.currentSubscription = this.findAllWithParamsAndCustomSource('create', params).subscribe({
       next: (response: any) => {
         this.ivaSimulation = response.data;
         
-       
         if (callback) {
           callback(this.ivaSimulation);
         }
@@ -103,4 +126,77 @@ export class IvaSimulationService extends BaseService<IResponse<IIvaCalculation>
       this.currentSubscription = null;
     }
   }
+
+  saveSimulationIva(simulation: IIvaCalculation) {
+    return this.add(simulation).subscribe({
+      next: (response: any) => {
+        this.alertService.showAlert('success', response.message);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al guardar la simulación de IVA');
+      }
+    });
+  }
+
+  getAll() {
+    this.findAllWithParams({
+      page: this.search.page,
+      size: this.search.size,
+      search: this.search.search
+    }).subscribe({
+      next: (response: any) => {
+        this.search = { ...this.search, ...response.meta };
+        this.totalItems = Array.from(
+          { length: this.search.totalPages ? this.search.totalPages : 0 },
+          (_, i) => i + 1);
+        this.simulationListSignal.set(response.data);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al obtener las simulaciones del IVA');
+      }
+    });
+  }
+
+  getById(id: number) {
+    this.find(id).subscribe({
+      next: (response: IResponse<IIvaCalculation>) => {
+        this.currentSimulation.set(response.data);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al recuperar la simulación');
+      },
+    });
+  }
+   
+  getByUserId(userId: number) {
+    this.findAllWithParams({ userId }).subscribe({
+      next: (response: IResponse<IIvaCalculation[]>) => {
+        this.search = { ...this.search, ...response.meta };
+        this.totalItems = Array.from(
+          { length: this.search.totalPages ? this.search.totalPages : 0 }, 
+          (_, i) => i + 1);
+        this.simulationListSignal.set(response.data);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al recuperar las simulaciones del usuario');
+      }
+    });
+  }
+     
+  delete(simulation: IIvaCalculation) {
+    this.delCustomSource(`${simulation.id}`).subscribe({
+      next: (response: any) => {
+        this.alertService.showAlert('success', response.message);
+        this.getAll();
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error eliminando al usuario');
+      }
+    });
+  }
+  
+  clearCurrentSimulation() {
+    this.currentSimulation.set(null);
+  }
+
 }

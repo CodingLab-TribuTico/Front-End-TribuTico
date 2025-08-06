@@ -21,6 +21,8 @@ import { NotificationDetailComponent } from './pages/notification-list/notificat
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
 import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
 import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
+import { SimulationViewComponent } from './pages/simulation-view/simulation-view.component';
+import { SimulationDetailComponent } from './pages/simulation-detail/simulation-detail.component';
 
 export const routes: Routes = [
   {
@@ -95,6 +97,15 @@ export const routes: Routes = [
         data: {
           authorities: [IRoleType.superAdmin],
           name: 'Notificaciones',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'simulation-view',
+        component: SimulationViewComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Simulaciones',
           showInSidebar: true
         }
       },
@@ -186,6 +197,17 @@ export const routes: Routes = [
             IRoleType.user
           ],
           name: 'Detalle de Factura',
+          showInSidebar: false
+        }
+      },
+      {
+        path: 'simulation-detail/:type/:id',
+        component: SimulationDetailComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Simulation',
           showInSidebar: false
         }
       }

@@ -40,6 +40,7 @@ export class SidebarComponent {
     'Facturas': 'list_alt',
     'Notificaciones': 'notifications',
     'Reportes': 'bar_chart_4_bars',
+    'Simulaciones': 'contract',
   }
 
   constructor(public router: Router
