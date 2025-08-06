@@ -15,8 +15,11 @@
     <div>
         <app-simulation-list 
         [simulations]="allSimulations()"
-        (pdfRequested)="downloadPdf($event)"
-        (csvRequested)="downloadCsv($event)"/>
+        (generatePdf)="downloadPdf($event)"
+        (generateCsv)="downloadCsv($event)"/>
+        @if(isrService.simulationsIsr$().length) {
+        <app-pagination [service]="isrService" />
+        }
     </div>
 </div>
 } @loading (minimum 1.5s){

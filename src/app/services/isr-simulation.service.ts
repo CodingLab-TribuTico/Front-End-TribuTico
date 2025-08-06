@@ -111,7 +111,6 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
     this.delCustomSource(`${simulation.id}`).subscribe({
       next: (response: any) => {
         this.alertService.showAlert('success', response.message);
-        this.getAll();
       },
       error: () => {
       this.alertService.showAlert('error', 'Ocurrió un error eliminando al usuario');
@@ -123,5 +122,4 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
     this.currentSimulation.set(null);
   }
   
-
 }

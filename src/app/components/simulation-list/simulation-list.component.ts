@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { IIvaCalculation } from "../../interfaces";
+import { IIsrSimulation } from "../../interfaces";
 
 @Component({
   selector: "app-simulation-list",
@@ -11,21 +11,15 @@ import { IIvaCalculation } from "../../interfaces";
   templateUrl: "./simulation-list.component.html",
 })
 export class SimulationListComponent {
-  @Output() pdfRequested = new EventEmitter<any>();
-  @Output() csvRequested = new EventEmitter<any>();
+  @Output() callDeleteAction: EventEmitter<IIsrSimulation> =new EventEmitter<IIsrSimulation>();
+  @Output() generatePdf = new EventEmitter<any>();
+  @Output() generateCsv = new EventEmitter<any>();
   @Input() simulations: any[] = [];
-
-  getSimulationType(item: any) {
-    if ('simulationPeriod' in item) return 'isr';
-    if ('month' in item && 'year' in item) return 'iva';
-    return;
-  }
 
   simulationPeriod(item: any) {
     if (item.simulationPeriod) {
       return item.simulationPeriod;
     }
-
     if (item.month && item.year) {
       const month = item.month.toString();
       return `${month}/${item.year}`;
@@ -36,9 +30,14 @@ export class SimulationListComponent {
     if (item.simulationName) {
       return item.simulationName;
     }
-
     if (item.user?.name && item.user?.lastname) {
       return `${item.user.name} ${item.user.lastname}`;
+    }
+  }
+
+  simulationType(item: any) {
+    if (item.type) {
+      return item.type.toLowerCase();
     }
   }
 
@@ -46,12 +45,12 @@ export class SimulationListComponent {
     return item.simulationIdentification || item.user?.identification || 'N/A';
   }
 
-  onDownloadPdf(item: any) {
-    this.pdfRequested.emit(item);
+  exportPdf(item: any) {
+    this.generatePdf.emit(item);
   }
 
-  onDownloadCsv(item: any) {
-    this.csvRequested.emit(item);
+  exportCsv(item: any) {
+    this.generateCsv.emit(item);
   }
-  
+
 }

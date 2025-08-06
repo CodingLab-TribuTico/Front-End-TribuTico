@@ -14,6 +14,7 @@ import { TaxBaseComponent } from "../../components/isr-simulation/tax-base/tax-b
 import { CreditsComponent } from "../../components/isr-simulation/credits/credits.component";
 import { SettlementTaxDebtComponent } from "../../components/isr-simulation/settlement-tax-debt/settlement-tax-debt.component";
 import { GeneralDataComponent } from "../../components/isr-simulation/general-data/general-data.component";
+import { LoaderComponent } from "../../components/loader/loader.component";
 
 @Component({
   selector: 'app-simulation-detail',
@@ -21,6 +22,7 @@ import { GeneralDataComponent } from "../../components/isr-simulation/general-da
   imports: [
     CommonModule, 
     ModalComponent,
+    LoaderComponent,
     IvaSimulationComponent,
     AssetsLiabilitiesComponent, 
     IncomeComponent, 
@@ -33,11 +35,11 @@ import { GeneralDataComponent } from "../../components/isr-simulation/general-da
   templateUrl: './simulation-detail.component.html',
 })
 export class SimulationDetailComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private isrSimulationService = inject(IsrSimulationService);
-  private ivaSimulationService = inject(IvaSimulationService);
-  private modalService = inject(ModalService);
+  public route = inject(ActivatedRoute);
+  public router = inject(Router);
+  public isrSimulationService = inject(IsrSimulationService);
+  public ivaSimulationService = inject(IvaSimulationService);
+  public modalService = inject(ModalService);
   @ViewChild('confirmationModal') public confirmationModal: any;
 
   currentSimulationIva = this.ivaSimulationService.currentIvaSimulation$;
@@ -48,6 +50,7 @@ export class SimulationDetailComponent implements OnInit {
     const type = this.route.snapshot.paramMap.get('type');
 
     if (!id || !type) {
+      this.router.navigate(['/app/simulation-view']);
       return;
     }
 

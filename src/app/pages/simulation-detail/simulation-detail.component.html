@@ -1,3 +1,4 @@
+@defer{
 @if(currentSimulationIva(); as iva){
   <app-iva-simulation 
     [simulation]="iva"
@@ -95,6 +96,9 @@
       Eliminar
     </button>
   </div>
+} 
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
 }
 
 <ng-template #confirmationModal>

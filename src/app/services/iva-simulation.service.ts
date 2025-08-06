@@ -2,7 +2,6 @@ import { Injectable, inject, signal } from '@angular/core';
 import { BaseService } from './base-service';
 import { IIvaCalculation, IResponse, ISearch } from '../interfaces';
 import { Subscription } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { AlertService } from './alert.service';
 
 @Injectable({
@@ -187,7 +186,6 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
     this.delCustomSource(`${simulation.id}`).subscribe({
       next: (response: any) => {
         this.alertService.showAlert('success', response.message);
-        this.getAll();
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error eliminando al usuario');

@@ -18,7 +18,7 @@ export class IsrExportService extends BaseService<IIsrSimulation> {
           const downloadUrl = window.URL.createObjectURL(response);
           const a = document.createElement('a');
           a.href = downloadUrl;
-          a.download = `simulacion_${simulation.id}.pdf`;
+          a.download = `Simulación_ISR.pdf`;
           a.click();
           window.URL.revokeObjectURL(downloadUrl);
         } else {
@@ -39,7 +39,7 @@ export class IsrExportService extends BaseService<IIsrSimulation> {
           const downloadUrl = window.URL.createObjectURL(response);
           const a = document.createElement('a');
           a.href = downloadUrl;
-          a.download = `simulacion_${simulation.id}.csv`;
+          a.download = `Simulación_ISR.csv`;
           a.click();
           window.URL.revokeObjectURL(downloadUrl);
         } else {

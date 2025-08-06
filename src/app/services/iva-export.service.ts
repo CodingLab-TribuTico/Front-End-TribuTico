@@ -19,7 +19,7 @@ export class IvaExportService extends BaseService<IIvaCalculation> {
           const downloadUrl = window.URL.createObjectURL(response);
           const a = document.createElement('a');
           a.href = downloadUrl;
-          a.download = `simulacion_${simulation.id}.pdf`;
+          a.download = `Simulación_IVA.pdf`;
           a.click();
           window.URL.revokeObjectURL(downloadUrl);
         } else {
@@ -40,7 +40,7 @@ export class IvaExportService extends BaseService<IIvaCalculation> {
           const downloadUrl = window.URL.createObjectURL(response);
           const a = document.createElement('a');
           a.href = downloadUrl;
-          a.download = `simulacion_${simulation.id}.csv`;
+          a.download = `Simulación_IVA.csv`;
           a.click();
           window.URL.revokeObjectURL(downloadUrl);
         } else {
