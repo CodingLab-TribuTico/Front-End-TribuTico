@@ -53,7 +53,7 @@ export class SimulationDetailComponent implements OnInit {
       this.router.navigate(['/app/simulation-view']);
       return;
     }
-
+    
     if (type === 'isr') {
       this.isrSimulationService.getById(id);
       this.ivaSimulationService.clearCurrentSimulation(); 

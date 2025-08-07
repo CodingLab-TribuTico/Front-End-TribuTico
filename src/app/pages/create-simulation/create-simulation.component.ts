@@ -240,8 +240,7 @@ export class CreateSimulationComponent {
     }
     const simulationToSave = {
       ...this.isrSimulation,
-      user: { id: userId },
-      simulationType: this.type
+      user: { id: userId }
     };
     this.isrSimulationService.saveSimulationIsr(simulationToSave);
   }
@@ -254,7 +253,6 @@ export class CreateSimulationComponent {
     const simulationToSave = {
       ...this.ivaSimulation,
       user: { id: userId }
-     
     };
     this.ivaSimulationService.saveSimulationIva(simulationToSave);
   }

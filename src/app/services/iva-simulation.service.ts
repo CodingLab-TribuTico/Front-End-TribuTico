@@ -20,11 +20,11 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
   get simulationsIva$() {
     return this.simulationListSignal;
   }
-   
+
   get currentIvaSimulation$() {
     return this.currentSimulation;
   }
- 
+
   get simulationsByUserIdList$() {
     return this.simulationsByUserIdList;
   }
@@ -55,8 +55,8 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
           callback(this.ivaSimulation);
         }
       },
-      error: (err: any) => {
-        console.error('Error al crear simulación IVA:', err);
+      error: () => {
+        this.alertService.showAlert('error', 'Error al crear simulación IVA');
         this.ivaSimulation = null;
         
         if (callback) {
@@ -95,9 +95,8 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
           callback(this.ivaSimulation);
         }
       },
-      error: (err: any) => {
-        console.error('Error al recalcular simulación IVA:', err);
-        
+      error: () => {
+        this.alertService.showAlert('error', 'Error al recalcular simulación IVA');
         this.createSimulation(year, month, userId, callback);
       }
     });
@@ -109,7 +108,7 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
         next: () => {
           this.forceRecalculation(year, month, userId, callback);
         },
-        error: (err) => {
+        error: () => {
           this.forceRecalculation(year, month, userId, callback);
         }
       });
