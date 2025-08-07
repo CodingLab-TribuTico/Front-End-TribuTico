@@ -21,6 +21,7 @@ import { NotificationDetailComponent } from './pages/notification/notification-d
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
 import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
 import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
+import { ChatbotComponent } from './pages/chatbot/chatbot.component';
 
 export const routes: Routes = [
   {
@@ -68,6 +69,15 @@ export const routes: Routes = [
         data: {
           authorities: [IRoleType.superAdmin],
           name: 'Reportes',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'chatbot',
+        component: ChatbotComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Chatbot',
           showInSidebar: true
         }
       },
