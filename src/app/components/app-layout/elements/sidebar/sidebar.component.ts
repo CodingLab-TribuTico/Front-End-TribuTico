@@ -41,6 +41,7 @@ export class SidebarComponent {
     'Notificaciones': 'notifications',
     'Reportes': 'bar_chart_4_bars',
     'Ver Notificaciones': 'notifications',
+    'Calendario Fiscal': 'calendar_month'
   }
 
   constructor(public router: Router

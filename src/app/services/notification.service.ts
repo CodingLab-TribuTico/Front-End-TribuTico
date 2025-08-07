@@ -10,7 +10,8 @@ import { tap } from 'rxjs';
 export class NotificationService extends BaseService<IResponse<any>> {
   protected override source: string = 'notifications';
   private notificationsList = signal<INotification[]>([]);
-  private allNotificationList =  signal<INotification[]>([]);
+  private allNotificationList = signal<INotification[]>([]);
+  private pendingNotificationsList = signal<INotification[]>([]);
   private alertService: AlertService = inject(AlertService);
 
   public search: ISearch = {
@@ -25,12 +26,16 @@ export class NotificationService extends BaseService<IResponse<any>> {
     return this.notificationsList.asReadonly();
   }
 
-  get allNotifications$(){
-    return  this.allNotificationList.asReadonly();
+  get pendingNotifications$() {
+    return this.pendingNotificationsList.asReadonly();
+  }
+
+  get allNotifications$() {
+    return this.allNotificationList.asReadonly();
   }
 
   public unreadCount = computed(() =>
-    this.notificationsList().length
+    this.pendingNotificationsList().length
   )
 
   getAll() {
@@ -41,7 +46,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
         this.notificationsList.set(response.data);
       },
       error: (err: any) => {
-        this.alertService.showAlert('error', err);
+        this.alertService.displayAlert('error', err);
       }
     });
   }
@@ -49,23 +54,23 @@ export class NotificationService extends BaseService<IResponse<any>> {
   getPending() {
     this.findAllWithParamsAndCustomSource('pending').subscribe({
       next: (response: any) => {
-        this.notificationsList.set(response.data);
+        this.pendingNotificationsList.set(response.data);
       }, error: (err: any) => {
-        this.alertService.showAlert('error', 'Ocurrió un error al recuperar las notificaciones pendientes');
+        this.alertService.displayAlert('error', 'Ocurrió un error al recuperar las notificaciones pendientes');
       }
     });
   }
 
-  getAllByUserId(){
+  getAllByUserId() {
     this.findAllWithParamsAndCustomSource('all').subscribe({
       next: (response: any) => {
         const notifications = response.data.map((item: any) => ({
-        ...item.notification, 
-        isRead: item.read
-      }));
+          ...item.notification,
+          isRead: item.read
+        }));
         this.allNotificationList.set(notifications);
       }, error: (err: any) => {
-        this.alertService.showAlert('error', 'Ocurrio un error al recuperar las notificaciones');
+        this.alertService.displayAlert('error', 'Ocurrio un error al recuperar las notificaciones');
       }
     })
   }
@@ -77,7 +82,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.showAlert('error', 'Ocurrió un error al guardar la notificación');
+        this.alertService.displayAlert('error', 'Ocurrió un error al guardar la notificación');
       }
     });
   }
@@ -85,25 +90,25 @@ export class NotificationService extends BaseService<IResponse<any>> {
   updateNotification(notification: INotification) {
     this.edit(notification.id, notification).subscribe({
       next: (response: IResponse<any>) => {
-        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.alertService.showAlert('success', response.message);
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar la notificación', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar la notificación');
       }
     });
   }
 
   markNotificationRead(notificationId: number) {
-  this.patchCustomSource(`read/${notificationId}`,{}).subscribe({
+    this.patchCustomSource(`read/${notificationId}`, {}).subscribe({
       next: (response: IResponse<any>) => {
         this.alertService.showAlert('success', response.message);
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar la notificación', 'center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'Ocurrió un error al actualizar la notificación');
       }
     });
-}
+  }
 
   delete(notification: INotification) {
     this.delCustomSource(`${notification.id}`).subscribe({
@@ -112,7 +117,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
         this.getAll();
       },
       error: () => {
-        this.alertService.showAlert('error', 'Ocurrió un error al eliminar la notificación');
+        this.alertService.displayAlert('error', 'Ocurrió un error al eliminar la notificación');
       }
     });
   }

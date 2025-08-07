@@ -172,3 +172,11 @@ export interface INotification {
   state?: string;
   isRead?: boolean;
 }
+
+export interface IFiscal {
+  id: number;
+  name?: string;
+  description?: string;
+  taxDeclarationDeadline?: string;
+  type?: string;
+}

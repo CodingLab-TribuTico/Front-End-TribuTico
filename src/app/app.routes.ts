@@ -19,6 +19,7 @@ import { CreateSimulationComponent } from './pages/create-simulation/create-simu
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { NotificationDetailComponent } from './pages/notification-list/notification-detail.component';
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
+import { FiscalCalendarComponent } from './pages/fiscal-calendar/fiscal-calendar.component';
 
 export const routes: Routes = [
   {
@@ -70,6 +71,15 @@ export const routes: Routes = [
         data: {
           authorities: [IRoleType.user],
           name: 'Ver Notificaciones',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'fiscal-calendar',
+        component: FiscalCalendarComponent,
+        data: {
+          authorities: [IRoleType.superAdmin],
+          name: 'Calendario Fiscal',
           showInSidebar: true
         }
       },

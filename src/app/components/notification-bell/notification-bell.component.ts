@@ -19,13 +19,12 @@ export class NotificationBellComponent {
   dropdownRef!: ElementRef;
 
   public dropdownOpen: boolean = false;
-  public notifications = this.notificationService.notifications$;
+  public notifications = this.notificationService.pendingNotifications$;
   public unreadCount = this.notificationService.unreadCount;
 
   ngOnInit() {
     this.loadNotifications();
   }
-
 
 
   loadNotifications() {
