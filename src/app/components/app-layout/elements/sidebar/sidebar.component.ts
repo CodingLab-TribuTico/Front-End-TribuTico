@@ -40,6 +40,7 @@ export class SidebarComponent {
     'Facturas': 'list_alt',
     'Notificaciones': 'notifications',
     'Reportes': 'bar_chart_4_bars',
+    'Metas': 'target'
   }
 
   constructor(public router: Router

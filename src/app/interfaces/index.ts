@@ -209,3 +209,13 @@ export interface INotificationGlobal{
   state?: string;
   closeDate?: string;
 }
+
+export interface IGoals {
+  id?: number;
+  declaration?: string;
+  type?: string;
+  date?: Date | string;
+  Objective?: string;
+  status?: 'pending' | 'in-progress' | 'completed';
+  createdAt?: string | Date;
+}

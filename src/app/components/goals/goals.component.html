@@ -1,0 +1,85 @@
+<div class="w-full min-h-screen flex items-center justify-center p-4">
+  <!-- Título principal -->
+  <div class="text-center w-full max-w-2xl">
+    <h1 class="text-4xl font-bold text-crater-brown mb-8">Define tus Metas Tributarias</h1>
+    
+    <!-- Formulario de metas (Cuadro café principal) -->
+    <div class="bg-crater-brown rounded-lg p-8 shadow-2xl">
+      <form [formGroup]="goalsForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        
+        <!-- Campo Declaración -->
+        <div class="form-field">
+          <label for="declaration" class="block text-base font-semibold text-bisque mb-2 text-left">
+            Declaración
+          </label>
+          <select id="declaration" 
+                  formControlName="declaration"
+                  class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
+            <option value="" disabled selected>Seleccionar...</option>
+            @for (option of declarationOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Campos Tipo de impuesto y Fecha -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-field">
+            <label for="taxType" class="block text-base font-semibold text-bisque mb-2 text-left">
+              Tipo de impuesto
+            </label>
+            <select id="taxType" 
+                    formControlName="type"
+                    class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
+              <option value="" disabled selected>IVA</option>
+              @for (option of taxTypeOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="date" class="block text-base font-semibold text-bisque mb-2 text-left">
+              Fecha
+            </label>
+            <input type="date" 
+                   id="date" 
+                   formControlName="date"
+                   value="2025-06-28"
+                   class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow [color-scheme:dark]">
+          </div>
+        </div>
+
+        <!-- Campo Objetivo -->
+        <div class="form-field">
+          <label for="objective" class="block text-base font-semibold text-bisque mb-2 text-left">
+            Objetivo
+          </label>
+          <select id="objective" 
+                  formControlName="Objective"
+                  class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
+            <option value="" disabled selected>Reducir en un 10% el monto del IVA</option>
+            @for (option of objectiveOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex gap-3 justify-center pt-6">
+          <button type="submit" 
+                  [disabled]="!isFormValid"
+                  class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold text-sm hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            Crear
+          </button>
+          <button type="button" 
+                  (click)="closeGoalsForm()"
+                  class="bg-golden-glow text-flamenco py-2 px-4 rounded-md font-bold text-sm hover:bg-burnt-umber hover:text-bisque transition-colors">
+            Cancelar
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
