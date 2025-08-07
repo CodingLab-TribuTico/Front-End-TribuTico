@@ -260,7 +260,7 @@
   <div class="flex gap-4 justify-center">
     <button (click)="callSave()" [disabled]="invoiceForm.invalid || this.details.length == 0" ctype="button"
       class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber disabled:text-bisque">
-      Registrar
+      {{textConfirmButton}}
     </button>
     <button type="button"
       class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-bisque transition-colors"

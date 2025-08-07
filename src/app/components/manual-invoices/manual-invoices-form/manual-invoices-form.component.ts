@@ -20,6 +20,7 @@ export class ManualInvoicesFormComponent {
   @Input() detailForm!: FormGroup;
   @Input() responseScan!: any;
   @Input() details: IDetailInvoice[] = [];
+  @Input() textConfirmButton: string = 'Confirmar';
   @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
   @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
   @Output() callUpdateMethod = new EventEmitter<IManualInvoice>();
