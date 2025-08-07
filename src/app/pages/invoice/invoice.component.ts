@@ -43,7 +43,7 @@ export class InvoiceComponent {
     identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: ['', Validators.required],
+    email: [{ value: '', disabled: true }, Validators.required],
   });
 
   public detailForm = this.fb.group({

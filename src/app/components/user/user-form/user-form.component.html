@@ -84,7 +84,7 @@
         <label class="block my-2 text-base font-semibold text-bisque" for="email">Correo electrónico<span
             class="text-burnt-umber">*</span></label>
         <input id="email" formControlName="email" type="email"
-          class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+          class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 placeholder:text-zorba focus:outline-none focus:border-golden-glow disabled:bg-zorba disabled:opacity-80 disabled:cursor-not-allowed"
           placeholder="email@dominio.com">
 
         <div class="min-h-[1.5rem]">
@@ -131,7 +131,7 @@
 
     <div class="col-span-2 flex justify-center items-center w-full">
       <button (click)="callSave()" [disabled]="userForm.invalid"
-        class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque font-bold hover:bg-golden-glow hover:text-flamenco transition-colors"
+        class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber disabled:text-bisque font-bold hover:bg-golden-glow hover:text-flamenco transition-colors"
         type="button">Guardar</button>
       @if (cancelOption) {
       <button (click)="callCancel()"

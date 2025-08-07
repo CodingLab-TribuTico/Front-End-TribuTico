@@ -19,7 +19,7 @@
                 <td class="p-3">{{item.consecutive || 'N/A'}}</td>
                 <td class="p-3">{{item.issueDate | date: 'dd/MM/yyyy'}}</td>
                 <td class="p-3">{{item.issuer?.name || 'N/A'}}</td>
-                <td class="p-3">{{item.issuer?.email}}</td>
+                <td class="p-3">{{item.issuer?.email || 'N/A'}}</td>
                 <td class="p-3">{{calculateTotal(item.details) | currency: '₡': 'symbol':'1.2-2'}}</td>
                 <td class="p-3 space-x-1 flex flex-row">
                     <button (click)="callModalAction.emit(item)"
