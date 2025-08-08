@@ -26,8 +26,8 @@ export class NotificationsComponent {
     this.notificationService.getAllByUserId();
   }
 
-  selectNotification(notification: INotification){
-      this.selectedNotification = notification;
+  selectNotification(notification: INotification) {
+    this.selectedNotification = notification;
   }
 
   handleToggleDropdown(open: boolean) {
@@ -39,21 +39,6 @@ export class NotificationsComponent {
   handleMarkAsRead(notificationId: number) {
     this.notificationService.markNotificationRead(notificationId);
     this.loadNotifications();
-  }
-
-  
-
-  // handleMarkAllAsRead() {
-  //   const currentNotifications = this.notifications();
-  //   currentNotifications.forEach(notification => {
-  //     if (notification.state === 'unread') {
-  //       this.handleMarkAsRead(notification);
-  //     }
-  //   });
-  // }
-
-  traer(selectedNotification: INotification) {
-    console.log('Prueba', selectedNotification.isRead);
   }
 
 }

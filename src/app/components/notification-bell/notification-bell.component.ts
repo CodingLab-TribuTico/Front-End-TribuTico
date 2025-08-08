@@ -38,8 +38,8 @@ export class NotificationBellComponent {
     }
   }
 
-  markAsRead(status: any) {
-    this.notificationService.markNotificationRead(status.notification.id);
+  markAsRead(notificationId: number) {
+    this.notificationService.markNotificationRead(notificationId);
   }
 
   markAllAsRead() {

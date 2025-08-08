@@ -36,7 +36,7 @@ export class FiscalCalendarComponent {
     id: [null as number | null],
     name: ['', Validators.required],
     description: ['', Validators.required],
-    date: ['', Validators.required],
+    date: ['', Validators.required,],
     type: ['', Validators.required]
   })
 
