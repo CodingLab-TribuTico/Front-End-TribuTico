@@ -128,13 +128,13 @@
             [totalDebtToPay]="isrSimulation.totalDebtToPay">
         </app-settlement-tax-debt>
         <div class="flex justify-center mt-4 gap-2">
-            <button (click)="closeSimulation()"
-                class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
-                Regresar
-            </button>
             <button (click)="saveSimulationIsr()"
                 class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
                 Guardar
+            </button>
+            <button (click)="closeSimulation()"
+                class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+                Regresar
             </button>
         </div>
     </div>
@@ -152,13 +152,13 @@
         [simulationName]="getIvaSimulationName()"
         [simulationIdentification]="getIvaSimulationIdentification()" />
     <div class="flex justify-center mt-4 gap-2">
-        <button (click)="closeSimulation()"
-            class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
-            Regresar
-        </button>
         <button (click)="saveSimulationIva()"
             class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
             Guardar
+        </button>
+        <button (click)="closeSimulation()"
+            class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+            Regresar
         </button>
     </div>
 </div>
