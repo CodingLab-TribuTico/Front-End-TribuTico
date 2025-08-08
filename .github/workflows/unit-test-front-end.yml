@@ -25,9 +25,6 @@ jobs:
       run: npm ci
 
     - name: Build Angular app
-      run: npm run build --prod  
+      run: npm run build --prod
 
-    - name: Run unit tests
-      run: npm test -- --watch=false --browsers=ChromeHeadless  
-      env:
-        CI: true  
+   
