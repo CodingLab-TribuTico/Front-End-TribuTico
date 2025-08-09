@@ -14,6 +14,7 @@ import { CreditsComponent } from '../../components/isr-simulation/credits/credit
 import { SettlementTaxDebtComponent } from '../../components/isr-simulation/settlement-tax-debt/settlement-tax-debt.component';
 import { GeneralDataComponent } from '../../components/isr-simulation/general-data/general-data.component';
 import { IvaSimulationComponent } from '../../components/iva-simulation/iva-simulation.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-create-simulation',
@@ -27,6 +28,7 @@ export class CreateSimulationComponent {
   public isrSimulationService: IsrSimulationService = inject(IsrSimulationService);
   public ivaSimulationService: IvaSimulationService = inject(IvaSimulationService);
   public invoiceService = inject(InvoiceService);
+  public authService = inject(AuthService);
   public type: string = 'isr'
   public year: number = 0;
   public childrenNumber: number = 0;
@@ -230,6 +232,31 @@ export class CreateSimulationComponent {
     
     return 'Crear simulación IVA';
   }
+
+  saveSimulationIsr(): void {
+    const userId = this.authService.getCurrentUserId();
+    if (!this.isrSimulationService || !userId || !this.isrSimulation){
+      return;
+    }
+    const simulationToSave = {
+      ...this.isrSimulation,
+      user: { id: userId }
+    };
+    this.isrSimulationService.saveSimulationIsr(simulationToSave);
+  }
+
+  saveSimulationIva(): void {
+    const userId = this.authService.getCurrentUserId();
+    if (!this.ivaSimulationService || !userId || !this.ivaSimulation){
+      return;
+    }
+    const simulationToSave = {
+      ...this.ivaSimulation,
+      user: { id: userId }
+    };
+    this.ivaSimulationService.saveSimulationIva(simulationToSave);
+  }
+
 }
 
 

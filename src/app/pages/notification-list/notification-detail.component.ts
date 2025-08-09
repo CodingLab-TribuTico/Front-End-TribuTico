@@ -7,7 +7,7 @@ import { ModalService } from "../../services/modal.service";
 import { NotificationFormComponent } from "../../components/notification-form/notification-form.component";
 import { FormBuilder, Validators } from "@angular/forms";
 import { INotificationGlobal } from "../../interfaces";
-import { NotificationListComponent } from "../../components/notification-detail/notification-list.component";
+import { NotificationListComponent } from "../../components/notification-list/notification-list.component";
 
 @Component({
   selector: "app-notification-detail",

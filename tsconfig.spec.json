@@ -7,8 +7,7 @@
       "jasmine"
     ]
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
+  "files": [
+    "src/test.spec.ts"
   ]
 }

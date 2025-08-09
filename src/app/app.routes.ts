@@ -22,6 +22,10 @@ import { ReportsUserComponent } from './pages/reports-user/reports-user.componen
 import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
 import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
 import { ChatbotComponent } from './pages/chatbot/chatbot.component';
+import { SimulationViewComponent } from './pages/simulation-view/simulation-view.component';
+import { SimulationDetailComponent } from './pages/simulation-detail/simulation-detail.component';
+import { GoalsComponent } from './pages/goals/goals.component';
+
 
 export const routes: Routes = [
   {
@@ -82,6 +86,15 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'goals',
+        component: GoalsComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Metas',
+          showInSidebar: true
+        }
+      },
+      {
         path: 'reports-user',
         component: ReportsUserComponent,
         data: {
@@ -105,6 +118,15 @@ export const routes: Routes = [
         data: {
           authorities: [IRoleType.superAdmin],
           name: 'Notificaciones',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'simulation-view',
+        component: SimulationViewComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Simulaciones',
           showInSidebar: true
         }
       },
@@ -196,6 +218,17 @@ export const routes: Routes = [
             IRoleType.user
           ],
           name: 'Detalle de Factura',
+          showInSidebar: false
+        }
+      },
+      {
+        path: 'simulation-detail/:type/:id',
+        component: SimulationDetailComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Simulation',
           showInSidebar: false
         }
       }

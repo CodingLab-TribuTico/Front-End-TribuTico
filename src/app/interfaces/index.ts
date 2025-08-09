@@ -220,3 +220,12 @@ export interface IChatbotResponse {
   from: 'user' | 'bot';
   answer: string;
 }
+export interface IGoals {
+  id?: number;
+  declaration?: string;
+  type?: string;
+  date?: Date | string;
+  Objective?: string;
+  status?: 'pending' | 'in-progress' | 'completed';
+  createdAt?: string | Date;
+}
