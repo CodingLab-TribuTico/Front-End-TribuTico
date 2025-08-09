@@ -28,7 +28,7 @@ export class GoalsViewComponent {
     this.goalsService.delete(goal);
   }
 
-   search(event: Event) {
+  search(event: Event) {
     let input = (event.target as HTMLInputElement).value
       .trim()
       .toLocaleLowerCase();

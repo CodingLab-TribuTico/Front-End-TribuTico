@@ -13,28 +13,28 @@
       'grid-cols-3': goals.length >= 3
     }">
     <div *ngFor="let goal of goals" class="bg-golden-glow p-4 rounded-md shadow-md w-full max-w-sm">
-      <p class="text-crater-brown font-bold mb-1">Objetivo</p>
-      <div class="border-2 border-crater-brown rounded p-2 mb-3">
+      <p class="text-crater-brown font-bold mb-1 text-lg">Objetivo</p>
+      <div class="border-2 border-crater-brown rounded p-2 mb-3 text-crater-brown font-semibold">
         {{ goal.objective }}
       </div>
 
       <div class="grid grid-cols-2 gap-3 mb-3">
         <div>
-          <p class="text-crater-brown font-bold">Tipo de impuesto</p>
-          <div class="border-2 border-crater-brown rounded p-2">
+          <p class="text-crater-brown font-bold text-lg">Tipo de impuesto</p>
+          <div class="border-2 border-crater-brown rounded p-2 text-crater-brown font-semibold">
             {{ goal.type }}
           </div>
         </div>
         <div>
-          <p class="text-crater-brown font-bold">Fecha</p>
-          <div class="border-2 border-crater-brown rounded p-2">
+          <p class="text-crater-brown font-bold text-lg">Fecha</p>
+          <div class="border-2 border-crater-brown rounded p-2 text-crater-brown font-semibold">
             {{ goal.date }}
           </div>
         </div>
       </div>
 
-      <p class="text-crater-brown font-bold">Recomendación</p>
-      <div class="border-2 border-crater-brown rounded p-2 min-h-[5rem] break-all whitespace-pre-wrap">
+      <p class="text-crater-brown font-bold text-lg">Recomendación</p>
+      <div class="border-2 border-crater-brown rounded p-2 min-h-[5rem] break-all whitespace-pre-wrap text-crater-brown font-semibold">
         <!--{{ recomendacion }}-->
       </div>
 
