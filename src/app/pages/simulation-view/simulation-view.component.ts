@@ -25,7 +25,7 @@ export class SimulationViewComponent {
   public isrExportService = inject(IsrExportService);
   public ivaExportService = inject(IvaExportService);
   public alertService = inject(AlertService);
-
+  
   public allSimulations = computed(() => {
     const iva = this.ivaService.simulationsIva$().map(ivaCalculation => (
       { ...ivaCalculation, type: 'IVA' }));
@@ -75,13 +75,20 @@ export class SimulationViewComponent {
   }
 
   search(event: Event) {
-    let input = (event.target as HTMLInputElement).value
-      .trim()
-      .toLocaleLowerCase();
-    this.isrService.search.page = 1;
-    this.isrService.search.search = input;
-    this.isrService.getAll();
+  const input = (event.target as HTMLInputElement).value
+    .trim()
+    .toLowerCase();
+
+  this.isrService.search.page = 1;
+  this.ivaService.search.page = 1;
+
+  this.isrService.search.search = input;
+  this.ivaService.search.search = input;
+
+  this.isrService.getAll();
+  this.ivaService.getAll();
   }
+
 }
 
 
