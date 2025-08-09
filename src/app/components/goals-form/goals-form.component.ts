@@ -19,7 +19,7 @@ export class GoalsFormComponent {
     declaration: ['', Validators.required],
     type: ['IVA', Validators.required],
     date: ['2025-06-28', Validators.required],
-    Objective: ['reduce_10_iva', Validators.required]
+    objective: ['reduce_10_iva', Validators.required]
   });
 
   public declarationOptions = [
@@ -33,8 +33,8 @@ export class GoalsFormComponent {
   ];
 
   public objectiveOptions = [
-    { value: 'reduce_10_iva', label: 'Reducir en un 10% el monto del IVA' },
-    { value: 'reduce_15_isr', label: 'Reducir en un 15% el monto del ISR' },
+    { value: 'Reducir en un 10% el monto del IVA', label: 'Reducir en un 10% el monto del IVA' },
+    { value: 'Reducir en un 15% el monto del ISR', label: 'Reducir en un 15% el monto del ISR' },
     { value: 'optimize_deductions', label: 'Optimizar deducciones fiscales' },
   ];
 
@@ -45,7 +45,7 @@ export class GoalsFormComponent {
         declaration: this.goalsForm.value.declaration,
         type: this.goalsForm.value.type,
         date: this.goalsForm.value.date,
-        Objective: this.goalsForm.value.Objective,
+        objective: this.goalsForm.value.objective,
         status: 'pending',
         createdAt: new Date().toISOString()
       };

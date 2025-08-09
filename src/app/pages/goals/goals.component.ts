@@ -6,12 +6,14 @@ import { GoalsService } from "../../services/goals.service";
 import { FormBuilder, Validators } from "@angular/forms";
 import { IGoals } from "../../interfaces";
 import { GoalsFormComponent } from "../../components/goals-form/goals-form.component";
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: "app-goals",
   standalone: true,
   imports: [
     GoalsFormComponent,
+    RouterModule
   ],
   templateUrl: "./goals.component.html",
 })
@@ -25,7 +27,7 @@ export class GoalsComponent {
     declaration: ['', Validators.required],
     type: ['IVA', Validators.required],
     date: ['2025-06-28', Validators.required],
-    Objective: ['reduce_10_iva', Validators.required],
+    objective: ['reduce_10_iva', Validators.required],
     status: ['pending']
   });
 

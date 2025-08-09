@@ -1,0 +1,60 @@
+<div class="flex flex-col items-center gap-4 px-4 py-6">
+  <div *ngIf="goals.length === 0" class="text-center text-crater-brown mt-28">
+    <span class="material-symbols-rounded text-6xl mb-4">flag</span>
+    <p class="text-2xl font-bold">No tienes metas guardadas</p>
+    <p class="text-1xl mt-2">Empieza creando una meta para llevar el control</p>
+  </div>
+
+  <div *ngIf="goals.length > 0"
+    class="grid gap-6 max-w-6xl w-full"
+    [ngClass]="{
+      'grid-cols-1 place-items-center': goals.length === 1,
+      'grid-cols-2 justify-items-center': goals.length === 2,
+      'grid-cols-3': goals.length >= 3
+    }">
+    <div *ngFor="let goal of goals" class="bg-golden-glow p-4 rounded-md shadow-md w-full max-w-sm">
+      <p class="text-crater-brown font-bold mb-1">Objetivo</p>
+      <div class="border-2 border-crater-brown rounded p-2 mb-3">
+        {{ goal.objective }}
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div>
+          <p class="text-crater-brown font-bold">Tipo de impuesto</p>
+          <div class="border-2 border-crater-brown rounded p-2">
+            {{ goal.type }}
+          </div>
+        </div>
+        <div>
+          <p class="text-crater-brown font-bold">Fecha</p>
+          <div class="border-2 border-crater-brown rounded p-2">
+            {{ goal.date }}
+          </div>
+        </div>
+      </div>
+
+      <p class="text-crater-brown font-bold">Recomendación</p>
+      <div class="border-2 border-crater-brown rounded p-2 min-h-[5rem] break-all whitespace-pre-wrap">
+        <!--{{ recomendacion }}-->
+      </div>
+
+      <div class="flex justify-center mt-4">
+        <button 
+          (click)="openDeleteModal(goal)" 
+          class="bg-crater-brown text-bisque py-1 px-3 rounded-md cursor-pointer font-bold hover:bg-bisque hover:text-crater-brown transition-colors flex items-center"
+          type="button">
+          <span class="material-symbols-rounded text-lg">delete</span>
+          <span class="text-sm font-bold ml-2">Eliminar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #confirmationModal>
+    <app-modal (callConfirmationMethod)="deleteGoal(selectedGoal?.id!)" (callCancelMethod)="hideModal()"
+        [cancelAction]="'Cancelar'" [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'"
+        [textCenter]="true" [icon]="'error'">
+        <p class="text-bisque text-base max-w-lg">Esta acción eliminará la meta permanentemente.</p>
+    </app-modal>
+</ng-template>

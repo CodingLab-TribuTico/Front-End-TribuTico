@@ -225,7 +225,7 @@ export interface IGoals {
   declaration?: string;
   type?: string;
   date?: Date | string;
-  Objective?: string;
+  objective?: string;
   status?: 'pending' | 'in-progress' | 'completed';
   createdAt?: string | Date;
 }

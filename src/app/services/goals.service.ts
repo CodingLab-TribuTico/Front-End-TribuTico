@@ -1,14 +1,16 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { IResponse, IGoals } from "../interfaces";
+import { IResponse, IGoals, ISearch } from "../interfaces";
 import { AlertService } from "./alert.service";
 import { AuthService } from "./auth.service";
+import { BaseService } from "./base-service";
 
 @Injectable({
   providedIn: "root",
 })
-export class GoalsService {
-  private http: HttpClient = inject(HttpClient);
+export class GoalsService extends BaseService<IGoals> {
+  protected override source: string = 'goals';
+  protected override http: HttpClient = inject(HttpClient);
   private alertService: AlertService = inject(AlertService);
   private authService: AuthService = inject(AuthService);
   private goalsList = signal<IGoals[]>([]);
@@ -26,6 +28,13 @@ export class GoalsService {
   get goalsByUserId$() {
     return this.goalsByUserIdList;
   }
+
+  public search: ISearch = {
+    page: 1,
+    size: 5,
+    search: "",
+  };
+  public totalItems: any = [];
 
   createGoal(goal: IGoals) {
     return this.http.post<IResponse<IGoals>>('/goals', goal);
@@ -59,7 +68,7 @@ export class GoalsService {
       user: { id: currentUserId },
       declaration: item.declaration,
       type: item.type,
-      objective: item.Objective, // Cambiar de Objective a objective
+      objective: item.objective, // Cambiar de Objective a objective
       date: item.date
     };
 
@@ -71,6 +80,32 @@ export class GoalsService {
         console.error('Error al crear meta:', error);
         this.alertService.showAlert("error", "Ocurrió un error al guardar la meta");
       },
+    });
+  }
+  
+  getAll() {
+    this.findAllWithParams({ page: this.search.page, size: this.search.size, search: this.search.search }).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.search = { ...this.search, ...response.meta };
+        this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
+        this.goalsList.set(response.data);
+      },
+      error: (err: any) => {
+        this.alertService.showAlert('error', err);
+      }
+    });
+  }
+
+  delete(goal: IGoals) {
+    this.delCustomSource(`${goal.id}`).subscribe({
+      next: (response: any) => {
+      this.goalsList.update(goals => goals.filter(g => g.id !== goal.id));
+      this.alertService.showAlert('success', response.message);
+      },
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al eliminar la meta');
+      }
     });
   }
   
