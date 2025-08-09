@@ -217,5 +217,6 @@ export interface IGoals {
   date?: Date | string;
   Objective?: string;
   status?: 'pending' | 'in-progress' | 'completed';
+  recommendations?: string;
   createdAt?: string | Date;
 }
