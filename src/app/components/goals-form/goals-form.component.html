@@ -1,6 +1,5 @@
 <div class="w-full min-h-screen flex items-center justify-center p-4">
   <div class="text-center w-full max-w-2xl">
-    <h1 class="text-4xl font-bold text-crater-brown mb-8">Define tus Metas Tributarias</h1>
     
     <div class="bg-crater-brown rounded-lg p-8 shadow-2xl">
       <form [formGroup]="goalsForm" (ngSubmit)="onSubmit()" class="space-y-6">
@@ -12,7 +11,7 @@
           <select id="declaration" 
                   formControlName="declaration"
                   class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
-            <option value="" disabled selected>Seleccionar...</option>
+            <option value="" disabled>Seleccionar...</option>
             @for (option of declarationOptions; track option.value) {
               <option [value]="option.value">{{ option.label }}</option>
             }
@@ -27,7 +26,6 @@
             <select id="taxType" 
                     formControlName="type"
                     class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
-              <option value="" disabled selected>IVA</option>
               @for (option of taxTypeOptions; track option.value) {
                 <option [value]="option.value">{{ option.label }}</option>
               }
@@ -41,7 +39,6 @@
             <input type="date" 
                    id="date" 
                    formControlName="date"
-                   value="2025-06-28"
                    class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow [color-scheme:dark]">
           </div>
         </div>
@@ -53,7 +50,6 @@
           <select id="objective" 
                   formControlName="Objective"
                   class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
-            <option value="" disabled selected>Reducir en un 10% el monto del IVA</option>
             @for (option of objectiveOptions; track option.value) {
               <option [value]="option.value">{{ option.label }}</option>
             }
@@ -67,7 +63,7 @@
             Crear
           </button>
           <button type="button" 
-                  (click)="closeGoalsForm()"
+                  (click)="onCancel()"
                   class="bg-golden-glow text-flamenco py-2 px-4 rounded-md font-bold text-sm hover:bg-burnt-umber hover:text-bisque transition-colors">
             Cancelar
           </button>

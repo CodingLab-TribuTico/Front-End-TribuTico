@@ -23,7 +23,8 @@ import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page
 import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
 import { SimulationViewComponent } from './pages/simulation-view/simulation-view.component';
 import { SimulationDetailComponent } from './pages/simulation-detail/simulation-detail.component';
-import { GoalsComponent } from './components/goals/goals.component';
+import { GoalsComponent } from './pages/goals/goals.component';
+
 
 export const routes: Routes = [
   {
