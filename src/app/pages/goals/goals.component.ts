@@ -30,7 +30,7 @@ export class GoalsComponent {
   });
 
   constructor() {
-    // No cargamos automáticamente, solo para agregar nuevas metas
+    // carga de facturas pendiente
   }
 
   saveGoal(goal: IGoals) {
