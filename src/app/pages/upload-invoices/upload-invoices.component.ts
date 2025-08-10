@@ -50,7 +50,7 @@ export class UploadInvoicesComponent {
     issueDate: ['', Validators.required],
     consecutive: ['', Validators.required],
     key: ['', Validators.required],
-    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    identification: ['', [Validators.required, Validators.pattern(/^(\d{9}|\d{12})$/)]],
     name: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', Validators.required],

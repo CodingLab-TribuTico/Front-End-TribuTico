@@ -143,6 +143,7 @@ export class ManualInvoicesFormComponent implements OnInit {
     this.details.push(detail);
 
     this.detailForm.reset({ category: '', tax: '' });
+    this.isEditingDetail = false;
   }
 
   fillInvoiceFromAutocomplete(response: any) {
@@ -231,7 +232,12 @@ export class ManualInvoicesFormComponent implements OnInit {
       this.details.splice(this.editingIndex, 0, this.backupDetail);
     }
 
-    this.detailForm.reset();
+    this.detailForm.reset(
+      {
+        tax: '',
+        category: ''
+      }
+    );
     this.isEditingDetail = false;
     this.editingIndex = -1;
     this.backupDetail = undefined;

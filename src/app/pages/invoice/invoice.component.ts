@@ -103,7 +103,14 @@ export class InvoiceComponent {
   }
 
   cancelUpdate() {
+    this.details = [];
     this.invoiceForm.reset();
+    this.detailForm.reset(
+      {
+        category: '',
+        tax: ''
+      }
+    );
     this.showEditInvoiceModal = false;
   }
 }

@@ -61,13 +61,21 @@
     </div>
     <div class="flex gap-4 flex-wrap">
       <div class="flex flex-col gap-2 flex-1">
-        <label class="text-bisque font-bold" for="identification">Cédula<span class="text-burnt-umber">*</span></label>
+        <label class="text-bisque font-bold" for="identification">Cédula o DIMEX<span
+            class="text-burnt-umber">*</span></label>
         <input id="identification" formControlName="identification" type="text"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
-          placeholder="Cédula" />
-        @if (invoiceForm.controls['identification'].invalid && (invoiceForm.controls['identification'].dirty ||
-        invoiceForm.controls['identification'].touched)) {
+          placeholder="Cédula o DIMEX" />
+
+        @if (invoiceForm.controls['identification'].errors?.['required'] &&
+        (invoiceForm.controls['identification'].dirty || invoiceForm.controls['identification'].touched)) {
         <div class="text-burnt-umber text-sm">La identificación es obligatoria.</div>
+        }
+        @if (
+        invoiceForm.controls['identification'].errors?.['pattern'] &&
+        (invoiceForm.controls['identification'].dirty || invoiceForm.controls['identification'].touched)
+        ) {
+        <p class="text-burnt-umber text-sm">Cédula o DIMEX inválida.</p>
         }
       </div>
 
@@ -192,7 +200,7 @@
         <select id="tax" formControlName="tax"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2.5 focus:outline-none focus:border-golden-glow"
           (change)="calculateTotal()">
-          <option [value]="''" disabled selected>Selecciona un impuesto</option>
+          <option value="" disabled selected>Selecciona un impuesto</option>
           <option value="13">13%</option>
           <option value="10">10%</option>
           <option value="4">4%</option>
@@ -252,14 +260,14 @@
       <div class="flex gap-4 justify-center mt-2">
         <button (click)="callSaveDetail()" [disabled]="detailForm.invalid" type="button"
           class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber disabled:text-bisque">
-          {{ isEditingDetail ? 'Guardar' : 'Agregar detalle' }}
+          {{ isEditingDetail ? 'Actualizar detalle' : 'Agregar detalle' }}
         </button>
       </div>
       @if(isEditingDetail) {
       <div class="flex gap-4 justify-center mt-2">
         <button (click)="cancelEdit()" [disabled]="detailForm.invalid" type="button"
           class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-bisque transition-colors">
-          Cancelar
+          Cancelar edición
         </button>
       </div>
       }

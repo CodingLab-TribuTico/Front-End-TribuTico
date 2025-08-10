@@ -78,18 +78,19 @@
       </div>
 
       <div class="flex flex-col">
-        <label class="text-bisque font-semibold mb-1" for="cedula">Cédula<span class="text-burnt-umber">*</span></label>
+        <label class="text-bisque font-semibold mb-1" for="cedula">Cédula o DIMEX<span
+            class="text-burnt-umber">*</span></label>
         <input
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded-md p-2 focus:outline-none focus:border-golden-glow"
           #identification="ngModel" type="text" id="identification" name="identification" placeholder="123456789"
           [(ngModel)]="user.identification" required />
         <div class="text-burnt-umber text-sm mt-1 min-h-[20px]">
           <span *ngIf="identification.invalid && identification.touched">
-            La identificación es obligatoria.
+            La identificación o dimex es obligatoria.
           </span>
           <span
-            *ngIf="identification.value && identification.value.length !== 9 && identification.value.length >= 1 && identification.touched">
-            La identificación es inválida.
+            *ngIf="identification.value && (identification.value.length !== 9 && identification.value.length !== 12) && identification.value.length >= 1 && identification.touched">
+            La identificación o dimex es inválida.
           </span>
         </div>
       </div>

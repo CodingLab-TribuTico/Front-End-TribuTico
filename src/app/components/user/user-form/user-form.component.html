@@ -5,24 +5,30 @@
   <div class="grid grid-cols-2">
     <div class="w-full">
       <div class="mb-2">
-        <label class="block my-2 text-base font-bold text-bisque" for="identification">Cédula<span
-            class="text-burnt-umber">*</span></label>
+        <label class="block my-2 text-base font-bold text-bisque" for="identification">
+          Cédula o DIMEX<span class="text-burnt-umber">*</span>
+        </label>
         <input id="identification" formControlName="identification" type="text"
           class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md block w-full p-2 font-bold placeholder:text-zorba placeholder:font-bold focus:outline-none focus:border-golden-glow"
-          placeholder="123456789">
+          placeholder="123456789" />
 
         <div class="min-h-[1.5rem]">
-          @if (userForm.controls['identification'].errors?.['required'] &&
-          (userForm.controls['identification'].dirty || userForm.controls['identification'].touched)) {
+          @if (
+          userForm.controls['identification'].errors?.['required'] &&
+          (userForm.controls['identification'].dirty || userForm.controls['identification'].touched)
+          ) {
           <p class="text-burnt-umber text-sm">Cédula es obligatoria</p>
           }
-          @if ((userForm.controls['identification'].errors?.['minlength'] ||
-          userForm.controls['identification'].errors?.['maxlength']) &&
-          (userForm.controls['identification'].dirty || userForm.controls['identification'].touched)) {
-          <p class="text-burnt-umber text-sm">Cédula inválida</p>
+
+          @if (
+          userForm.controls['identification'].errors?.['pattern'] &&
+          (userForm.controls['identification'].dirty || userForm.controls['identification'].touched)
+          ) {
+          <p class="text-burnt-umber text-sm">Cédula o DIMEX inválida.</p>
           }
         </div>
       </div>
+
 
       <div class="mb-2">
         <label class="block my-2 text-base font-semibold text-bisque" for="lastname">Primer apellido<span

@@ -31,7 +31,7 @@ export class UsersComponent {
 
   userForm = this.fb.group({
     id: [''],
-    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    identification: ['', [Validators.required, Validators.pattern(/^(\d{9}|\d{12})$/)]],
     name: ['', Validators.required],
     lastname: ['', Validators.required],
     lastname2: [''],

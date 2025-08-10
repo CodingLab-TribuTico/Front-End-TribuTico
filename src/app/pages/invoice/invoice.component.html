@@ -14,7 +14,7 @@
 
     <div>
         <app-invoice-list (callModalAction)="callEdition($event)" (callDeleteAction)="invoiceService.delete($event)"
-            [invoices]="invoiceService.invoices$()" />
+            [invoices]="invoiceService.invoices$()" (callCancelAction)="invoiceForm.reset()" />
         @if(invoiceService.invoices$().length) {
         <app-pagination [service]="invoiceService" />
         }

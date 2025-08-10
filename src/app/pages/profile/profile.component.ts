@@ -30,7 +30,7 @@ export class ProfileComponent {
     lastname: ['', Validators.required],
     lastname2: [''],
     email: [{ value: '', disabled: true }, [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
-    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    identification: ['', [Validators.required, Validators.pattern(/^(\d{9}|\d{12})$/)]],
     birthDate: ['', Validators.required]
   });
 
