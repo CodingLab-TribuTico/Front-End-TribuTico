@@ -77,11 +77,22 @@ export class SimulationDetailComponent implements OnInit {
   }
 
   deleteSimulation(): void {
-    const currentSimulation = this.isrSimulationService.currentIsrSimulation$();
-    if (currentSimulation) {
-      this.isrSimulationService.delete(currentSimulation);
-      this.hideModal();
-      this.onBack();
+    const type = this.route.snapshot.paramMap.get('type');
+
+    if (type === 'isr') {
+      const currentSimulation = this.isrSimulationService.currentIsrSimulation$();
+      if (currentSimulation) {
+        this.isrSimulationService.delete(currentSimulation);
+        this.hideModal();
+        this.onBack();
+      }
+    } else if (type === 'iva') {
+      const currentSimulation = this.ivaSimulationService.currentIvaSimulation$();
+      if (currentSimulation) {
+        this.ivaSimulationService.delete(currentSimulation);
+        this.hideModal();
+        this.onBack();
+      }
     }
   }
 

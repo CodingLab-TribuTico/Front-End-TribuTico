@@ -1,4 +1,4 @@
-import { Component, computed, inject } from "@angular/core";
+import { Component, computed, inject, signal } from "@angular/core";
 import { SimulationListComponent } from "../../components/simulation-list/simulation-list.component";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { LoaderComponent } from "../../components/loader/loader.component";
@@ -25,22 +25,30 @@ export class SimulationViewComponent {
   public isrExportService = inject(IsrExportService);
   public ivaExportService = inject(IvaExportService);
   public alertService = inject(AlertService);
+  public searchType = signal<string>(''); 
 
   public allSimulations = computed(() => {
-    const iva = this.ivaService.simulationsIva$().map(ivaCalculation => (
-      { ...ivaCalculation, type: 'IVA' }));
+    const iva = this.ivaService.simulationsIva$().map(i => ({ ...i, type: 'IVA' }));
+    const isr = this.isrService.simulationsIsr$().map(s => ({ ...s, type: 'ISR' }));
+    const all = [...iva, ...isr];
 
-    const isr = this.isrService.simulationsIsr$().map(isrSimulation => (
-      { ...isrSimulation, type: 'ISR' }));
-    return [...iva, ...isr];
+    const search = this.searchType().trim();
+    if (!search) return all;
+
+    return all.filter(sim => sim.type.toLowerCase().includes(search));
   });
 
+  search(event: Event) {
+    const value = (event.target as HTMLInputElement).value || '';
+    this.searchType.set(value.trim().toLowerCase());
+  }
+  
   constructor() {
     const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
     const userId = user.id;
     this.loadSimulations(userId);
   }
-
+  
   loadSimulations(userId: number) {
     this.ivaService.getByUserId(userId);
     this.isrService.getByUserId(userId);
@@ -74,14 +82,6 @@ export class SimulationViewComponent {
     return simulation && typeof simulation.year === 'number' && typeof simulation.month === 'number';
   }
 
-  search(event: Event) {
-    let input = (event.target as HTMLInputElement).value
-      .trim()
-      .toLocaleLowerCase();
-    this.isrService.search.page = 1;
-    this.isrService.search.search = input;
-    this.isrService.getAll();
-  }
 }
 
 

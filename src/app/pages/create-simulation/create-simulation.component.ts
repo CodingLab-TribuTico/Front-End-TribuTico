@@ -15,6 +15,7 @@ import { SettlementTaxDebtComponent } from '../../components/isr-simulation/sett
 import { GeneralDataComponent } from '../../components/isr-simulation/general-data/general-data.component';
 import { IvaSimulationComponent } from '../../components/iva-simulation/iva-simulation.component';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-simulation',
@@ -33,6 +34,7 @@ export class CreateSimulationComponent {
   public year: number = 0;
   public childrenNumber: number = 0;
   public hasSpouse: boolean = false;
+  public router = inject(Router);
   public fb: FormBuilder = inject(FormBuilder);
   public isrSimulationShown: boolean = false;
   public ivaSimulationShown: boolean = false;
@@ -211,6 +213,7 @@ export class CreateSimulationComponent {
       user: { id: userId }
     };
     this.isrSimulationService.saveSimulationIsr(simulationToSave);
+    this.router.navigate(['/app/simulation-view']);
   }
 
   saveSimulationIva(): void {
@@ -223,6 +226,7 @@ export class CreateSimulationComponent {
       user: { id: userId }
     };
     this.ivaSimulationService.saveSimulationIva(simulationToSave);
+    this.router.navigate(['/app/simulation-view']);
   }
 
 }
