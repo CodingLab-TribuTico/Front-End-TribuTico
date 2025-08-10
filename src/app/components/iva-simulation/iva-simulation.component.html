@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div *ngIf="currentSimulation">
+        <div *ngIf="currentSimulation" class="space-y-8">
             <app-section-iva-simulation 
                 [sectionTitle]="ventasSujetasSection.sectionTitle"
                 [hasToggle]="ventasSujetasSection.hasToggle"
@@ -36,12 +36,16 @@
                 [subsections]="ventasSujetasSection.subsections">
             </app-section-iva-simulation>
 
+            <div class="py-4"></div>
+
             <app-tax-base
                 [simulationPeriod]="simulationPeriod"
                 [simulationName]="simulationName"
                 [simulationIdentification]="simulationIdentification"
                 [simulation]="currentSimulation">
             </app-tax-base>
+
+            <div class="py-4"></div>
 
             <app-exempt-sales
                 [simulationPeriod]="simulationPeriod"
@@ -50,12 +54,16 @@
                 [simulation]="currentSimulation">
             </app-exempt-sales>
 
+            <div class="py-4"></div>
+
             <app-sales-not-subject
                 [simulationPeriod]="simulationPeriod"
                 [simulationName]="simulationName"
                 [simulationIdentification]="simulationIdentification"
                 [simulation]="currentSimulation">
             </app-sales-not-subject>
+
+            <div class="py-4"></div>
 
             <app-total-sales
                 [simulationPeriod]="simulationPeriod"
