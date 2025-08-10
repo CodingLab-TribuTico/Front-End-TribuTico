@@ -28,7 +28,7 @@
             <div class="max-h-60 overflow-y-auto">
                 @if(notifications().length > 0) {
                 @for(notification of notifications().slice().reverse(); track notification.id) {
-                <a (click)="markAsRead(notification.id)"
+                <a (click)="handleNotificationClick(notification)"
                     class="flex items-start gap-3 px-5 py-4 border-b border-bisque/30 hover:bg-zorba transition-colors cursor-pointer">
                     <span class="material-symbols-rounded text-bisque text-xl pt-0.5">
                         {{

@@ -14,7 +14,7 @@ import { NotificationService } from '../../services/notification.service';
 })
 export class NotificationBellComponent {
   private notificationService = inject(NotificationService);
-
+  private router = inject(Router);
   @ViewChild("notificationDropdown", { static: false })
   dropdownRef!: ElementRef;
 
@@ -38,10 +38,17 @@ export class NotificationBellComponent {
     }
   }
 
-  markAsRead(notificationId: number) {
-    this.notificationService.markNotificationRead(notificationId);
+  handleNotificationClick(notification: INotification) {
+    this.notificationService.markNotificationRead(notification.id);
+    
+    this.router.navigate(['/app/notifications'], {
+      state: { selectedNotificationId: notification.id }
+    });
+    
+    this.dropdownOpen = false;
   }
 
+ 
   markAllAsRead() {
     this.notificationService.markAllAsRead();
   }
