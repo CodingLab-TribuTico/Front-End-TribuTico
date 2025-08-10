@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { IChatbotRequest, IChatbotResponse, IResponse } from '../interfaces';
 import { BaseService } from './base-service';
 import { AlertService } from './alert.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class ChatbotService extends BaseService<IResponse<IChatbotRequest>> {
   private botTyping = signal(false);
   private messagesListSignal = signal<IChatbotResponse[]>([]);
   private currentChatId = signal<string>('');
+  private responseArrived = new Subject<void>();
+  responseArrived$ = this.responseArrived.asObservable();
 
   get botTyping$() {
     return this.botTyping;
@@ -31,8 +34,9 @@ export class ChatbotService extends BaseService<IResponse<IChatbotRequest>> {
       next: (response: any) => {
         this.currentChatId.set(response.chatId);
         this.messagesListSignal.update(messages => [...messages,
-        { chatId: this.currentChatId(), answer: response.answer, from: 'bot' }]
+        { chatId: response.chatId, answer: response.answer, from: 'bot' }]
         );
+        this.responseArrived.next();
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al enviar la pregunta al chatbot');

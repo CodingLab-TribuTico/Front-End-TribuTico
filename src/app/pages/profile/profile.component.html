@@ -55,21 +55,27 @@
         </div>
 
         <div class="flex flex-col">
-          <label class="mb-2 text-bisque font-bold" for="identification">Cédula<span
-              class="text-burnt-umber">*</span></label>
+          <label class="mb-2 text-bisque font-bold" for="identification">
+            Cédula o DIMEX<span class="text-burnt-umber">*</span>
+          </label>
+
           @if (isEditing) {
           <input formControlName="identification" type="text" placeholder="Cédula"
             class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:outline-none focus:border-golden-glow" />
+
           <div class="min-h-[1rem]">
-            @if (userForm.get('identification')?.errors?.['required'] && userForm.get('identification')?.touched) {
+            @if (userForm.get('identification')?.hasError('required') && userForm.get('identification')?.touched) {
             <p class="text-sm text-burnt-umber">Este campo es obligatorio</p>
             }
-            @if (userForm.get('identification')?.errors?.['minlength'] ||
-            userForm.get('identification')?.errors?.['maxlength']) {
-            <p class="text-sm text-burnt-umber">Cédula inválida</p>
+
+            @if (userForm.get('identification')?.hasError('pattern') && userForm.get('identification')?.touched) {
+            <p class="text-sm text-burnt-umber">
+              Cédula o DIMEX inválida.
+            </p>
             }
           </div>
           }
+
           @if (!isEditing) {
           <p class="text-bisque font-bold border-b border-zorba pb-2">
             {{ profileService.user$().identification?.trim() || "No disponible" }}
@@ -101,7 +107,7 @@
               class="text-burnt-umber">*</span></label>
           @if (isEditing) {
           <input formControlName="email" type="text" placeholder="Correo electrónico"
-            class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:outline-none focus:border-golden-glow" />
+            class="w-full p-2 rounded-md border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba font-bold focus:border-golden-glow focus:outline-none focus:ring-2 disabled:bg-zorba disabled:opacity-80 disabled:cursor-not-allowed" />
           <div class="min-h-[1rem]">
             @if (userForm.get('email')?.errors?.['required'] && userForm.get('email')?.touched) {
             <p class="text-sm text-burnt-umber">Este campo es obligatorio</p>
@@ -133,7 +139,7 @@
         <button *ngIf="isEditing" type="button" (click)="saveChanges(userForm.value)"
           [disabled]="userForm.invalid || !userForm.dirty"
           class="px-4 py-2 font-bold rounded-md text-bisque bg-flamenco hover:bg-golden-glow hover:text-flamenco transition-colors disabled:bg-burnt-umber disabled:text-bisque disabled:opacity-80 disabled:cursor-not-allowed">
-          Guardar
+          Actualizar
         </button>
 
         <button *ngIf="isEditing" type="button" (click)="cancelChanges()"

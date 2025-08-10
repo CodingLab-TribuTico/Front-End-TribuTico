@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { CardMenuComponent } from '../../components/card-menu/card-menu.component';
-import { Router } from '@angular/router';
-import { InvoiceListComponent } from '../../components/invoice-list/invoice-list.component';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CardMenuComponent],
+  imports: [CardMenuComponent, RouterLink],
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
