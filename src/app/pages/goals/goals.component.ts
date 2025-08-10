@@ -31,9 +31,6 @@ export class GoalsComponent {
     status: ['pending']
   });
 
-  constructor() {
-    // carga de facturas pendiente
-  }
 
   saveGoal(goal: IGoals) {
     this.goalsService.save(goal);

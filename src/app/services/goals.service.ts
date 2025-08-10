@@ -63,7 +63,6 @@ export class GoalsService extends BaseService<IGoals> {
       return;
     }
 
-    // Preparar los datos para el backend
     const goalData = {
       user: { id: currentUserId },
       declaration: item.declaration,
