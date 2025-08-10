@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, Output, signal, Signal } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { IDetailInvoice, IManualInvoice, IInvoiceUser } from '../../../interfaces';
 import { CardDetailComponent } from '../../card-detail/card-detail.component';
@@ -14,34 +14,27 @@ import { CardDetailComponent } from '../../card-detail/card-detail.component';
     CardDetailComponent,
   ],
 })
-export class ManualInvoicesFormComponent {
+export class ManualInvoicesFormComponent implements OnInit {
   public fb: FormBuilder = inject(FormBuilder);
+
   @Input() invoiceForm!: FormGroup;
   @Input() detailForm!: FormGroup;
   @Input() responseScan!: any;
   @Input() details: IDetailInvoice[] = [];
-  @Output() callSavedMethod: EventEmitter<IManualInvoice> = new EventEmitter<IManualInvoice>();
-  @Output() callResetScanMethod: EventEmitter<any> = new EventEmitter<any>();
+  @Input() textConfirmButton: string = 'Confirmar';
+  @Output() callSavedMethod = new EventEmitter<IManualInvoice>();
+  @Output() callResetScanMethod = new EventEmitter<any>();
   @Output() callUpdateMethod = new EventEmitter<IManualInvoice>();
   @Output() callCancelMethod = new EventEmitter<void>();
   @Input() isEditing: boolean = false;
 
-  public isEditingDetail: boolean = false;
-  public editingIndex: number = -1;
+  public isEditingDetail = false;
+  public editingIndex = -1;
+  private originalDetailsBackup: IDetailInvoice[] = [];
+  private backupDetail?: IDetailInvoice;
 
-  public showDeleteModal: boolean = false;
-  public indexToDelete: number = -1;
-
-  public typeInvoice: string = 'ingreso';
-
-  constructor() {
-    effect(() => {
-      if (!this.responseScan) return;
-      const response = this.responseScan();
-      this.fillInvoiceFromAutocomplete(response);
-      this.callResetScanMethod.emit();
-    });
-  }
+  public showDeleteModal = false;
+  public indexToDelete = -1;
 
   public keyCategories: string[] = [
     "VG-B", "VG-S", "VE", "VX", "EXP", "CBG", "CSG", "CX", "CBR", "CSR", "GSP", "GA", "SPS", "HP", "GV",
@@ -75,6 +68,19 @@ export class ManualInvoicesFormComponent {
     "DON": "Donación Deducible - No lleva IVA",
     "MUL": "Multas, Sanciones o Gastos No Deducibles"
   };
+
+  ngOnInit() {
+    this.originalDetailsBackup = JSON.parse(JSON.stringify(this.details));
+  }
+
+  constructor() {
+    effect(() => {
+      if (!this.responseScan) return;
+      const response = this.responseScan();
+      this.fillInvoiceFromAutocomplete(response);
+      this.callResetScanMethod.emit();
+    });
+  }
 
   callSave() {
     const type = this.invoiceForm.controls["type"].value;
@@ -111,36 +117,31 @@ export class ManualInvoicesFormComponent {
       this.invoiceForm.reset();
     }
 
+    this.originalDetailsBackup = JSON.parse(JSON.stringify(manualInvoice.details));
     this.details = [];
-    this.detailForm.reset({
-      category: '',
-      tax: '',
-    });
-    this.invoiceForm.reset({
-      type: '',
-    });
+    this.detailForm.reset({ category: '', tax: '' });
+    this.invoiceForm.reset({ type: '' });
   }
 
   callSaveDetail() {
-    let detail: IDetailInvoice = {
-      cabys: this.detailForm.controls["cabys"].value,
-      quantity: this.detailForm.controls["quantity"].value,
-      unit: this.detailForm.controls["unit"].value,
-      unitPrice: this.detailForm.controls["unitPrice"].value,
-      discount: this.detailForm.controls["discount"].value,
-      tax: this.detailForm.controls["tax"].value,
-      taxAmount: (this.detailForm.controls["quantity"].value * this.detailForm.controls["unitPrice"].value * this.detailForm.controls["tax"].value) / 100,
-      category: this.detailForm.controls["category"].value,
-      total: this.detailForm.controls["total"].value,
-      description: this.detailForm.controls["description"].value,
+    const form = this.detailForm.controls;
+    const detail: IDetailInvoice = {
+      cabys: form["cabys"].value,
+      quantity: form["quantity"].value,
+      unit: form["unit"].value,
+      unitPrice: form["unitPrice"].value,
+      discount: form["discount"].value,
+      tax: form["tax"].value,
+      taxAmount: (form["quantity"].value * form["unitPrice"].value * form["tax"].value) / 100,
+      category: form["category"].value,
+      total: form["total"].value,
+      description: form["description"].value,
     };
 
     this.details.push(detail);
 
-    this.detailForm.reset({
-      category: '',
-      tax: '',
-    });
+    this.detailForm.reset({ category: '', tax: '' });
+    this.isEditingDetail = false;
   }
 
   fillInvoiceFromAutocomplete(response: any) {
@@ -150,23 +151,13 @@ export class ManualInvoicesFormComponent {
   }
 
   updateFormForType(data: any) {
-    const personData = data.receiver || data.issuer;
-    const person = personData || {};
+    const person = data.receiver || data.issuer || {};
+    let firstName = '', lastName = '';
 
-    let firstName = '';
-    let lastName = '';
     if (person.name) {
       const fullName = person.name.trim().split(/\s+/);
-      if (fullName.length > 0) {
-        firstName = fullName[0];
-        lastName = fullName.slice(2).join(' ');
-      }
-    }
-
-    if (data.type == "ingreso") {
-      this.typeInvoice = 'ingreso';
-    } else {
-      this.typeInvoice = 'gasto';
+      firstName = fullName[0];
+      lastName = fullName.slice(1).join(' ');
     }
 
     this.invoiceForm.patchValue({
@@ -182,7 +173,7 @@ export class ManualInvoicesFormComponent {
 
     this.details = [];
 
-    if (data.details && data.details.length > 0) {
+    if (data.details?.length) {
       const firstDetail = data.details[0];
       this.detailForm.patchValue({
         cabys: firstDetail.cabys || '',
@@ -196,10 +187,7 @@ export class ManualInvoicesFormComponent {
       });
       this.calculateTotal();
     } else {
-      this.detailForm.reset({
-        category: '',
-        tax: ''
-      });
+      this.detailForm.reset({ category: '', tax: '' });
     }
   }
 
@@ -217,30 +205,38 @@ export class ManualInvoicesFormComponent {
   }
 
   callCancel() {
+    this.details.length = 0;
+    this.details.push(...JSON.parse(JSON.stringify(this.originalDetailsBackup)));
     this.callCancelMethod.emit();
   }
 
   editDetailItem(index: number) {
     const detail = this.details[index];
+    this.backupDetail = { ...detail };
 
-
-    this.detailForm.patchValue({
-      cabys: detail.cabys,
-      quantity: detail.quantity,
-      unit: detail.unit,
-      unitPrice: detail.unitPrice,
-      discount: detail.discount,
-      tax: detail.tax,
-      category: detail.category,
-      description: detail.description
-    });
+    this.detailForm.patchValue(detail);
 
     this.details.splice(index, 1);
-
     this.calculateTotal();
 
     this.isEditingDetail = true;
     this.editingIndex = index;
+  }
+
+  cancelEdit() {
+    if (this.backupDetail && this.editingIndex >= 0) {
+      this.details.splice(this.editingIndex, 0, this.backupDetail);
+    }
+
+    this.detailForm.reset(
+      {
+        tax: '',
+        category: ''
+      }
+    );
+    this.isEditingDetail = false;
+    this.editingIndex = -1;
+    this.backupDetail = undefined;
   }
 
   deleteDetailItem(index: number) {
@@ -254,17 +250,6 @@ export class ManualInvoicesFormComponent {
       this.indexToDelete = -1;
     }
     this.hideDeleteModal();
-  }
-
-  changeType(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const selectedType = selectElement.value as 'ingreso' | 'gasto';
-
-    if (selectedType === 'ingreso') {
-      this.typeInvoice = 'ingreso';
-    } else if (selectedType === 'gasto') {
-      this.typeInvoice = 'gasto';
-    }
   }
 
   hideDeleteModal() {

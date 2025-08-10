@@ -68,31 +68,7 @@ export class CreateSimulationComponent {
   });
 
   constructor() {
-    const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
-    const userId = user.id;
-    this.generateYears();
-    this.initializeMockData(); 
-  }
-
-  initializeMockData() {
-    const mockInvoices: IManualInvoice[] = [
-      {
-        id: 1,
-        issueDate: '2025-07-15',
-        type: 'ingreso',
-        consecutive: '001',
-        key: 'mock-key-1'
-      },
-      {
-        id: 2,
-        issueDate: '2025-07-20',
-        type: 'gasto',
-        consecutive: '002',
-        key: 'mock-key-2'
-      }
-    ];
-    
-    this.invoiceService['invoicesList'].set(mockInvoices);
+    this.invoiceService.getAll();
   }
 
   changeType(event: Event) {
@@ -105,7 +81,7 @@ export class CreateSimulationComponent {
     this.ivaSimulation = null;
   }
 
-  onSubmit() {
+  onSubmitISR() {
     if (this.formIsrSimulation.invalid || this.type !== 'isr') return;
     const { year, childrenNumber, hasSpouse } = this.formIsrSimulation.value;
 
@@ -129,16 +105,16 @@ export class CreateSimulationComponent {
     const userId = user.id;
 
     this.ivaSimulationShown = false;
-    this.ivaSimulation = null; 
+    this.ivaSimulation = null;
 
-    this.ivaSimulationService.createSimulation(year, month, userId, (simulation) => {
-      if (simulation) {
-        this.ivaSimulation = simulation;
+    this.ivaSimulationService.createSimulation(year, month, userId);
+
+    setTimeout(() => {
+      this.ivaSimulation = this.ivaSimulationService.ivaSimulation;
+      if (this.ivaSimulation) {
         this.ivaSimulationShown = true;
-      } else {
-        console.error('Error: No se pudo cargar la simulación IVA');
       }
-    });
+    }, 300);
   }
 
   closeSimulation() {
@@ -146,14 +122,6 @@ export class CreateSimulationComponent {
     this.ivaSimulationShown = false;
     this.isrSimulation = null;
     this.ivaSimulation = null;
-  }
-
-  generateYears() {
-    const currentYear = new Date().getFullYear();
-    this.years = [];
-    for (let year = currentYear; year >= currentYear - 10; year--) {
-      this.years.push(year);
-    }
   }
 
   loadInvoicesYears(invoices: IManualInvoice[] = []) {
@@ -186,21 +154,21 @@ export class CreateSimulationComponent {
 
   getAvailableMonths(): { value: number, name: string }[] {
     const invoices = this.invoiceService.invoices$();
-    
+
     if (!invoices || invoices.length === 0) {
-      return this.months; 
+      return this.months;
     }
 
     const availableMonths = new Set<number>();
     invoices.forEach(invoice => {
       if (invoice.issueDate) {
-        const month = new Date(invoice.issueDate).getMonth() + 1; 
+        const month = new Date(invoice.issueDate).getMonth() + 1;
         availableMonths.add(month);
       }
     });
 
     const filteredMonths = this.months.filter(month => availableMonths.has(month.value));
-    
+
     return filteredMonths.length > 0 ? filteredMonths : this.months;
   }
 
@@ -214,24 +182,24 @@ export class CreateSimulationComponent {
 
   getIsrButtonText(): string {
     if (this.type !== 'isr') return 'Crear simulación ISR';
-    
+
     const { year, childrenNumber, hasSpouse } = this.formIsrSimulation.value;
-    
+
     if (!year) return 'Seleccione un año';
     if (childrenNumber === null || childrenNumber === undefined) return 'Ingrese número de hijos';
     if (hasSpouse === null || hasSpouse === undefined) return 'Seleccione si tiene cónyuge';
-    
+
     return 'Crear simulación ISR';
   }
 
   getIvaButtonText(): string {
     if (this.type !== 'iva') return 'Crear simulación IVA';
-    
+
     const { year, month } = this.formIvaSimulation.value;
-    
+
     if (!year) return 'Seleccione un año';
     if (!month) return 'Seleccione un mes';
-    
+
     return 'Crear simulación IVA';
   }
 

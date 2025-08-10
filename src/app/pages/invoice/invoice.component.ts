@@ -43,7 +43,7 @@ export class InvoiceComponent {
     identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
     name: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: ['', Validators.required],
+    email: [{ value: '', disabled: true }, Validators.required],
   });
 
   public detailForm = this.fb.group({
@@ -65,11 +65,10 @@ export class InvoiceComponent {
       consecutive: invoice.consecutive?.toString() || '',
       key: invoice.key,
       issueDate: invoice.issueDate,
-      identification: invoice.receiver?.identification,
-      name: invoice.receiver?.name,
-      lastName: invoice.receiver?.lastName,
-      email: invoice.receiver?.email
-
+      identification: invoice.issuer?.identification,
+      name: invoice.issuer?.name,
+      lastName: invoice.issuer?.lastName,
+      email: invoice.issuer?.email
     });
 
     this.details = invoice.details ?? [];
@@ -103,7 +102,14 @@ export class InvoiceComponent {
   }
 
   cancelUpdate() {
+    this.details = [];
     this.invoiceForm.reset();
+    this.detailForm.reset(
+      {
+        category: '',
+        tax: ''
+      }
+    );
     this.showEditInvoiceModal = false;
   }
 }

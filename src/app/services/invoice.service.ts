@@ -47,7 +47,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
           (_, i) => i + 1
         );
         this.invoicesList.set(response.data);
-        console.log("Invoices loaded successfully", response.data);
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al recuperar las facturas');
@@ -63,19 +62,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al recuperar la factura');
       },
-    });
-  }
-
-  getByUserId(userId: number) {
-    this.findAllWithParams({ userId }).subscribe({
-      next: (response: IResponse<IManualInvoice[]>) => {
-        this.search = { ...this.search, ...response.meta };
-        this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
-        this.invoicesList.set(response.data);
-      },
-      error: () => {
-        this.alertService.showAlert('error', 'Ocurrió un error al recuperar las facturas del usuario');
-      }
     });
   }
 
