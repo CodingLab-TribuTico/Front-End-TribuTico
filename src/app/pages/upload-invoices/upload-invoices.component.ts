@@ -36,7 +36,6 @@ export class UploadInvoicesComponent {
   @ViewChild('inputFileForm') inputFileForm!: InputFileFormComponent;
 
   public combinedResponse = computed(() => {
-    console.log(this.xmlService.responseScan$(), this.ocrService.responseScan$());
     return this.xmlService.responseScan$() || this.ocrService.responseScan$();
   });
 
@@ -50,7 +49,7 @@ export class UploadInvoicesComponent {
     issueDate: ['', Validators.required],
     consecutive: ['', Validators.required],
     key: ['', Validators.required],
-    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    identification: ['', [Validators.required, Validators.pattern(/^(\d{9}|\d{12})$/)]],
     name: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', Validators.required],
@@ -116,14 +115,6 @@ export class UploadInvoicesComponent {
   }
 
   saveInvoice(item: IManualInvoice) {
-    const userId = this.authService.getCurrentUserId();
-
-    if (!userId) {
-      console.error('No se pudo obtener el ID del usuario');
-      this.alertService.displayAlert('error', 'No se pudo obtener el ID del usuario. Por favor, inicia sesión nuevamente.', 'center', 'top', ['error-snackbar']);
-      return;
-    }
-
     this.invoicesService.save(item);
   }
 

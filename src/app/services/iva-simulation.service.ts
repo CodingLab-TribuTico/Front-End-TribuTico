@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { BaseService } from './base-service';
 import { IIvaCalculation, IResponse, ISearch } from '../interfaces';
 import { Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { AlertService } from './alert.service';
 
 @Injectable({
@@ -12,109 +13,30 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
   private currentSubscription: Subscription | null = null;
   public ivaSimulation: IIvaCalculation | null = null;
   private alertService: AlertService = inject(AlertService);
-  private simulationsByUserIdList = signal<IIvaCalculation[]>([]);
-  private simulationListSignal = signal<IIvaCalculation[]>([]);
-  private currentSimulation = signal<IIvaCalculation | null>(null);
-  public totalItems: any = [];
- 
-  get simulationsIva$() {
-    return this.simulationListSignal;
-  }
 
-  get currentIvaSimulation$() {
-    return this.currentSimulation;
-  }
-
-  get simulationsByUserIdList$() {
-    return this.simulationsByUserIdList;
-  }
- 
   public search: ISearch = {
     page: 1,
     size: 5,
     search: "",
-  }
+  };
+  public totalItems: any = [];
+  public simulationListSignal = signal<IIvaCalculation[]>([]);
+  public currentSimulation = signal<IIvaCalculation | null>(null);
 
-  createSimulation(year: number, month: number, userId: number, callback?: (simulation: IIvaCalculation | null) => void) {
-    if (this.currentSubscription) {
-      this.currentSubscription.unsubscribe();
-    }
-    
-    const params = { 
-      year: year, 
-      month: month, 
-      userId: userId, 
-      _t: Date.now()
-    };
-    
-    this.currentSubscription = this.findAllWithParamsAndCustomSource('create', params).subscribe({
+
+  createSimulation(year: number, month: number, userId: number) {
+    this.currentSubscription = this.findAllWithParams({
+      year: year,
+      month: month,
+      userId: userId,
+    }).subscribe({
       next: (response: any) => {
         this.ivaSimulation = response.data;
-        
-        if (callback) {
-          callback(this.ivaSimulation);
-        }
       },
       error: () => {
-        this.alertService.showAlert('error', 'Error al crear simulación IVA');
-        this.ivaSimulation = null;
-        
-        if (callback) {
-          callback(null);
-        }
+        this.alertService.showAlert('error', 'Ocurrió un error al crear la simulación de IVA');
       },
     });
-  }
-
-  refreshSimulation(callback?: (simulation: IIvaCalculation | null) => void) {
-    if (!this.ivaSimulation) {
-      if (callback) callback(null);
-      return;
-    }
-    
-    this.forceRecalculation(
-      this.ivaSimulation.year, 
-      this.ivaSimulation.month, 
-      this.ivaSimulation.user?.id || 0,
-      callback
-    );
-  }
-
-  forceRecalculation(year: number, month: number, userId: number, callback?: (simulation: IIvaCalculation | null) => void) {
-    if (this.currentSubscription) {
-      this.currentSubscription.unsubscribe();
-    }
-
-    const requestBody = { year, month, userId };
-    
-    this.currentSubscription = this.add(requestBody).subscribe({
-      next: (response: any) => {
-        this.ivaSimulation = response.data;
-        
-        if (callback) {
-          callback(this.ivaSimulation);
-        }
-      },
-      error: () => {
-        this.alertService.showAlert('error', 'Error al recalcular simulación IVA');
-        this.createSimulation(year, month, userId, callback);
-      }
-    });
-  }
-
-  forceCompleteRefresh(year: number, month: number, userId: number, callback?: (simulation: IIvaCalculation | null) => void) {
-    if (this.ivaSimulation?.id) {
-      this.http.delete(`${this.source}/${this.ivaSimulation.id}`).subscribe({
-        next: () => {
-          this.forceRecalculation(year, month, userId, callback);
-        },
-        error: () => {
-          this.forceRecalculation(year, month, userId, callback);
-        }
-      });
-    } else {
-      this.forceRecalculation(year, month, userId, callback);
-    }
   }
 
   clearSimulation() {

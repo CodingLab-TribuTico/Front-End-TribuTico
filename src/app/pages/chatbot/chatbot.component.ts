@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ChatbotService } from '../../services/chatbot.service';
-import { IChatbotRequest } from '../../interfaces';
 import { FaqChatbotComponent } from '../../components/faq-chatbot/faq-chatbot.component';
 
 @Component({
@@ -36,10 +35,13 @@ export class ChatbotComponent {
     const user = localStorage.getItem('auth_user');
     if (user) {
       const parsed = JSON.parse(user);
-      this.userName = parsed.name || 'Tú';
+      this.userName = parsed.name;
     }
     this.chatbotService.cleanMessages();
 
+    this.chatbotService.responseArrived$.subscribe(() => {
+      this.scrollChat();
+    });
   }
 
   updateChat(): void {
@@ -48,18 +50,15 @@ export class ChatbotComponent {
 
     this.chatbotService.messages$.update(messages => [...messages, { from: 'user', answer: input }]);
     this.chatbotForm.reset();
-    this.scrollChat();
-
     const lastId = this.chatbotService.currentChatId$();
     this.chatbotService.askQuestion({ chatId: lastId, question: input });
+    this.scrollChat();
   }
 
   updateChatWithFaq(description: string): void {
     this.chatbotService.messages$.update(messages => [...messages, { from: 'user', answer: description }]);
-
     this.chatbotService.askQuestion({ question: description });
     this.chatbotForm.reset();
-    this.scrollChat();
   }
 
   scrollChat(): void {

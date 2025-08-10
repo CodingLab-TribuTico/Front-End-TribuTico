@@ -7,8 +7,7 @@ import { INotificationGlobal } from '../../interfaces';
   selector: 'app-notification-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './notification-form.component.html',
-  styleUrl: './notification-form.component.scss'
+  templateUrl: './notification-form.component.html'
 })
 export class NotificationFormComponent {
 

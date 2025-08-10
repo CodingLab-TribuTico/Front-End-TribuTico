@@ -16,6 +16,7 @@ export class UserFormComponent {
   public fb: FormBuilder = inject(FormBuilder);
   @Input() userForm!: FormGroup;
   @Input() cancelOption: boolean = false;
+  @Input() sendButtonText: string = 'Guardar';
   @Output() callSaveMethod: EventEmitter<IUser> = new EventEmitter<IUser>();
   @Output() callUpdateMethod: EventEmitter<IUser> = new EventEmitter<IUser>();
   @Output() callCancelMethod: EventEmitter<void> = new EventEmitter<void>();

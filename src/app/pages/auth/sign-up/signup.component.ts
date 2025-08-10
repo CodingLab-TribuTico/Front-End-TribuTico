@@ -59,7 +59,7 @@ export class SignUpComponent {
       this.lastnameModel.valid &&
       this.emailModel.valid && !this.emailModel.errors?.['email'] &&
       this.passwordModel.valid &&
-      this.identificationModel.valid && this.identificationModel.value.length === 9 &&
+      this.identificationModel.valid && this.identificationModel.value.length === 9 || this.identificationModel.value.length === 12 &&
       this.birthDateModel.valid &&
       this.passwordsMatch
     ) {
