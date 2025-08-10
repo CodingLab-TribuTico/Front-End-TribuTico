@@ -94,8 +94,8 @@ export interface IManualInvoice {
   key?: string;
   issueDate?: string;
   details?: IDetailInvoice[];
-  receiver?: IInvoiceUser;  
-  issuer?: IInvoiceUser;    
+  receiver?: IInvoiceUser;
+  issuer?: IInvoiceUser;
   users?: IUser;
 }
 
@@ -182,15 +182,15 @@ export interface IIvaCalculation {
   ivaNetoPorPagar: number;
   ivaAFavor: number;
   automaticCalculation: boolean;
-  
+
   iva1Percent: number;
   iva2Percent: number;
   iva4Percent: number;
   iva8Percent: number;
-  iva10Percent: number;  
+  iva10Percent: number;
   iva13Percent: number;
   ivaExento: number;
-  
+
   user?: IUser;
 }
 export interface INotification {
@@ -201,7 +201,7 @@ export interface INotification {
   timestamp: string;
   type: string;
 }
-export interface INotificationGlobal{
+export interface INotificationGlobal {
   id?: number;
   name?: string;
   description?: string;
@@ -210,12 +210,22 @@ export interface INotificationGlobal{
   closeDate?: string;
 }
 
+export interface IChatbotRequest {
+  chatId?: string;
+  question: string;
+}
+
+export interface IChatbotResponse {
+  chatId?: string;
+  from: 'user' | 'bot';
+  answer: string;
+}
 export interface IGoals {
   id?: number;
   declaration?: string;
   type?: string;
   date?: Date | string;
-  Objective?: string;
+  objective?: string;
   status?: 'pending' | 'in-progress' | 'completed';
   recommendations?: string;
   createdAt?: string | Date;

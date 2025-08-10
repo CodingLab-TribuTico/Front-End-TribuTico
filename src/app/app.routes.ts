@@ -21,9 +21,11 @@ import { NotificationDetailComponent } from './pages/notification/notification-d
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
 import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
 import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
+import { ChatbotComponent } from './pages/chatbot/chatbot.component';
 import { SimulationViewComponent } from './pages/simulation-view/simulation-view.component';
 import { SimulationDetailComponent } from './pages/simulation-detail/simulation-detail.component';
 import { GoalsComponent } from './pages/goals/goals.component';
+import { GoalsViewComponent } from './pages/goals-view/goals-view.component';
 
 
 export const routes: Routes = [
@@ -72,6 +74,15 @@ export const routes: Routes = [
         data: {
           authorities: [IRoleType.superAdmin],
           name: 'Reportes',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'chatbot',
+        component: ChatbotComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Chatbot',
           showInSidebar: true
         }
       },
@@ -221,7 +232,18 @@ export const routes: Routes = [
           name: 'Simulation',
           showInSidebar: false
         }
-      }
+      },
+      {
+        path: 'goals-view',
+        component: GoalsViewComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Metas',
+          showInSidebar: false
+        }
+      },
     ],
   },
 ];

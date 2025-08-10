@@ -47,7 +47,6 @@ export class InvoiceService extends BaseService<IManualInvoice> {
           (_, i) => i + 1
         );
         this.invoicesList.set(response.data);
-        console.log("Invoices loaded successfully", response.data);
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al recuperar las facturas');
