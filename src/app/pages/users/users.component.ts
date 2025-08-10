@@ -31,12 +31,12 @@ export class UsersComponent {
 
   userForm = this.fb.group({
     id: [''],
-    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    identification: ['', [Validators.required, Validators.pattern(/^(\d{9}|\d{12})$/)]],
     name: ['', Validators.required],
     lastname: ['', Validators.required],
     lastname2: [''],
     birthDate: ['', Validators.required],
-    email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+    email: [{ value: '', disabled: true }, [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
     status: ['', Validators.required],
     password: [''],
     role: ['']

@@ -23,7 +23,13 @@
         <td class="p-3" scope="row">{{item.type}}</td>
         <td class="p-3" scope="row">{{item.state}}</td>
         <td class="p-3 space-x-1">
-
+          <button (click)="editNotification(item)"
+            class="group bg-flamenco px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-golden-glow hover:bg-bisque ml-2"
+            type="button">
+            <span class="material-symbols-rounded text-lg text-bisque group-hover:text-flamenco">
+              edit
+            </span>
+          </button>
           <button (click)="openModal(item)"
             class="group bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-golden-glow hover:bg-bisque ml-2"
             type="button">
@@ -31,6 +37,7 @@
               delete
             </span>
           </button>
+
         </td>
       </tr>
       } @empty {

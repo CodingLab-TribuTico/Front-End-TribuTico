@@ -7,7 +7,8 @@
         search
       </span>
       <input (keyup)="search($event)" type="text"
-        class="bg-crater-brown text-bisque placeholder:text-bisque text-base font-bold w-full" placeholder="Buscar">
+        class="bg-crater-brown text-bisque placeholder:text-bisque text-base font-bold w-full"
+        placeholder="Buscar por correo" />
     </div>
   </div>
 
@@ -27,7 +28,7 @@
   <app-modal [hideFooter]="true">
     <div>
       <app-user-form [userForm]="userForm" (callSaveMethod)="saveUser($event)" (callUpdateMethod)="updateUser($event)"
-        [cancelOption]="true" (callCancelMethod)="cancelUpdate()" />
+        [cancelOption]="true" (callCancelMethod)="cancelUpdate()" [sendButtonText]="'Actualizar'" />
     </div>
   </app-modal>
 </ng-template>

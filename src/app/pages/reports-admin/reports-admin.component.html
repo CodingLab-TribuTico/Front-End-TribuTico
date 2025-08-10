@@ -1,0 +1,276 @@
+@if(systemUsers === false && processedInvoices === false && incomeAndExpenses === false) {
+<ng-container>
+    <h1 class="text-3xl font-bold text-center mb-2 text-crater-brown">Reportes de administración</h1>
+    <div class="grid grid-cols-3 gap-4">
+        <app-card-report [title]="'USUARIOS DEL SISTEMA.'" [icon]="'groups_2'"
+            [description]="'Este reporte muestra la evolución mensual de usuarios registrados y la distribución de usuarios activos, inactivos y bloqueados a través de gráficos visuales.'"
+            [buttonText]="'Ver usuarios'" (callClickMethod)="systemUsers = true" [bgColor]="'bg-flamenco'"
+            [textColor]="'text-crater-brown'" [bgButtonColor]="'bg-bisque'"
+            [bgButtonHoverColor]="'hover:bg-crater-brown'" [bgButtonTextHoverColor]="'hover:text-bisque'">
+        </app-card-report>
+
+        <app-card-report [title]="'FACTURAS PROCESADAS.'" [icon]="'receipt'"
+            [description]="'Este reporte presenta el volumen mensual de facturas procesadas, la proporción entre ingresos y gastos, y el ranking de usuarios con mayor actividad.'"
+            [buttonText]="'Ver facturas'" (callClickMethod)="processedInvoices = true" [bgColor]="'bg-bisque'"
+            [textColor]="'text-crater-brown'" [bgButtonColor]="'bg-golden-glow'"
+            [bgButtonHoverColor]="'hover:bg-crater-brown'" [bgButtonTextHoverColor]="'hover:text-golden-glow'">
+        </app-card-report>
+
+        <app-card-report [title]="'INGRESOS Y GASTOS DEL SISTEMA.'" [icon]="'payments'"
+            [description]="'Este reporte incluye la evolución mensual de ingresos y gastos, un ranking de usuarios con mayores montos acumulados y el balance financiero.'"
+            [buttonText]="'Ver ingresos y gastos'" (callClickMethod)="incomeAndExpenses = true">
+        </app-card-report>
+    </div>
+</ng-container>
+} @else if(systemUsers) {
+<ng-container>
+    <div class="mb-10">
+        <div class="flex flex-row w-full justify-between items-center mb-2">
+            <h1 class="text-2xl font-bold text-center text-crater-brown">Evolución mensual de registro de usuarios</h1>
+            <select (change)="changeYear($event, 'registeredMonthlyUsers')" id="year"
+                class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+                formControlName="year">
+                <option value=0 selected>Todos</option>
+                @for (year of loadUsersYears(userService.users$()); track year) {
+                <option [value]="year">{{ year }}</option>
+                }
+            </select>
+        </div>
+
+        <div
+            class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+            <div class="h-full w-full flex items-center justify-center">
+                @if(hasRegisteredMonthlyUsers()) {
+                <app-chart class="h-full w-full flex flex-col justify-center items-center" [labels]="labels"
+                    [datasets]="reportAdminService.registeredMonthlyUsers$()" [type]="'bar'">
+                </app-chart>
+                } @else{
+                <div class="flex flex-col items-center justify-center h-full w-full">
+                    <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                        supervised_user_circle_off
+                    </span>
+                    <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="flex flex-row w-full justify-between items-center mb-2">
+            <h1 class="text-2xl font-bold text-center text-crater-brown">Proporción de usuarios por estado</h1>
+        </div>
+
+        <div
+            class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+            <div class="h-full w-full flex items-center justify-center">
+                @if(hasUserStatusProportion()) {
+                <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                    [labels]="reportAdminService.userStatusProportion$()[0].labels"
+                    [datasets]="reportAdminService.userStatusProportion$()[0].datasets" [type]="'pie'">
+                </app-chart>
+                } @else{
+                <div class="flex flex-col items-center justify-center h-full w-full">
+                    <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                        supervised_user_circle_off
+                    </span>
+                    <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="flex justify-center mt-2">
+            <button
+                class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+                (click)="closeReport('systemUsers')">Regresar</button>
+        </div>
+    </div>
+</ng-container>
+} @else if(processedInvoices) {
+<ng-container>
+    <div class="mb-10">
+        <div class="flex flex-row w-full justify-between items-center mb-2">
+            <h1 class="text-2xl font-bold text-center text-crater-brown">Evolución mensual de facturas procesadas</h1>
+            <select (change)="changeYear($event, 'monthlyVolumeInvoices')" id="year"
+                class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+                formControlName="year">
+                <option value=0 selected>Todos</option>
+                @for (year of loadInvoicesYears(invoiceService.invoices$()); track year) {
+                <option [value]="year">{{ year }}</option>
+                }
+            </select>
+        </div>
+
+        <div
+            class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+            <div class="h-full w-full flex items-center justify-center">
+                @if(hasMonthlyVolumeInvoices()) {
+                <app-chart class="h-full w-full flex flex-col justify-center items-center" [labels]="labels"
+                    [datasets]="reportAdminService.monthlyVolumeInvoices$()" [type]="'bar'">
+                </app-chart>
+                } @else{
+                <div class="flex flex-col items-center justify-center h-full w-full">
+                    <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                        receipt_long
+                    </span>
+                    <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="mb-10">
+        <div class="flex flex-row w-full justify-between items-center mb-2">
+            <h1 class="text-2xl font-bold text-center text-crater-brown">Proporción de ingresos y gastos</h1>
+            <select (change)="changeYear($event, 'proportionTotalIncomeAndExpenses')" id="year"
+                class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+                formControlName="year">
+                <option value=0 selected>Todos</option>
+                @for (year of loadInvoicesYears(invoiceService.invoices$()); track year) {
+                <option [value]="year">{{ year }}</option>
+                }
+            </select>
+        </div>
+
+        <div
+            class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+            <div class="h-full w-full flex items-center justify-center">
+                @if(hasProportionTotalIncomeAndExpenses()) {
+                <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                    [labels]="reportAdminService.proportionTotalIncomeAndExpenses$()[0].labels"
+                    [datasets]="reportAdminService.proportionTotalIncomeAndExpenses$()[0].datasets" [type]="'pie'">
+                </app-chart>
+                } @else{
+                <div class="flex flex-col items-center justify-center h-full w-full">
+                    <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                        receipt_long
+                    </span>
+                    <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="flex flex-row w-full justify-between items-center mb-2">
+            <h1 class="text-2xl font-bold text-center text-crater-brown">Top 10 usuarios con mayor volumen de
+                facturación</h1>
+        </div>
+
+        <div
+            class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+            <div class="h-full w-full flex items-center justify-center">
+                @if(hasTop10HighestUsersVolumeInvoices()) {
+                <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                    [labels]="reportAdminService.top10HighestUsersVolumeInvoices$()[0].labels"
+                    [datasets]="reportAdminService.top10HighestUsersVolumeInvoices$()[0].datasets" [type]="'bar'"
+                    [horizontal]="true">
+                </app-chart>
+                } @else{
+                <div class="flex flex-col items-center justify-center h-full w-full">
+                    <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                        receipt_long
+                    </span>
+                    <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="flex justify-center mt-2">
+            <button
+                class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+                (click)="closeReport('processedInvoices')">Regresar</button>
+        </div>
+    </div>
+</ng-container>
+} @else if(incomeAndExpenses) {
+<ng-container>
+    <div class="mb-10">
+        <div class="flex flex-row w-full justify-between items-center mb-2">
+            <h1 class="text-2xl font-bold text-center text-crater-brown">Top 10 usuarios por cantidad de facturas
+                procesadas</h1>
+        </div>
+
+        <div
+            class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+            <div class="h-full w-full flex items-center justify-center">
+                @if(hasMonthlyVolumeInvoices()) {
+                <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                    [labels]="reportAdminService.top10UsersByInvoiceCount$()[0].labels"
+                    [datasets]="reportAdminService.top10UsersByInvoiceCount$()[0].datasets" [type]="'bar'"
+                    [horizontal]="true">
+                </app-chart>
+                } @else{
+                <div class="flex flex-col items-center justify-center h-full w-full">
+                    <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                        receipt_long
+                    </span>
+                    <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-10">
+        <div class="flex flex-row w-full justify-between items-center mb-2">
+            <h1 class="text-2xl font-bold text-center text-crater-brown">Evolución mensual de ingresos y gastos en el
+                sistema</h1>
+            <select (change)="changeYear($event, 'monthlyIncomeAndExpenses')" id="year"
+                class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+                formControlName="year">
+                <option value=0 selected>Todos</option>
+                @for (year of loadInvoicesYears(invoiceService.invoices$()); track year) {
+                <option [value]="year">{{ year }}</option>
+                }
+            </select>
+        </div>
+
+        <div
+            class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+            <div class="h-full w-full flex items-center justify-center">
+                @if(hasMonthlyIncomeExpenses()) {
+                <app-chart class="h-full w-full flex flex-col justify-center items-center" [labels]="labels"
+                    [datasets]="reportAdminService.monthlyIncomeExpenses$()" [type]="'line'">
+                </app-chart>
+                } @else{
+                <div class="flex flex-col items-center justify-center h-full w-full">
+                    <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                        receipt_long
+                    </span>
+                    <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="flex flex-row w-full justify-between items-center mb-2">
+            <h1 class="text-2xl font-bold text-center text-crater-brown">Top 10 usuarios por mayor balance</h1>
+        </div>
+
+        <div
+            class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+            <div class="h-full w-full flex items-center justify-center">
+                @if(hasTop10UsersByBalance()) {
+                <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                    [labels]="reportAdminService.top10UsersByBalance$()[0].labels"
+                    [datasets]="reportAdminService.top10UsersByBalance$()[0].datasets" [type]="'bar'">
+                </app-chart>
+                } @else{
+                <div class=" flex flex-col items-center justify-center h-full w-full">
+                    <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                        receipt_long
+                    </span>
+                    <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="flex justify-center mt-2">
+            <button
+                class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+                (click)="closeReport('incomeAndExpenses')">Regresar</button>
+        </div>
+    </div>
+</ng-container>
+}

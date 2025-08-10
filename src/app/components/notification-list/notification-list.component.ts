@@ -15,22 +15,23 @@ import { ModalComponent } from "../modal/modal.component";
   ],
   templateUrl: './notification-list.component.html'
 })
-export class NotificationListComponent{
+export class NotificationListComponent {
   @Input() notifications: INotificationGlobal[] = [];
-  @Output() callDeleteAction: EventEmitter<INotificationGlobal> = new EventEmitter<INotificationGlobal>();
+  @Output() callDeleteAction = new EventEmitter<INotificationGlobal>();
+  @Output() callEditAction = new EventEmitter<INotificationGlobal>();
   @ViewChild('confirmationModal') public confirmationModal: any;
   public modalService: ModalService = inject(ModalService);
   public selectedNotification: INotificationGlobal | null = null;
-  
+
   openModal(item: INotificationGlobal) {
     this.selectedNotification = item;
     this.modalService.displayModal(this.confirmationModal);
   }
-  
+
   hideModal() {
     this.modalService.closeAll();
   }
-  
+
   deleteNotification(id: INotificationGlobal["id"]) {
     this.hideModal();
     const notification = this.notifications.find(u => u.id === id);
@@ -40,4 +41,7 @@ export class NotificationListComponent{
     this.selectedNotification = null;
   }
 
+  editNotification(item: INotificationGlobal) {
+    this.callEditAction.emit(item);
+  }
 }
