@@ -84,7 +84,6 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
     this.find(id).subscribe({
       next: (response: IResponse<IIsrSimulation>) => {
         this.currentSimulation.set(response.data);
-        console.log("obteniendo la simulacion", response);
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al recuperar la simulación');
