@@ -68,8 +68,9 @@ export class GoalsService extends BaseService<IGoals> {
       user: { id: currentUserId },
       declaration: item.declaration,
       type: item.type,
-      objective: item.objective, // Cambiar de Objective a objective
-      date: item.date
+      objective: item.objective, 
+      date: item.date,
+      recommendations: item.recommendations
     };
 
     this.createGoal(goalData as any).subscribe({
