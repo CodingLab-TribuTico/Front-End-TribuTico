@@ -2,7 +2,6 @@ import { Injectable, inject, signal } from '@angular/core';
 import { BaseService } from './base-service';
 import { IIvaCalculation, IResponse, ISearch } from '../interfaces';
 import { Subscription } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { AlertService } from './alert.service';
 
 @Injectable({
@@ -12,7 +11,14 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
   protected override source: string = 'iva-simulation';
   private currentSubscription: Subscription | null = null;
   public ivaSimulation: IIvaCalculation | null = null;
+
   private alertService: AlertService = inject(AlertService);
+
+  public simulationsIvaSignal = signal<IIvaCalculation[]>([]);
+  public currentIvaSimulationSignal = signal<IIvaCalculation | null>(null);
+
+  public simulationsIva$ = () => this.simulationsIvaSignal();
+  public currentIvaSimulation$ = () => this.currentIvaSimulationSignal();
 
   public search: ISearch = {
     page: 1,
@@ -20,9 +26,6 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
     search: "",
   };
   public totalItems: any = [];
-  public simulationListSignal = signal<IIvaCalculation[]>([]);
-  public currentSimulation = signal<IIvaCalculation | null>(null);
-
 
   createSimulation(year: number, month: number, userId: number) {
     this.currentSubscription = this.findAllWithParams({
@@ -31,7 +34,7 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
       userId: userId,
     }).subscribe({
       next: (response: any) => {
-        this.ivaSimulation = response.data;
+        this.currentIvaSimulationSignal.set(response.data);
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al crear la simulación de IVA');
@@ -40,7 +43,7 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
   }
 
   clearSimulation() {
-    this.ivaSimulation = null;
+    this.currentIvaSimulationSignal.set(null);
     if (this.currentSubscription) {
       this.currentSubscription.unsubscribe();
       this.currentSubscription = null;
@@ -69,7 +72,7 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
         this.totalItems = Array.from(
           { length: this.search.totalPages ? this.search.totalPages : 0 },
           (_, i) => i + 1);
-        this.simulationListSignal.set(response.data);
+        this.simulationsIvaSignal.set(response.data);
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al obtener las simulaciones del IVA');
@@ -80,7 +83,7 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
   getById(id: number) {
     this.find(id).subscribe({
       next: (response: IResponse<IIvaCalculation>) => {
-        this.currentSimulation.set(response.data);
+        this.currentIvaSimulationSignal.set(response.data);
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al recuperar la simulación');
@@ -95,7 +98,7 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
         this.totalItems = Array.from(
           { length: this.search.totalPages ? this.search.totalPages : 0 }, 
           (_, i) => i + 1);
-        this.simulationListSignal.set(response.data);
+        this.simulationsIvaSignal.set(response.data);
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al recuperar las simulaciones del usuario');
@@ -115,7 +118,6 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
   }
   
   clearCurrentSimulation() {
-    this.currentSimulation.set(null);
+    this.currentIvaSimulationSignal.set(null);
   }
-
 }
