@@ -138,7 +138,7 @@
     <div class="col-span-2 flex justify-center items-center w-full">
       <button (click)="callSave()" [disabled]="userForm.invalid"
         class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber disabled:text-bisque font-bold hover:bg-golden-glow hover:text-flamenco transition-colors"
-        type="button">Guardar</button>
+        type="button">{{sendButtonText}}</button>
       @if (cancelOption) {
       <button (click)="callCancel()"
         class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer ml-2 font-bold hover:bg-bisque transition-colors"

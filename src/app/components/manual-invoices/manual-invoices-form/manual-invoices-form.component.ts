@@ -36,8 +36,6 @@ export class ManualInvoicesFormComponent implements OnInit {
   public showDeleteModal = false;
   public indexToDelete = -1;
 
-  public typeInvoice: string = 'ingreso';
-
   public keyCategories: string[] = [
     "VG-B", "VG-S", "VE", "VX", "EXP", "CBG", "CSG", "CX", "CBR", "CSR", "GSP", "GA", "SPS", "HP", "GV",
     "PP", "ALO", "MR", "CAF", "GF", "GS", "NCE", "NCR", "DON", "MUL"
@@ -162,8 +160,6 @@ export class ManualInvoicesFormComponent implements OnInit {
       lastName = fullName.slice(1).join(' ');
     }
 
-    this.typeInvoice = data.type === "ingreso" ? 'ingreso' : 'gasto';
-
     this.invoiceForm.patchValue({
       type: data.type || '',
       consecutive: data.consecutive || '',
@@ -259,10 +255,5 @@ export class ManualInvoicesFormComponent implements OnInit {
   hideDeleteModal() {
     this.showDeleteModal = false;
     this.indexToDelete = -1;
-  }
-
-  changeType(event: Event) {
-    const selectedType = (event.target as HTMLSelectElement).value;
-    this.typeInvoice = selectedType === 'ingreso' ? 'ingreso' : 'gasto';
   }
 }

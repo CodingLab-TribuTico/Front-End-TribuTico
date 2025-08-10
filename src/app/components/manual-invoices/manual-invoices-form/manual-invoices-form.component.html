@@ -7,8 +7,7 @@
       <div class="flex flex-col gap-2 flex-1">
         <label class="text-bisque font-bold" for="type">Tipo<span class="text-burnt-umber">*</span></label>
         <select id="type" formControlName="type"
-          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2.5 focus:outline-none focus:border-golden-glow"
-          (change)="changeType($event)">
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2.5 focus:outline-none focus:border-golden-glow">
           <option [value]="''" disabled selected>Selecciona un tipo</option>
           <option value="ingreso">Ingreso</option>
           <option value="gasto">Gasto</option>
@@ -57,7 +56,9 @@
 
   <div>
     <div class="border-b-2 mb-4 border-zorba">
-      <h2 class="text-bisque font-bold">Datos del @if(this.typeInvoice === "ingreso") {cliente} @else {proveedor}</h2>
+      <h2 class="text-bisque font-bold">
+        Datos del {{ invoiceForm.get('type')?.value === 'ingreso' ? 'cliente' : 'proveedor' }}
+      </h2>
     </div>
     <div class="flex gap-4 flex-wrap">
       <div class="flex flex-col gap-2 flex-1">

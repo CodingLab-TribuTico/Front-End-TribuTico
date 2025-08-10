@@ -139,7 +139,7 @@
         <button *ngIf="isEditing" type="button" (click)="saveChanges(userForm.value)"
           [disabled]="userForm.invalid || !userForm.dirty"
           class="px-4 py-2 font-bold rounded-md text-bisque bg-flamenco hover:bg-golden-glow hover:text-flamenco transition-colors disabled:bg-burnt-umber disabled:text-bisque disabled:opacity-80 disabled:cursor-not-allowed">
-          Guardar
+          Actualizar
         </button>
 
         <button *ngIf="isEditing" type="button" (click)="cancelChanges()"

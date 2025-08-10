@@ -65,11 +65,10 @@ export class InvoiceComponent {
       consecutive: invoice.consecutive?.toString() || '',
       key: invoice.key,
       issueDate: invoice.issueDate,
-      identification: invoice.receiver?.identification,
-      name: invoice.receiver?.name,
-      lastName: invoice.receiver?.lastName,
-      email: invoice.receiver?.email
-
+      identification: invoice.issuer?.identification,
+      name: invoice.issuer?.name,
+      lastName: invoice.issuer?.lastName,
+      email: invoice.issuer?.email
     });
 
     this.details = invoice.details ?? [];
