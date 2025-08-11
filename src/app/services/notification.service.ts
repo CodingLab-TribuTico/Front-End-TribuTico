@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { INotification, IResponse, ISearch } from '../interfaces';
 import { BaseService } from './base-service';
 import { AlertService } from './alert.service';
-import { Subscription, tap } from 'rxjs';
+import { filter, Subscription, take, tap } from 'rxjs';
 import { WebSocketService } from './web-socket.service';
 
 @Injectable({
@@ -26,19 +26,35 @@ export class NotificationService extends BaseService<IResponse<any>> {
 
   public totalItems: any = [];
 
+
   constructor() {
     super();
     this.setupWebSocketListeners();
+    this.checkInitialConnection();
   }
+
+
 
   ngOnDestroy(): void {
     this.wsSubscription?.unsubscribe();
+    this.webSocketService.disconnect();
+  }
+
+  private checkInitialConnection(): void {
+    this.webSocketService.getConnectionStatus().pipe(
+      take(1),
+      filter(connected => !connected),
+      tap(() => this.alertService.displayAlert('warning', 'No se pudo conectar al servidor de notificaciones en tiempo real'))
+    ).subscribe();
   }
 
   private setupWebSocketListeners(): void {
     this.wsSubscription = this.webSocketService.getNotifications().subscribe({
-      next: (message) => this.handleWebSocketMessage(message),
-      error: (err) => console.error("Error en WebSocket:", err),
+      next: (message) => {
+        console.log('Mensaje WebSocket crudo:', message); // Agrega esto para debug
+        this.handleWebSocketMessage(message);
+      },
+      error: (err) => console.error('WebSocket error:', err)
     });
   }
 
@@ -237,6 +253,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
   }
 
   markNotificationRead(notificationId: number) {
+    console.log(notificationId);
     this.patchCustomSource(`read/${notificationId}`, {}).subscribe({
       next: (response: IResponse<any>) => {
         this.alertService.showAlert("success", response.message);

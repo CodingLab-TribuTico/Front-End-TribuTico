@@ -180,3 +180,9 @@ export interface IFiscal {
   taxDeclarationDeadline?: string;
   type?: string;
 }
+
+export interface NotificationMessage {
+  action: string;
+  data?: any;
+  id?: number;
+}
