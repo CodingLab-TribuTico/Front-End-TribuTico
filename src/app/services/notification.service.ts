@@ -186,8 +186,8 @@ export class NotificationService extends BaseService<IResponse<any>> {
         );
         this.notificationsList.set(response.data);
       },
-      error: (err: any) => {
-        this.alertService.displayAlert("error", err);
+      error: () => {
+        this.alertService.displayAlert("error", "Ocurrió un error al recuperar las notificaciones");
       },
     });
   }
@@ -197,7 +197,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
       next: (response: any) => {
         this.pendingNotificationsList.set(response.data);
       },
-      error: (err: any) => {
+      error: () => {
         this.alertService.displayAlert(
           "error",
           "Ocurrió un error al recuperar las notificaciones pendientes"
@@ -209,17 +209,16 @@ export class NotificationService extends BaseService<IResponse<any>> {
   getAllByUserId() {
     this.findAllWithParamsAndCustomSource("all").subscribe({
       next: (response: any) => {
-        const notifications = response.data.map((item: any) => ({
-          ...item.notification,
-          isRead: item.read,
-        }));
-        this.allNotificationList.set(notifications);
+        if (response && response.data) {
+          const notifications = response.data.map((item: any) => ({
+            ...item.notification,
+            isRead: item.read,
+          }));
+          this.allNotificationList.set(notifications);
+        }
       },
-      error: (err: any) => {
-        this.alertService.displayAlert(
-          "error",
-          "Ocurrio un error al recuperar las notificaciones"
-        );
+      error: () => {
+        this.alertService.displayAlert("error", "Ocurrió un error al recuperar las notificaciones");
       },
     });
   }
@@ -230,7 +229,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
         this.alertService.showAlert("success", response.message);
         this.getAll();
       },
-      error: (err: any) => {
+      error: () => {
         this.alertService.displayAlert(
           "error",
           "Ocurrió un error al guardar la notificación"
@@ -245,7 +244,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
         this.alertService.showAlert("success", response.message);
         this.getAll();
       },
-      error: (err: any) => {
+      error: () => {
         this.alertService.displayAlert(
           "error",
           "Ocurrió un error al actualizar la notificación"
@@ -259,7 +258,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
       next: (response: IResponse<any>) => {
         this.alertService.showAlert("success", response.message);
       },
-      error: (err: any) => {
+      error: () => {
         this.alertService.displayAlert(
           "error",
           "Ocurrió un error al actualizar la notificación"
@@ -288,7 +287,7 @@ export class NotificationService extends BaseService<IResponse<any>> {
       next: (response: IResponse<any>) => {
         this.alertService.showAlert("success", response.message);
       },
-      error: (err: any) => {
+      error: () => {
         this.alertService.displayAlert(
           "error",
           "Ocurrió un error al marcar todas las notificaciones como leídas"

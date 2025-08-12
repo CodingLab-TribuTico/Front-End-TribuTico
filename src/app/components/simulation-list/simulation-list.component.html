@@ -2,7 +2,6 @@
   <table class="w-full border-collapse p-3">
     <thead>
       <tr class="text-center border border-crater-brown bg-crater-brown text-bisque">
-        <th class="p-3">ID</th>
         <th class="p-3">Período</th>
         <th class="p-3">Tipo</th>
         <th class="p-3">Nombre</th>
@@ -11,47 +10,44 @@
       </tr>
     </thead>
     <tbody>
-    @for (item of simulations; track item.id) {
+      @for (item of simulations; track item.id) {
       <tr class="text-center text-crater-brown font-semibold border-t border-crater-brown">
-        <td class="p-3">{{ item.id || 'N/A' }}</td>
         <td class="p-3">{{ simulationPeriod(item) }}</td>
         <td class="p-3">{{ item.type }}</td>
         <td class="p-3">{{ simulationName(item) }}</td>
         <td class="p-3">{{ simulationIdentification(item) }}</td>
 
         <td class="p-3 space-x-1 flex flex-row">
-            <a [routerLink]="['/app/simulation-detail', simulationType(item), item.id]"
-                class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2 hover:bg-golden-glow hover:text-flamenco text-bisque"
-                type="button">
-                <span class="material-symbols-rounded text-lg">visibility</span>
-                <span class="text-sm ml-2 font-bold">Ver</span>
-            </a>
-            <button
-                (click)="exportPdf(item)"
-                class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2 hover:bg-golden-glow hover:text-flamenco text-bisque"
-                type="button">
-                <span class="material-symbols-rounded text-lg">download</span>
-                <span class="text-sm ml-2 font-bold">PDF</span>
-            </button>
+          <a [routerLink]="['/app/simulation-detail', simulationType(item), item.id]"
+            class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2 hover:bg-golden-glow hover:text-flamenco text-bisque"
+            type="button">
+            <span class="material-symbols-rounded text-lg">visibility</span>
+            <span class="text-sm ml-2 font-bold">Ver</span>
+          </a>
+          <button (click)="exportPdf(item)"
+            class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2 hover:bg-golden-glow hover:text-flamenco text-bisque"
+            type="button">
+            <span class="material-symbols-rounded text-lg">download</span>
+            <span class="text-sm ml-2 font-bold">PDF</span>
+          </button>
 
-            <button
-                (click)="exportCsv(item)"
-                class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2 hover:bg-golden-glow hover:text-flamenco text-bisque"
-                type="button">
-                <span class="material-symbols-rounded text-lg">download</span>
-                <span class="text-sm ml-2 font-bold">CSV</span>
-            </button>
+          <button (click)="exportCsv(item)"
+            class="bg-flamenco px-2 p-0.5 rounded-md flex items-center ml-2 hover:bg-golden-glow hover:text-flamenco text-bisque"
+            type="button">
+            <span class="material-symbols-rounded text-lg">download</span>
+            <span class="text-sm ml-2 font-bold">CSV</span>
+          </button>
         </td>
-    </tr>
-    } @empty {
-    <tr>
-      <td colspan="5">
-        <div class="flex justify-center items-center w-full">
-          <p class="p-3 text-crater-brown font-bold">No hay simulaciones</p>
-        </div>
-      </td>
-    </tr>
-    } 
+      </tr>
+      } @empty {
+      <tr>
+        <td colspan="5">
+          <div class="flex justify-center items-center w-full">
+            <p class="p-3 text-crater-brown font-bold">No hay simulaciones</p>
+          </div>
+        </td>
+      </tr>
+      }
     </tbody>
   </table>
 </div>

@@ -120,11 +120,11 @@
         placeholder="Correo" />
       @if (invoiceForm.controls['email'].invalid && (invoiceForm.controls['email'].dirty ||
       invoiceForm.controls['email'].touched)) {
+      @if (invoiceForm.controls['email'].errors?.['required']) {
       <div class="text-burnt-umber text-sm">El correo electrónico es obligatorio.</div>
-      }
-      @if (invoiceForm.controls['email'].errors?.['email'] && (invoiceForm.controls['email'].dirty ||
-      invoiceForm.controls['email'].touched)) {
+      } @else if (invoiceForm.controls['email'].errors?.['email']) {
       <div class="text-burnt-umber text-sm">Correo electrónico inválido.</div>
+      }
       }
     </div>
   </div>
