@@ -9,7 +9,8 @@ import { GoalsService } from '../../services/goals.service';
   selector: 'app-goals-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, LlamaLoaderComponent],
-  templateUrl: './goals-form.component.html'
+  templateUrl: './goals-form.component.html',
+  styleUrls: ['./goals-form.component.scss']
 })
 export class GoalsFormComponent {
   private fb = inject(FormBuilder);

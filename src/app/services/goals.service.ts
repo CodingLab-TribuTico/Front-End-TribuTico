@@ -84,7 +84,7 @@ export class GoalsService extends BaseService<IGoals> {
       error: (error) => {
         console.error('Error al crear meta:', error);
         this.alertService.showAlert("error", "Ocurrió un error al guardar la meta");
-        this.isLoadingOllama.set(false); // ← Desactivar loading también en error
+        this.isLoadingOllama.set(false); 
       },
     });
   }
