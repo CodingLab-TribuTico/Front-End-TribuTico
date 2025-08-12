@@ -4,12 +4,13 @@ import { GoalsService } from "../../services/goals.service";
 import { IGoals } from "../../interfaces";
 import { LoaderComponent } from "../../components/loader/loader.component";
 import { Router } from "@angular/router";
+import { PaginationComponent } from "../../components/pagination/pagination.component";
 
 @Component({
   selector: "app-goals-view",
   standalone: true,
   imports: [
-    GoalsListComponent
+    GoalsListComponent, LoaderComponent
   ],
   templateUrl: "./goals-view.component.html",
 })
