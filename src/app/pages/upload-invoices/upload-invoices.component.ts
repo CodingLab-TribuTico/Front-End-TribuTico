@@ -47,26 +47,25 @@ export class UploadInvoicesComponent {
     id: [''],
     type: ['', Validators.required],
     issueDate: ['', Validators.required],
-    consecutive: ['', Validators.required],
-    key: ['', Validators.required],
-    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    consecutive: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+    key: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+    identification: ['', [Validators.required, Validators.pattern(/^(\d{9}|\d{12})$/)]],
     name: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
   });
 
   public detailForm = this.fb.group({
-    cabys: ['', Validators.required],
+    cabys: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
     unit: ['', Validators.required],
-    quantity: ['', [Validators.required, Validators.min(1)]],
-    unitPrice: ['', [Validators.required, Validators.min(0)]],
-    discount: ['', Validators.required],
-    tax: ['', [Validators.required, Validators.min(0)]],
-    total: [{ value: '', disabled: true }, Validators.required],
+    quantity: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
+    unitPrice: [null, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+    discount: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+    tax: ['', Validators.required],
+    total: [{ value: '', disabled: true }],
     category: ['', Validators.required],
     description: ['', Validators.required]
   });
-
 
   hideImportInvoices() {
     this.hideImportInvoicesVar = !this.hideImportInvoicesVar;
