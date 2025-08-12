@@ -266,7 +266,7 @@
 
       <div class="flex flex-col gap-2 flex-1 min-w-[200px]">
         <label class="text-bisque font-bold" for="total">Total<span class="text-burnt-umber">*</span></label>
-        <input id="total" formControlName="total" type="number"
+        <input id="total" formControlName="total" type="text"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
           placeholder="Total" />
         @if (detailForm.controls['total'].invalid && (detailForm.controls['total'].dirty ||
