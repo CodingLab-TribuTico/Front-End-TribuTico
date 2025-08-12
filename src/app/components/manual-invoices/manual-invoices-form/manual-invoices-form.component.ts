@@ -171,24 +171,51 @@ export class ManualInvoicesFormComponent implements OnInit {
       email: person.email || ''
     });
 
-    this.details = (data.details || []).map((d: {
-      cabys: any; quantity: any; unit: any; unitPrice: any; discount: any; tax: any; category: any; description: any; total: any; taxAmount: any;
-    }) => ({
-      cabys: d.cabys !== undefined && d.cabys !== null ? d.cabys : '',
-      quantity: d.quantity !== undefined && d.quantity !== null ? d.quantity : 0,
-      unit: d.unit !== undefined && d.unit !== null ? d.unit : '',
-      unitPrice: d.unitPrice !== undefined && d.unitPrice !== null ? d.unitPrice : 0,
-      discount: d.discount !== undefined && d.discount !== null ? d.discount : 0,
-      tax: d.tax !== undefined && d.tax !== null ? d.tax : 0,
-      category: d.category !== undefined && d.category !== null ? d.category : '',
-      description: d.description !== undefined && d.description !== null ? d.description : '',
-      total: d.total !== undefined && d.total !== null ? d.total : 0,
-      taxAmount: d.taxAmount !== undefined && d.taxAmount !== null ? d.taxAmount : 0
-    }));
+    this.details = (data.details || []).map((d: any) => {
+      const quantity = d.quantity || 0;
+      const unitPrice = d.unitPrice || 0;
+      const discount = d.discount || 0;
+      const tax = d.tax || 0;
+
+      const calculatedTaxAmount = ((quantity * unitPrice - discount) * tax) / 100;
+
+      let taxAmount = d.taxAmount;
+      if (
+        taxAmount === undefined ||
+        taxAmount === null ||
+        taxAmount <= 0 ||
+        taxAmount > (quantity * unitPrice)
+      ) {
+        taxAmount = calculatedTaxAmount;
+      }
+
+      const calculatedTotal = (quantity * unitPrice - discount) + taxAmount;
+      let total = d.total;
+      if (
+        total === undefined ||
+        total === null ||
+        total <= 0 ||
+        Math.abs(total - calculatedTotal) > 0.01
+      ) {
+        total = calculatedTotal;
+      }
+
+      return {
+        cabys: d.cabys || '',
+        quantity,
+        unit: d.unit || '',
+        unitPrice,
+        discount,
+        tax,
+        category: d.category || '',
+        description: d.description || '',
+        total,
+        taxAmount
+      };
+    });
 
     this.detailForm.reset({ category: '', tax: '' });
   }
-
 
   calculateTotal(): void {
     const quantity = this.detailForm.get('quantity')?.value;
