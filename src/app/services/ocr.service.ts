@@ -30,7 +30,6 @@ export class OcrService extends BaseService<IResponse<any>> {
     this.currentSubscription = this.addFile(formData).subscribe({
       next: (response: any) => {
         this.responseScan.set(response);
-        console.log(response)
         this.alertService.showAlert('success', "Archivo escaneado correctamente");
       },
       error: () => {

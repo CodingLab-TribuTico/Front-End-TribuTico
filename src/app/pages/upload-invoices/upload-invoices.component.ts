@@ -47,8 +47,8 @@ export class UploadInvoicesComponent {
     id: [''],
     type: ['', Validators.required],
     issueDate: ['', Validators.required],
-    consecutive: ['', [Validators.required, Validators.pattern(/^\d+$/)]], // solo números enteros
-    key: ['', [Validators.required, Validators.pattern(/^\d+$/)]],         // solo números enteros
+    consecutive: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+    key: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
     identification: ['', [Validators.required, Validators.pattern(/^(\d{9}|\d{12})$/)]],
     name: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -56,11 +56,11 @@ export class UploadInvoicesComponent {
   });
 
   public detailForm = this.fb.group({
-    cabys: [null, [Validators.required, Validators.pattern(/^\d+$/)]],       // solo enteros
+    cabys: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
     unit: ['', Validators.required],
-    quantity: [null, [Validators.required, Validators.pattern(/^\d+$/)]],    // solo enteros
-    unitPrice: [null, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]], // número decimal o entero
-    discount: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],     // decimal o entero
+    quantity: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
+    unitPrice: [null, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+    discount: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
     tax: ['', Validators.required],
     total: [{ value: '', disabled: true }],
     category: ['', Validators.required],
