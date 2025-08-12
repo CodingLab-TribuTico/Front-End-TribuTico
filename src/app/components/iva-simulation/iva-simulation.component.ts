@@ -253,7 +253,7 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
               tableData: {
                 headers: ['DETALLE', '2%'],
                 rows: ['Bienes', 'Bienes de capital', 'Servicios', 'Uso o consumo personal de mercancías y servicios', 'Transferencias sin contraprestación a terceros'],
-                values: []
+                values: this.getTableValues(2)
               }
             },
             {
@@ -317,6 +317,15 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     let rawValues: number[] = [];
 
     switch (percentage) {
+      case 2:
+        rawValues = [
+          sim.iva2Percent || 0,
+          0,
+          0,
+          0,
+          0
+        ];
+        break;
       case 10:
         rawValues = [
           sim.iva10Percent || 0, 
