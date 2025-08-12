@@ -6,7 +6,7 @@ import { ModalComponent } from "../../components/modal/modal.component";
 import { ModalService } from "../../services/modal.service";
 import { NotificationFormComponent } from "../../components/notification-form/notification-form.component";
 import { FormBuilder, Validators } from "@angular/forms";
-import { INotificationGlobal } from "../../interfaces";
+import { INotification } from "../../interfaces";
 import { NotificationListComponent } from "../../components/notification-list/notification-list.component";
 
 @Component({
@@ -45,7 +45,7 @@ export class NotificationDetailComponent {
   }
 
   saveNotification(formValue: any) {
-    const notification: INotificationGlobal = {
+    const notification: INotification = {
       id: formValue.id,
       name: formValue.name,
       description: formValue.description,
@@ -67,7 +67,7 @@ export class NotificationDetailComponent {
     }
   }
 
-  editNotification(notification: INotificationGlobal) {
+  editNotification(notification: INotification) {
     this.notificationForm.patchValue({
       id: notification.id,
       name: notification.name,

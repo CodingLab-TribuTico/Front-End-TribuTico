@@ -59,7 +59,7 @@ export class GoalsService extends BaseService<IGoals> {
 
   save(item: IGoals) {
     const currentUserId = this.authService.getCurrentUserId();
-    
+
     if (!currentUserId) {
       this.alertService.showAlert("error", "Usuario no autenticado");
       return;
@@ -71,7 +71,7 @@ export class GoalsService extends BaseService<IGoals> {
       user: { id: currentUserId },
       declaration: item.declaration,
       type: item.type,
-      objective: item.objective, 
+      objective: item.objective,
       date: item.date,
       recommendations: item.recommendations
     };
@@ -82,17 +82,15 @@ export class GoalsService extends BaseService<IGoals> {
         this.isLoadingOllama.set(false); // ← Desactivar loading
       },
       error: (error) => {
-        console.error('Error al crear meta:', error);
         this.alertService.showAlert("error", "Ocurrió un error al guardar la meta");
-        this.isLoadingOllama.set(false); 
+        this.isLoadingOllama.set(false);
       },
     });
   }
-  
+
   getAll() {
     this.findAllWithParams({ page: this.search.page, size: this.search.size, search: this.search.search }).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from({ length: this.search.totalPages ? this.search.totalPages : 0 }, (_, i) => i + 1);
         this.goalsList.set(response.data);
@@ -106,17 +104,17 @@ export class GoalsService extends BaseService<IGoals> {
   delete(goal: IGoals) {
     this.delCustomSource(`${goal.id}`).subscribe({
       next: (response: any) => {
-      this.goalsList.update(goals => goals.filter(g => g.id !== goal.id));
-      this.alertService.showAlert('success', response.message);
+        this.goalsList.update(goals => goals.filter(g => g.id !== goal.id));
+        this.alertService.showAlert('success', response.message);
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al eliminar la meta');
       }
     });
   }
-  
+
   public isLoading = signal(false);
   public isLoadingOllama = signal(false);
-  
-  
+
+
 }

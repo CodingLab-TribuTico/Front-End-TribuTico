@@ -36,14 +36,14 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
   ventasSujetas2Enabled: boolean = false;
   ventasSujetas4Enabled: boolean = false;
   ventasSujetas8Enabled: boolean = false;
-  ventasSujetas10Enabled: boolean = false; 
+  ventasSujetas10Enabled: boolean = false;
   ventasSujetas13Enabled: boolean = false;
 
   constructor(
     private ivaService: IvaSimulationService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (!this.simulation) {
@@ -57,7 +57,7 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     this.autoActivateSectionsWithData();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {    
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes['simulation'] && changes['simulation'].currentValue) {
       setTimeout(() => {
         this.autoActivateSectionsWithData();
@@ -68,13 +68,13 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
 
   autoActivateSectionsWithData(): void {
     const sim = this.currentSimulation;
-    
+
     if (!sim) {
       return;
     }
 
     if (sim.iva1Percent || sim.iva2Percent || sim.iva4Percent || sim.iva8Percent || sim.iva10Percent || sim.iva13Percent ||
-        sim.ivaVentasBienes || sim.ivaVentasServicios) {
+      sim.ivaVentasBienes || sim.ivaVentasServicios) {
       this.ventasSujetasEnabled = true;
     }
 
@@ -90,15 +90,15 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     if (sim.iva8Percent && sim.iva8Percent > 0) {
       this.ventasSujetas8Enabled = true;
     }
-    
+
     if (sim.iva10Percent && sim.iva10Percent > 0) {
       this.ventasSujetas10Enabled = true;
     }
-    
+
     if (sim.iva13Percent && sim.iva13Percent > 0) {
       this.ventasSujetas13Enabled = true;
     }
-    
+
     if (sim.ivaVentasBienes && sim.ivaVentasBienes > 0) {
       this.ventasSujetas13Enabled = true;
     }
@@ -120,16 +120,15 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
   createSimulation(): void {
     const currentUser = this.authService.getUser();
     const userId = this.authService.getCurrentUserId();
-    
+
     if (!currentUser || !userId) {
-      console.error('No hay usuario autenticado');
       return;
     }
 
     this.loading = true;
-    
+
     this.ivaService.createSimulation(this.selectedYear, this.selectedMonth, userId);
-    
+
     setTimeout(() => {
       this.loading = false;
       if (this.ivaService.ivaSimulation) {
@@ -197,7 +196,7 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
   get ventasSujetasItems() {
     const sim = this.currentSimulation;
     if (!this.ventasSujetasEnabled || !sim) return [];
-    
+
     return [
       { label: 'Bienes y servicios afectos al 0.5%', value: 0, isAutocalculated: true },
       { label: 'Bienes y servicios afectos al 1%', value: sim.iva1Percent || 0, isAutocalculated: true },
@@ -213,16 +212,16 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     return {
       sectionTitle: 'I. TOTAL DE VENTAS SUJETAS, EXENTAS Y NO SUJETAS',
       hasToggle: false,
-      toggleState: false, 
-      onToggle: () => {}, 
-      items: [], 
+      toggleState: false,
+      onToggle: () => { },
+      items: [],
       subsections: [
         {
           title: 'Ventas sujetas (Base imponible)',
           hasToggle: true,
           toggleState: this.ventasSujetasEnabled,
           onToggle: (value: boolean) => this.toggleVentasSujetas(value),
-          subsections: [ 
+          subsections: [
             {
               title: 'BIENES Y SERVICIOS AFECTADOS AL 0,5%',
               hasToggle: true,
@@ -308,7 +307,7 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
 
   getTableValues(percentage: number): { [key: string]: number }[] {
     const sim = this.currentSimulation;
-    
+
     if (!sim) {
       return [{}, {}, {}, {}, {}];
     }
@@ -328,20 +327,20 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
         break;
       case 10:
         rawValues = [
-          sim.iva10Percent || 0, 
-          0, 
-          0, 
-          0, 
-          0  
+          sim.iva10Percent || 0,
+          0,
+          0,
+          0,
+          0
         ];
         break;
       case 13:
         rawValues = [
-          sim.ivaVentasBienes || 0, 
-          0, 
-          sim.ivaVentasServicios || 0, 
-          0, 
-          0  
+          sim.ivaVentasBienes || 0,
+          0,
+          sim.ivaVentasServicios || 0,
+          0,
+          0
         ];
         break;
       default:
@@ -349,11 +348,11 @@ export class IvaSimulationComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     const formattedValues = rawValues.map(value => ({ [percentageKey]: value }));
-    
+
     return formattedValues;
   }
 
 }
-  
+
 
 

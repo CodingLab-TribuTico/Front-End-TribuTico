@@ -195,21 +195,27 @@ export interface IIvaCalculation {
 }
 export interface INotification {
   id: number;
-  title: string;
-  message: string;
-  read: boolean;
-  timestamp: string;
-  type: string;
-}
-export interface INotificationGlobal {
-  id?: number;
   name?: string;
   description?: string;
   type?: string;
-  state?: string;
   closeDate?: string;
+  state?: string;
+  isRead?: boolean;
 }
 
+export interface IFiscal {
+  id: number;
+  name?: string;
+  description?: string;
+  taxDeclarationDeadline?: string;
+  type?: string;
+}
+
+export interface NotificationMessage {
+  action: string;
+  data?: any;
+  id?: number;
+}
 export interface IChatbotRequest {
   chatId?: string;
   question: string;
