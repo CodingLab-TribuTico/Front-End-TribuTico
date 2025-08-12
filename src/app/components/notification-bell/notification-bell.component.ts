@@ -40,7 +40,8 @@ export class NotificationBellComponent {
 
   handleNotificationClick(notification: INotification) {
     this.router.navigate(['/app/notifications'], {
-      queryParams: { select: notification.id }
+      state: { notification },
+      onSameUrlNavigation: 'reload'
     });
     this.dropdownOpen = false;
 
