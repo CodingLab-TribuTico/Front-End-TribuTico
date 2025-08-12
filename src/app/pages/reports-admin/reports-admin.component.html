@@ -64,7 +64,7 @@
             class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
             <div class="h-full w-full flex items-center justify-center">
                 @if(hasUserStatusProportion()) {
-                <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                <app-chart class="h-[40rem] w-[50rem] flex flex-col justify-center items-center"
                     [labels]="reportAdminService.userStatusProportion$()[0].labels"
                     [datasets]="reportAdminService.userStatusProportion$()[0].datasets" [type]="'pie'">
                 </app-chart>
@@ -135,7 +135,7 @@
             class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
             <div class="h-full w-full flex items-center justify-center">
                 @if(hasProportionTotalIncomeAndExpenses()) {
-                <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                <app-chart class="h-[40rem] w-[50rem] flex flex-col justify-center items-center"
                     [labels]="reportAdminService.proportionTotalIncomeAndExpenses$()[0].labels"
                     [datasets]="reportAdminService.proportionTotalIncomeAndExpenses$()[0].datasets" [type]="'pie'">
                 </app-chart>

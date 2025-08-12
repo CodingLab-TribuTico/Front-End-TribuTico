@@ -21,19 +21,16 @@ export class NotificationsComponent {
 
   ngOnInit() {
     this.loadNotifications();
-    // Escucha cambios en los parámetros de la URL
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state?.['notification']) {
-      this.selectedNotification = navigation.extras.state['notification'];
+      this.selectNotification(navigation.extras.state['notification']);
     }
   }
 
-  // Nuevo método para seleccionar notificación por ID
   selectNotificationById(id: number) {
     const notification = this.allNotifications().find(n => n.id === id);
     if (notification) {
       this.selectedNotification = notification;
-      // Si la notificación no está leída, márcala como leída
       if (!notification.isRead) {
         this.handleMarkAsRead(notification.id);
       }
