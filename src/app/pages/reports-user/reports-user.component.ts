@@ -25,15 +25,13 @@ export class ReportsUserComponent {
   public expenseCategories: boolean = false;
   public years: number[] = [];
 
-  public hasIncomesAndExpensesData = computed(() => this.hasPositiveData(this.reportUserService.invoicesMonthlyIncomesAndExpenses$()));
-  public hasCashFlowData = computed(() => this.hasPositiveData(this.reportUserService.invoicesMonthlyCashFlow$()));
-  public hasExpenseCategoriesData = computed(() => this.hasCategoryData());
+  public hasIncomesAndExpensesData = computed(() => this.hasPositiveValues(this.reportUserService.invoicesMonthlyIncomesAndExpenses$()));
+  public hasCashFlowData = computed(() => this.hasPositiveValues(this.reportUserService.invoicesMonthlyCashFlow$()));
+  public hasExpenseCategoriesData = computed(() => this.hasPositiveValues(this.reportUserService.invoicesTop5ExpenseCategories$()));
 
   constructor() {
-    const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
-    const userId = user.id;
-    this.invoiceService.getByUserId(userId);
     this.reportUserService.search.year = 0;
+    this.invoiceService.getAll();
     this.loadAllReports();
   }
 
@@ -44,13 +42,22 @@ export class ReportsUserComponent {
     this.reportUserService.getTop5ExpenseCategories();
   }
 
-  private hasPositiveData(data: any[]): boolean {
-    return data.some(item => item.data?.some((value: number) => value > 0));
-  }
+  private hasPositiveValues(data: any): boolean {
+    if (!data) return false;
 
-  private hasCategoryData(): boolean {
-    const datasets = this.reportUserService.invoicesTop5ExpenseCategories$()?.[0]?.datasets ?? [];
-    return datasets.some((ds: { data: number[] }) => ds.data.some((v: number) => v > 0));
+    if (Array.isArray(data) && data.length > 0 && Array.isArray(data[0].data)) {
+      return data.some(item => item.data.some((value: number) => value > 0));
+    }
+
+    if (Array.isArray(data) && data.length > 0 && Array.isArray(data[0].datasets)) {
+      return data[0].datasets.some((ds: { data: number[] }) => ds.data.some(v => v > 0));
+    }
+
+    if (Array.isArray(data)) {
+      return data.some((value: number) => value > 0);
+    }
+
+    return false;
   }
 
   loadInvoicesYears(invoices: IManualInvoice[] = []) {

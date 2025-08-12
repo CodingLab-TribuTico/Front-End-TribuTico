@@ -1,5 +1,5 @@
-<div class="bg-crater-brown border-2 border-zorba rounded-md p-2 text-xs text-bisque shadow-sm leading-tight">
-    <div class="font-semibold mb-1">{{ description }}</div>
+<div class="bg-crater-brown border-2 border-zorba rounded-md p-2 text-xs text-bisque shadow-sm leading-tight h-full">
+    <div class="font-semibold mb-1 truncate">{{ description }}</div>
 
     <table class="w-full text-left">
         <tbody>
@@ -49,4 +49,16 @@
             </button>
         </div>
     </div>
+    @if(isDetailInvalid) {
+    <div class="flex flex-row justify-center items-center mt-2">
+        <span class="flex items-center justify-center font-bold bg-burnt-umber rounded-md text-bisque p-2 text-center">
+            <span class="material-symbols-rounded text-sm mr-1">
+                edit
+            </span>
+            <span class="text-sm">
+                Requiere edición
+            </span>
+        </span>
+    </div>
+    }
 </div>

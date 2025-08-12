@@ -1,0 +1,110 @@
+@defer{
+@if(currentSimulationIva(); as iva){
+  <app-iva-simulation 
+    [simulation]="iva"
+    [simulationPeriod]="getIvaSimulationPeriod(iva)"
+    [simulationName]="getIvaSimulationName()"
+    [simulationIdentification]="getIvaSimulationIdentification()" />
+
+  <div class="flex justify-center mt-4 gap-2">
+    <button (click)="openDeleteModal()"
+      class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer font-bold hover:bg-bisque transition-colors">
+      Eliminar
+    </button>
+    <button (click)="onBack()"
+      class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+      Regresar
+    </button>
+  </div>
+}
+
+@if(currentSimulationIsr(); as isr){
+  <app-general-data 
+    [simulationPeriod]="isr.simulationPeriod"
+    [simulationName]="isr.simulationName"
+    [simulationIdentification]="isr.simulationIdentification">
+  </app-general-data>
+
+  <app-assets-liabilities
+    [currentAssets]="isr.currentAssets"
+    [equityInvestments]="isr.equityInvestments"
+    [inventory]="isr.inventory"
+    [netFixedAssets]="isr.netFixedAssets"
+    [totalNetAssets]="isr.totalNetAssets"
+    [totalLiabilities]="isr.totalLiabilities"
+    [netEquity]="isr.netEquity">
+  </app-assets-liabilities>
+
+  <app-income
+    [salesRevenue]="isr.salesRevenue"
+    [professionalFees]="isr.professionalFees"
+    [commissions]="isr.commissions"
+    [interestsAndYields]="isr.interestsAndYields"
+    [dividendsAndShares]="isr.dividendsAndShares"
+    [rents]="isr.rents"
+    [otherIncome]="isr.otherIncome"
+    [nonTaxableIncome]="isr.nonTaxableIncome"
+    [grossIncomeTotal]="isr.grossIncomeTotal">
+  </app-income>
+
+  <app-costs-expenses-deductions
+    [initialInventory]="isr.initialInventory"
+    [purchases]="isr.purchases"
+    [finalInventory]="isr.finalInventory"
+    [costOfGoodsSold]="isr.costOfGoodsSold"
+    [financialExpenses]="isr.financialExpenses"
+    [administrativeExpenses]="isr.administrativeExpenses"
+    [depreciationAndAmortization]="isr.depreciationAndAmortization"
+    [pensionContributions]="isr.pensionContributions"
+    [otherAllowableDeductions]="isr.otherAllowableDeductions"
+    [totalAllowableDeductions]="isr.totalAllowableDeductions">
+  </app-costs-expenses-deductions>
+
+  <app-tax-base
+    [netTaxableIncome]="isr.netTaxableIncome"
+    [nonTaxableSalaryAmount]="isr.nonTaxableSalaryAmount"
+    [incomeTax]="isr.incomeTax"
+    [freeTradeZoneExemption]="isr.freeTradeZoneExemption"
+    [otherExemptions]="isr.otherExemptions"
+    [netIncomeTaxAfterExemptions]="isr.netIncomeTaxAfterExemptions">
+  </app-tax-base>
+
+  <app-credits
+    [familyCredit]="isr.familyCredit"
+    [otherCredits]="isr.otherCredits"
+    [periodTax]="isr.periodTax"
+    [twoPercentWithholdings]="isr.twoPercentWithholdings"
+    [otherWithholdings]="isr.otherWithholdings"
+    [partialPayments]="isr.partialPayments"
+    [totalNetTax]="isr.totalNetTax">
+  </app-credits>
+
+  <app-settlement-tax-debt
+    [interests]="isr.interests"
+    [totalTaxDebt]="isr.totalTaxDebt"
+    [requestedCompensation]="isr.requestedCompensation"
+    [totalDebtToPay]="isr.totalDebtToPay">
+  </app-settlement-tax-debt>
+
+  <div class="flex justify-center mt-4 gap-2">
+    <button (click)="openDeleteModal()"
+      class="bg-golden-glow text-crater-brown py-1 px-3 rounded-md cursor-pointer font-bold hover:bg-bisque transition-colors">
+      Eliminar
+    </button>
+    <button (click)="onBack()"
+      class="bg-flamenco text-bisque py-2 px-3 rounded-md cursor-pointer font-bold hover:bg-golden-glow hover:text-flamenco transition-colors">
+      Regresar
+    </button>
+  </div>
+} 
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}
+
+<ng-template #confirmationModal>
+    <app-modal (callConfirmationMethod)="deleteSimulation()" (callCancelMethod)="hideModal()" [cancelAction]="'Cancelar'"
+        [confirmAction]="'Confirmar'" [title]="'¿Estás seguro de que deseas continuar?'" [textCenter]="true"
+        [icon]="'error'">
+        <p class="text-bisque text-base max-w-lg">Esta acción eliminará la simulación permanentemente.</p>
+    </app-modal>
+</ng-template>
