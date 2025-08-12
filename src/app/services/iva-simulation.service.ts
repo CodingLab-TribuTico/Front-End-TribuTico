@@ -28,7 +28,7 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
   public totalItems: any = [];
 
   createSimulation(year: number, month: number, userId: number) {
-    this.currentSubscription = this.findAllWithParams({
+    this.currentSubscription = this.findAllWithParamsAndCustomSource('create', {
       year: year,
       month: month,
       userId: userId,
