@@ -14,13 +14,30 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { UploadInvoicesComponent } from './pages/upload-invoices/upload-invoices.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.component';
-import { LandingPageComponent } from './pages/landing-page/landing-page.component';
+import { LandingPageTributicoComponent } from './pages/landing-page-tributico/landing-page-tributico.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { NotificationDetailComponent } from './pages/notification/notification-detail/notification-detail.component';
+import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
+import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
+import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
+import { ChatbotComponent } from './pages/chatbot/chatbot.component';
+import { SimulationViewComponent } from './pages/simulation-view/simulation-view.component';
+import { SimulationDetailComponent } from './pages/simulation-detail/simulation-detail.component';
+import { GoalsComponent } from './pages/goals/goals.component';
+import { GoalsViewComponent } from './pages/goals-view/goals-view.component';
+import { FiscalCalendarComponent } from './pages/fiscal-calendar/fiscal-calendar.component';
+
 
 export const routes: Routes = [
   {
-    path: 'landing-page',
-    component: LandingPageComponent,
+    path: 'landing-page-team',
+    component: LandingPageTeamComponent,
+    canActivate: [GuestGuard],
+  },
+  {
+    path: 'landing-page-tributico',
+    component: LandingPageTributicoComponent,
     canActivate: [GuestGuard],
   },
   {
@@ -39,7 +56,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'landing-page',
+    redirectTo: 'landing-page-team',
     pathMatch: 'full',
   },
   {
@@ -51,6 +68,78 @@ export const routes: Routes = [
         path: 'app',
         redirectTo: 'users',
         pathMatch: 'full',
+      },
+      {
+        path: 'reports-admin',
+        component: ReportsAdminComponent,
+        data: {
+          authorities: [IRoleType.superAdmin],
+          name: 'Reportes',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'chatbot',
+        component: ChatbotComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Chatbot',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'goals',
+        component: GoalsComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Metas',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'reports-user',
+        component: ReportsUserComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Reportes',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'notifications',
+        component: NotificationsComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Ver Notificaciones',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'fiscal-calendar',
+        component: FiscalCalendarComponent,
+        data: {
+          authorities: [IRoleType.superAdmin],
+          name: 'Calendario Fiscal',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'notification',
+        component: NotificationDetailComponent,
+        data: {
+          authorities: [IRoleType.superAdmin],
+          name: 'Notificaciones',
+          showInSidebar: true
+        }
+      },
+      {
+        path: 'simulation-view',
+        component: SimulationViewComponent,
+        data: {
+          authorities: [IRoleType.user],
+          name: 'Simulaciones',
+          showInSidebar: true
+        }
       },
       {
         path: 'create-simulation',
@@ -142,7 +231,29 @@ export const routes: Routes = [
           name: 'Detalle de Factura',
           showInSidebar: false
         }
-      }
+      },
+      {
+        path: 'simulation-detail/:type/:id',
+        component: SimulationDetailComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Simulation',
+          showInSidebar: false
+        }
+      },
+      {
+        path: 'goals-view',
+        component: GoalsViewComponent,
+        data: {
+          authorities: [
+            IRoleType.user
+          ],
+          name: 'Metas',
+          showInSidebar: false
+        }
+      },
     ],
   },
 ];

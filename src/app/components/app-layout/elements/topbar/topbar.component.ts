@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 import { IUser } from '../../../../interfaces';
 import { MyAccountComponent } from '../../../my-account/my-account.component';
+import { NotificationBellComponent } from '../../../notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [CommonModule, MyAccountComponent],
+  imports: [CommonModule, MyAccountComponent, NotificationBellComponent],
   templateUrl: './topbar.component.html',
 })
 export class TopbarComponent implements OnInit {

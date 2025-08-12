@@ -7,8 +7,7 @@
       <div class="flex flex-col gap-2 flex-1">
         <label class="text-bisque font-bold" for="type">Tipo<span class="text-burnt-umber">*</span></label>
         <select id="type" formControlName="type"
-          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2.5 focus:outline-none focus:border-golden-glow"
-          (change)="changeType($event)">
+          class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2.5 focus:outline-none focus:border-golden-glow">
           <option [value]="''" disabled selected>Selecciona un tipo</option>
           <option value="ingreso">Ingreso</option>
           <option value="gasto">Gasto</option>
@@ -34,22 +33,30 @@
   <div class="flex gap-4 flex-wrap">
     <div class="flex flex-col gap-2 flex-1">
       <label class="text-bisque font-bold" for="consecutive">Consecutivo<span class="text-burnt-umber">*</span></label>
-      <input id="consecutive" formControlName="consecutive" type="number"
+      <input id="consecutive" formControlName="consecutive" type="text"
         class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
         placeholder="1205262060456206" />
-      @if (invoiceForm.controls['consecutive'].invalid && (invoiceForm.controls['consecutive'].dirty ||
-      invoiceForm.controls['consecutive'].touched)) {
+
+      @if (invoiceForm.controls['consecutive'].errors?.['pattern'] &&
+      (invoiceForm.controls['consecutive'].dirty || invoiceForm.controls['consecutive'].touched)) {
+      <p class="text-burnt-umber text-sm">El consecutivo es inválido.</p>
+      } @else if (invoiceForm.controls['consecutive'].errors?.['required'] &&
+      (invoiceForm.controls['consecutive'].dirty || invoiceForm.controls['consecutive'].touched)) {
       <div class="text-burnt-umber text-sm">El consecutivo es obligatorio.</div>
       }
     </div>
 
     <div class="flex flex-col gap-2 flex-1">
       <label class="text-bisque font-bold" for="key">Clave<span class="text-burnt-umber">*</span></label>
-      <input id="key" formControlName="key" type="number"
+      <input id="key" formControlName="key" type="text"
         class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
         placeholder="Clave" />
-      @if (invoiceForm.controls['key'].invalid && (invoiceForm.controls['key'].dirty ||
-      invoiceForm.controls['key'].touched)) {
+
+      @if (invoiceForm.controls['key'].errors?.['pattern'] &&
+      (invoiceForm.controls['key'].dirty || invoiceForm.controls['key'].touched)) {
+      <p class="text-burnt-umber text-sm">La clave es inválida.</p>
+      } @else if (invoiceForm.controls['key'].errors?.['required'] &&
+      (invoiceForm.controls['key'].dirty || invoiceForm.controls['key'].touched)) {
       <div class="text-burnt-umber text-sm">La clave es obligatoria.</div>
       }
     </div>
@@ -57,17 +64,27 @@
 
   <div>
     <div class="border-b-2 mb-4 border-zorba">
-      <h2 class="text-bisque font-bold">Datos del @if(type() === "ingreso") {cliente} @else {proveedor}</h2>
+      <h2 class="text-bisque font-bold">
+        Datos del {{ invoiceForm.get('type')?.value === 'ingreso' ? 'cliente' : 'proveedor' }}
+      </h2>
     </div>
     <div class="flex gap-4 flex-wrap">
       <div class="flex flex-col gap-2 flex-1">
-        <label class="text-bisque font-bold" for="identification">Cédula<span class="text-burnt-umber">*</span></label>
+        <label class="text-bisque font-bold" for="identification">Cédula o DIMEX<span
+            class="text-burnt-umber">*</span></label>
         <input id="identification" formControlName="identification" type="text"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
-          placeholder="Cédula" />
-        @if (invoiceForm.controls['identification'].invalid && (invoiceForm.controls['identification'].dirty ||
-        invoiceForm.controls['identification'].touched)) {
+          placeholder="Cédula o DIMEX" />
+
+        @if (invoiceForm.controls['identification'].errors?.['required'] &&
+        (invoiceForm.controls['identification'].dirty || invoiceForm.controls['identification'].touched)) {
         <div class="text-burnt-umber text-sm">La identificación es obligatoria.</div>
+        }
+        @if (
+        invoiceForm.controls['identification'].errors?.['pattern'] &&
+        (invoiceForm.controls['identification'].dirty || invoiceForm.controls['identification'].touched)
+        ) {
+        <p class="text-burnt-umber text-sm">Cédula o DIMEX inválida.</p>
         }
       </div>
 
@@ -99,11 +116,15 @@
     <div class="flex flex-col gap-2 flex-1">
       <label class="text-bisque font-bold" for="email">Correo electrónico<span class="text-burnt-umber">*</span></label>
       <input id="email" formControlName="email" type="text"
-        class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
+        class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow disabled:bg-zorba disabled:opacity-80 disabled:cursor-not-allowed"
         placeholder="Correo" />
       @if (invoiceForm.controls['email'].invalid && (invoiceForm.controls['email'].dirty ||
       invoiceForm.controls['email'].touched)) {
       <div class="text-burnt-umber text-sm">El correo electrónico es obligatorio.</div>
+      }
+      @if (invoiceForm.controls['email'].errors?.['email'] && (invoiceForm.controls['email'].dirty ||
+      invoiceForm.controls['email'].touched)) {
+      <div class="text-burnt-umber text-sm">Correo electrónico inválido.</div>
       }
     </div>
   </div>
@@ -114,15 +135,16 @@
         <h2 class="text-bisque font-bold">Detalles</h2>
       </div>
       @if(details && details.length > 0) {
-      <div class="flex gap-4 flex-wrap mb-4">
-        @for(detail of details; track $index) {
-        <app-card-detail [cabys]="detail.cabys || '0'" [quantity]="detail.quantity || 0" [unit]="detail.unit || ''"
-          [unitPrice]="detail.unitPrice || 0" [discount]="detail.discount || 0" [tax]="detail.tax || 0"
-          [taxAmount]="detail.taxAmount || 0" [category]="detail.category || ''" [total]="detail.total || 0"
-          [description]="detail.description || ''" [index]="$index" (editDetail)="editDetailItem($event)"
+
+      <div *ngIf="details && details.length > 0" class="flex flex-wrap gap-4 mb-4">
+        <app-card-detail *ngFor="let detail of details; let i = index"
+          class="flex-grow flex-shrink basis-[calc(50%-1rem)]" [cabys]="detail.cabys || '0'"
+          [quantity]="detail.quantity || 0" [unit]="detail.unit || ''" [unitPrice]="detail.unitPrice || 0"
+          [discount]="detail.discount || 0" [tax]="detail.tax || 0" [taxAmount]="detail.taxAmount || 0"
+          [category]="detail.category || ''" [total]="detail.total || 0" [description]="detail.description || ''"
+          [index]="i" [isDetailInvalid]="isDetailInvalid(detail)" (editDetail)="editDetailItem($event)"
           (deleteDetail)="deleteDetailItem($event)">
         </app-card-detail>
-        }
       </div>
       }
       <div class="flex gap-4 flex-wrap">
@@ -131,19 +153,28 @@
           <input id="cabys" formControlName="cabys" type="text"
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
             placeholder="Cabys" />
-          @if (detailForm.controls['cabys'].invalid && (detailForm.controls['cabys'].dirty ||
-          detailForm.controls['cabys'].touched)) {
+
+
+          @if (detailForm.controls['cabys'].errors?.['pattern'] &&
+          (detailForm.controls['cabys'].dirty || detailForm.controls['cabys'].touched)) {
+          <p class="text-burnt-umber text-sm">El cabys es inválido.</p>
+          } @else if (detailForm.controls['cabys'].errors?.['required'] &&
+          (detailForm.controls['cabys'].dirty || detailForm.controls['cabys'].touched)) {
           <div class="text-burnt-umber text-sm">El cabys es obligatorio.</div>
           }
         </div>
 
         <div class="flex flex-col gap-2 flex-1">
           <label class="text-bisque font-bold" for="quantity">Cantidad<span class="text-burnt-umber">*</span></label>
-          <input id="quantity" formControlName="quantity" type="number"
+          <input id="quantity" formControlName="quantity" type="text"
             class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
             placeholder="Cantidad" (change)="calculateTotal()" />
-          @if (detailForm.controls['quantity'].invalid && (detailForm.controls['quantity'].dirty ||
-          detailForm.controls['quantity'].touched)) {
+
+          @if (detailForm.controls['quantity'].errors?.['pattern'] &&
+          (detailForm.controls['quantity'].dirty || detailForm.controls['quantity'].touched)) {
+          <p class="text-burnt-umber text-sm">La cantidad es inválida.</p>
+          } @else if (detailForm.controls['quantity'].errors?.['required'] &&
+          (detailForm.controls['quantity'].dirty || detailForm.controls['quantity'].touched)) {
           <div class="text-burnt-umber text-sm">La cantidad es obligatorio.</div>
           }
         </div>
@@ -165,11 +196,15 @@
       <div class="flex flex-col gap-2 flex-1">
         <label class="text-bisque font-bold" for="unitPrice">Precio de unidad<span
             class="text-burnt-umber">*</span></label>
-        <input id="unitPrice" formControlName="unitPrice" type="number"
+        <input id="unitPrice" formControlName="unitPrice" type="text"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
           placeholder="Precio de unidad" (change)="calculateTotal()" />
-        @if (detailForm.controls['unitPrice'].invalid && (detailForm.controls['unitPrice'].dirty ||
-        detailForm.controls['unitPrice'].touched)) {
+
+        @if (detailForm.controls['unitPrice'].errors?.['pattern'] &&
+        (detailForm.controls['unitPrice'].dirty || detailForm.controls['unitPrice'].touched)) {
+        <p class="text-burnt-umber text-sm">El precio de unidad es inválido.</p>
+        } @else if (detailForm.controls['unitPrice'].errors?.['required'] &&
+        (detailForm.controls['unitPrice'].dirty || detailForm.controls['unitPrice'].touched)) {
         <div class="text-burnt-umber text-sm">El precio de unidad es obligatorio.</div>
         }
       </div>
@@ -178,11 +213,15 @@
     <div class="flex gap-4 flex-wrap">
       <div class="flex flex-col gap-2 flex-1">
         <label class="text-bisque font-bold" for="discount">Descuento<span class="text-burnt-umber">*</span></label>
-        <input id="discount" formControlName="discount" type="number"
+        <input id="discount" formControlName="discount" type="text"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
           placeholder="Descuento" (change)="calculateTotal()" />
-        @if (detailForm.controls['discount'].invalid && (detailForm.controls['discount'].dirty ||
-        detailForm.controls['discount'].touched)) {
+
+        @if (detailForm.controls['discount'].errors?.['pattern'] &&
+        (detailForm.controls['discount'].dirty || detailForm.controls['discount'].touched)) {
+        <p class="text-burnt-umber text-sm">El descuento es inválido.</p>
+        } @else if (detailForm.controls['discount'].errors?.['required'] &&
+        (detailForm.controls['discount'].dirty || detailForm.controls['discount'].touched)) {
         <div class="text-burnt-umber text-sm">El descuento es obligatorio.</div>
         }
       </div>
@@ -192,7 +231,7 @@
         <select id="tax" formControlName="tax"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2.5 focus:outline-none focus:border-golden-glow"
           (change)="calculateTotal()">
-          <option [value]="''" disabled selected>Selecciona un impuesto</option>
+          <option value="" disabled selected>Selecciona un impuesto</option>
           <option value="13">13%</option>
           <option value="10">10%</option>
           <option value="4">4%</option>
@@ -211,17 +250,17 @@
 
     <div class="flex gap-4 flex-wrap">
       <div class="flex flex-col gap-2 flex-1 min-w-[200px]">
-        <label class="text-bisque font-bold" for="category">Categoria<span class="text-burnt-umber">*</span></label>
+        <label class="text-bisque font-bold" for="category">Categoría<span class="text-burnt-umber">*</span></label>
         <select id="category" formControlName="category"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2.5 focus:outline-none focus:border-golden-glow">
-          <option [value]="''" disabled selected>Selecciona una categoria</option>
+          <option [value]="''" disabled selected>Selecciona una categoría</option>
           @for (key of keyCategories; track $index) {
           <option [value]="key">{{ categories[key] }}</option>
           }
         </select>
         @if (detailForm.controls['category'].invalid && (detailForm.controls['category'].dirty ||
         detailForm.controls['category'].touched)) {
-        <div class="text-burnt-umber text-sm">La categoria es obligatoria.</div>
+        <div class="text-burnt-umber text-sm">La categoría es obligatoria.</div>
         }
       </div>
 
@@ -238,29 +277,39 @@
     </div>
 
     <div class="flex flex-col gap-2 flex-wrap">
-      <label class="text-bisque font-bold" for="description">Descripcion<span class="text-burnt-umber">*</span></label>
+      <label class="text-bisque font-bold" for="description">Descripción<span class="text-burnt-umber">*</span></label>
       <textarea id="description" formControlName="description" type="text"
         class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow resize-none"
-        placeholder="Descripcion"></textarea>
+        placeholder="Descripción"></textarea>
       @if (detailForm.controls['description'].invalid && (detailForm.controls['description'].dirty ||
       detailForm.controls['description'].touched)) {
-      <div class="text-burnt-umber text-sm">La descripcion es obligatoria.</div>
+      <div class="text-burnt-umber text-sm">La descripción es obligatoria.</div>
       }
     </div>
 
-    <div class="flex gap-4 justify-center mt-2">
-      <button (click)="callSaveDetail()" [disabled]="detailForm.invalid" type="button"
-        class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-flamenco disabled:text-bisque">
-        Agregar detalle
-      </button>
+    <div class="flex gap-4 justify-center">
+      <div class="flex gap-4 justify-center mt-2">
+        <button (click)="callSaveDetail()" [disabled]="detailForm.invalid" type="button"
+          class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber disabled:text-bisque">
+          {{ isEditingDetail ? 'Actualizar detalle' : 'Agregar detalle' }}
+        </button>
+      </div>
+      @if(isEditingDetail) {
+      <div class="flex gap-4 justify-center mt-2">
+        <button (click)="cancelEdit()" type="button"
+          class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-bisque transition-colors">
+          Cancelar edición
+        </button>
+      </div>
+      }
     </div>
-
   </form>
 
   <div class="flex gap-4 justify-center">
-    <button (click)="callSave()" [disabled]="invoiceForm.invalid || this.details.length == 0" ctype="button"
-      class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-flamenco disabled:text-bisque">
-      Registrar
+    <button (click)="callSave()" [disabled]="invoiceForm.invalid || this.details.length == 0 || hasInvalidDetails()"
+      ctype="button"
+      class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber disabled:text-bisque">
+      {{textConfirmButton}}
     </button>
     <button type="button"
       class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-bisque transition-colors"

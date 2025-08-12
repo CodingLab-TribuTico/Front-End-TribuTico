@@ -1,0 +1,73 @@
+<div class="flex items-center justify-center h-20 mr-3">
+    <div class="relative" #notificationDropdown>
+        <button (click)="toggleNotifications()" [ngClass]="{'ring-animation': unreadCount() > 0 && !dropdownOpen}"
+            class="relative flex items-center justify-center p-1 rounded-full hover:bg-zorba transition">
+            @if(unreadCount() > 0) {
+            <span
+                class="absolute -top-[0.10px] -right-[0.10px] bg-flamenco text-bisque rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold shadow">
+                {{ unreadCount() }}
+            </span>
+            }
+            <span class="material-symbols-rounded text-2xl text-bisque">
+                notifications
+            </span>
+        </button>
+
+        @if(dropdownOpen) {
+        <div
+            class="absolute right-0 mt-4 bg-crater-brown rounded-md shadow-2xl overflow-hidden z-50 w-96 border border-bisque/30">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-bisque/50 bg-crater-brown">
+                <p class="text-bisque font-semibold text-base">Notificaciones</p>
+                @if(unreadCount() > 0) {
+                <button (click)="markAllAsRead()" class="text-xs text-bisque hover:underline">
+                    Marcar todas como leídas
+                </button>
+                }
+            </div>
+
+            <div class="max-h-60 overflow-y-auto">
+                @if(notifications().length > 0) {
+                @for(notification of notifications().slice().reverse(); track notification.id) {
+                <a (click)="handleNotificationClick(notification)"
+                    class="flex items-start gap-3 px-5 py-4 border-b border-bisque/30 hover:bg-zorba transition-colors cursor-pointer">
+                    <span class="material-symbols-rounded text-bisque text-xl pt-0.5">
+                        {{
+                        notification.type === 'message'
+                        ? 'message'
+                        : notification.type === 'update'
+                        ? 'update'
+                        : 'warning'
+                        }}
+                    </span>
+
+                    <div class="flex flex-col flex-grow min-w-0">
+                        <p class="text-bisque text-sm truncate">
+                            <span class="font-semibold">{{ notification.name }}</span> - {{ notification.description }}
+                        </p>
+                        <span class="text-xs text-bisque/70 mt-1">
+                            {{ notification.closeDate | date: 'dd/MM/yyyy' }}
+                        </span>
+                    </div>
+
+                    <span class="relative inline-flex h-2 w-2 mt-1 ml-2">
+                        <span
+                            class="absolute inline-flex h-full w-full animate-ping rounded-full bg-flamenco opacity-75"></span>
+                        <span class="relative inline-flex h-2 w-2 rounded-full bg-flamenco"></span>
+                    </span>
+                </a>
+                }
+                } @else {
+                <div class="p-4 text-center text-bisque text-sm">
+                    <p>No hay notificaciones</p>
+                </div>
+                }
+            </div>
+
+            <a [routerLink]="['/app', 'notifications']"
+                class="block text-center text-bisque font-semibold text-sm py-3 border-t border-bisque/30 hover:underline">
+                Ver todas las notificaciones
+            </a>
+        </div>
+        }
+    </div>
+</div>

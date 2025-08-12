@@ -1,3 +1,5 @@
-<div class="w-full bg-crater-brown sticky h-12">
+<div class="w-full bg-crater-brown sticky h-12 flex flex-row items-center justify-end px-4">
+    <app-notification-bell [hidden]="authService.isSuperAdmin()"></app-notification-bell>
+
     <app-my-account></app-my-account>
 </div>

@@ -11,7 +11,6 @@ import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { ManualInvoicesFormComponent } from "../../components/manual-invoices/manual-invoices-form/manual-invoices-form.component";
 import { InputFileFormComponent } from "../../components/input-file-form/input-file-form.component";
-import { toSignal } from '@angular/core/rxjs-interop';
 import { XmlService } from '../../services/xml.service';
 
 @Component({
@@ -40,7 +39,9 @@ export class UploadInvoicesComponent {
     return this.xmlService.responseScan$() || this.ocrService.responseScan$();
   });
 
-  public isLoading = computed(() => this.ocrService.isLoading$() || this.xmlService.isLoading$());
+  public isLoading = computed(() => {
+    return this.ocrService.isLoading$() || this.xmlService.isLoading$();
+  });
 
   public invoiceForm = this.fb.group({
     id: [''],
@@ -117,7 +118,6 @@ export class UploadInvoicesComponent {
     const userId = this.authService.getCurrentUserId();
 
     if (!userId) {
-      console.error('No se pudo obtener el ID del usuario');
       this.alertService.displayAlert('error', 'No se pudo obtener el ID del usuario. Por favor, inicia sesión nuevamente.', 'center', 'top', ['error-snackbar']);
       return;
     }
@@ -136,6 +136,16 @@ export class UploadInvoicesComponent {
   resetScanResponse() {
     this.xmlService.responseScan.set(null);
     this.ocrService.resetResponseScan();
+  }
+
+  handleScanFile(file: File) {
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+    if (fileExtension === 'xml') {
+      this.xmlService.scanFile(file, this.type);
+    } else {
+      this.ocrService.scanFile(file, this.type);
+    }
   }
 
   callCancel() {

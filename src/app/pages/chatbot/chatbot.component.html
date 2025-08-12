@@ -1,0 +1,100 @@
+<div [formGroup]="chatbotForm" class="flex flex-col items-center px-6 py-6 w-full rounded-md h-[80vh] bg-crater-brown">
+    <div class="flex items-center justify-center w-full mb-4 border-b border-bisque/30">
+        <h1 class="text-2xl font-bold text-bisque pb-2 text-start w-full">Chatbot</h1>
+    </div>
+
+    <div class="flex-1 p-2 flex flex-col h-full w-[150vh] border border-bisque/30 rounded-md overflow-hidden">
+
+        <div id="messages" class="flex-1 flex flex-col space-y-4 p-3 overflow-y-auto">
+            <div *ngFor="let message of this.chatbotService.messages$()">
+                <div class="flex items-end" [ngClass]="message.from === 'bot' ? '' : 'justify-end'">
+                    <div class="flex flex-col space-y-2 text-md max-w-lg mx-2"
+                        [ngClass]="message.from === 'bot' ? 'order-2 items-start' : 'order-1 items-end'">
+                        <div>
+                            <span class="px-4 py-3 rounded-xl inline-block font-medium" [ngClass]="message.from === 'bot'
+                  ? 'rounded-bl-none bg-golden-glow text-crater-brown'
+                  : 'rounded-br-none bg-bisque text-crater-brown'" [innerHTML]="message.answer">
+                            </span>
+                        </div>
+                    </div>
+
+                    @if(message.from === 'bot') {
+                    <div
+                        class="w-6 h-6 rounded-full bg-golden-glow text-crater-brown font-bold flex items-center justify-center order-1">
+                        <span class="material-symbols-rounded text-sm">
+                            smart_toy
+                        </span>
+                    </div>
+                    } @else {
+                    <div
+                        class="w-6 h-6 rounded-full bg-bisque text-crater-brown font-bold flex items-center justify-center order-2 text-sm">
+                        {{ userName.charAt(0) }}
+                    </div>
+                    }
+                </div>
+            </div>
+
+            @if(this.chatbotService.messages$().length < 2) { <div class="flex flex-col items-end justify-end gap-2">
+                @for (description of faqDescription; track description) {
+                <app-faq-chatbot [description]="description"
+                    (callFaqClick)="updateChatWithFaq(description)"></app-faq-chatbot>
+                }
+        </div>
+        }
+
+        @if(chatbotService.botTyping$()) {
+        <div>
+            <div class="flex items-end">
+                <div
+                    class="w-6 h-6 rounded-full bg-golden-glow text-crater-brown font-bold flex items-center justify-center order-1">
+                    <span class="material-symbols-rounded text-sm">
+                        smart_toy
+                    </span>
+                </div>
+
+                <div class="flex flex-col space-y-2 text-md leading-tight mx-2 order-2 items-start">
+                    <div>
+                        <span
+                            class="px-4 py-3 rounded-xl inline-block font-medium rounded-bl-none bg-golden-glow text-crater-brown">
+                            <div class="flex items-center justify-center space-x-2">
+                                <div class="circle1 bg-crater-brown rounded-full w-2 h-2"></div>
+                                <div class="circle1 bg-crater-brown rounded-full w-2 h-2"></div>
+                                <div class="circle1 bg-crater-brown rounded-full w-2 h-2"></div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="border-t-2 border-crater-brown/30 pt-4 flex flex-row items-center justify-center">
+        <div class="relative flex px-3 pb-3 w-full">
+            <input id="question" formControlName="question" type="text" placeholder="Escribe tu mensaje..."
+                (keydown.enter)="updateChat()"
+                class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-3 focus:outline-none focus:border-golden-glow w-full" />
+
+            <div class="absolute right-[4.5rem] items-center inset-y-0 h-full flex justify-center px-3 pb-3">
+                <button type="button"
+                    class="rounded-md px-1.5 py-0.5 text-white bg-flamenco flex items-center justify-center"
+                    (click)="updateChat()">
+                    <span class="material-symbols-rounded text-2xl text-bisque font-bold">
+                        arrow_forward
+                    </span>
+                </button>
+            </div>
+            <div class="flex items-center justify-center ml-2">
+                <button
+                    class="bg-zorba text-bisque py-3 px-4 rounded-md hover:bg-bisque hover:text-zorba disabled:bg-burnt-umber disabled:text-bisque disabled:opacity-80 disabled:cursor-not-allowed"
+                    [disabled]="this.chatbotService.botTyping$()" (click)="this.chatbotService.cleanMessages()">
+                    <span class="material-symbols-rounded text-2xl">
+                        replay
+                    </span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>

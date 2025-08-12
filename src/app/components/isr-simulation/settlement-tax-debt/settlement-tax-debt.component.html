@@ -1,0 +1,37 @@
+<div class="flex flex-col space-y-4 w-full">
+    <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
+        VI. Liquidación deuda tributaria
+    </h1>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            82 - Intereses
+        </p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ interests }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            83 - Total deuda tributaria
+        </p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ totalTaxDebt }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            84 - Solicito compensar con créditos a mi favor por el monto de
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ requestedCompensation }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            85 - Total deuda por pagar
+        </p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ totalDebtToPay }}
+        </span>
+    </div>
+</div>

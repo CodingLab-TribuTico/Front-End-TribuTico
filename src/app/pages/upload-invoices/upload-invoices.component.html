@@ -2,7 +2,7 @@
     <div class="flex flex-row justify-between items-center w-full px-4">
         <h1 class="text-3xl font-bold text-crater-brown">Cargar facturas</h1>
         <button
-            class="bg-zorba text-crater-brown px-4 py-2 rounded-md flex justify-center items-center disabled:opacity-80 disabled:cursor-not-allowed hover:bg-crater-brown hover:text-bisque disabled:bg-zorba disabled:text-crater-brown transition-colors"
+            class="bg-zorba text-crater-brown px-4 py-2 rounded-md flex justify-center items-center disabled:bg-burnt-umber disabled:opacity-80 disabled:cursor-not-allowed hover:bg-crater-brown hover:text-bisque disabled:text-bisque transition-colors"
             (click)="hideImportInvoices()" [disabled]="ocrService.isLoading$() || xmlService.isLoading$()">
             {{importInvoicesText}}
             <span class="material-symbols-rounded ml-2 hover:text-bisque disabled:text-crater-brown transition-colors">
@@ -41,8 +41,7 @@
             </div>
             }
             <app-input-file-form [ngClass]="[ocrService.isLoading$() || xmlService.isLoading$() ? '' : 'h-full w-full']"
-                [isLoading]="isLoading" (callScanMethod)="ocrService.scanFile($event, type)"
-                (callOpenModalMethod)="openModal()" />
+                [isLoading]="isLoading" (callScanMethod)="handleScanFile($event)" (callOpenModalMethod)="openModal()" />
         </div>
         }
     </div>

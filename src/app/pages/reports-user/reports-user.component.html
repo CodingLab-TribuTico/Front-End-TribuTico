@@ -1,0 +1,141 @@
+@if(expenseCategories === false && cashFlow === false && incomesAndExpenses === false) {
+<ng-container>
+    <h1 class="text-3xl font-bold text-center mb-2 text-crater-brown">Reportes de usuario</h1>
+    <div class="grid grid-cols-3 gap-4">
+        <app-card-report [title]="'INGRESOS Y REPORTES.'" [icon]="'money_bag'"
+            [description]="'Este reporte gráfico muestra de manera fácil de entender, cómo han sido los ingresos (dinero que entra) y los gastos (dinero que sale) del negocio en toda su existencia.'"
+            [buttonText]="'Ver ingresos y gastos'" (callClickMethod)="incomesAndExpenses = true"
+            [bgColor]="'bg-flamenco'" [textColor]="'text-crater-brown'" [bgButtonColor]="'bg-bisque'"
+            [bgButtonHoverColor]="'hover:bg-crater-brown'" [bgButtonTextHoverColor]="'hover:text-bisque'">
+        </app-card-report>
+        <app-card-report [title]="'FLUJO DE CAJA.'" [icon]="'account_balance_wallet'"
+            [description]="'El flujo de caja muestra cuánto dinero entra y sale de tu negocio en un periodo determinado. Es clave para saber si estás generando efectivo o perdiendo dinero.'"
+            [buttonText]="'Ver flujo de caja'" (callClickMethod)="cashFlow = true" [bgColor]="'bg-bisque'"
+            [textColor]="'text-crater-brown'" [bgButtonColor]="'bg-golden-glow'"
+            [bgButtonHoverColor]="'hover:bg-crater-brown'" [bgButtonTextHoverColor]="'hover:text-golden-glow'">
+        </app-card-report>
+        <app-card-report [title]="'GASTOS POR CATEGORÍA.'" [icon]="'category'"
+            [description]="'Este gráfico permite al usuario visualizar sus egresos desglosados por categorías, facilitando la identificación de los rubros donde se concentra la mayor parte de sus gastos.'"
+            [buttonText]="'Ver gastos por categoría'" (callClickMethod)="expenseCategories = true">
+        </app-card-report>
+    </div>
+</ng-container>
+} @else if(incomesAndExpenses) {
+<ng-container>
+    <div class="flex flex-row w-full justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-center text-crater-brown">Ingresos y gastos</h1>
+        <select (change)="changeYear($event)" id="year"
+            class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+            formControlName="year">
+            <option value=0 selected>Todos</option>
+            @for (year of loadInvoicesYears(this.invoiceService.invoices$()); track year) {
+            <option [value]="year">{{ year }}</option>
+            }
+        </select>
+    </div>
+
+    <div
+        class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+        <div class="h-full w-full flex items-center justify-center">
+            @if(hasIncomesAndExpensesData()) {
+            <app-chart class="h-full w-full flex flex-col justify-center items-center" [labels]="labels"
+                [datasets]="reportUserService.invoicesMonthlyIncomesAndExpenses$()" [type]="'bar'">
+            </app-chart>
+            } @else{
+            <div class="flex flex-col items-center justify-center h-full w-full">
+                <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                    contract_delete
+                </span>
+                <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="flex justify-center mt-2">
+        <button class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+            (click)="closeReport('incomesAndExpenses')">Regresar</button>
+    </div>
+</ng-container>
+} @else if(cashFlow) {
+<ng-container>
+    <div class="flex flex-row w-full justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-center text-crater-brown">Flujo de caja</h1>
+        <div class="flex flex-row items-center gap-2">
+            <label for="Toggle3" class="inline-flex items-center rounded-md cursor-pointer font-bold text-bisque"
+                (change)="toggleVariationType()">
+                <input id="Toggle3" type="checkbox" class="hidden peer">
+                <span class="px-4 py-2 rounded-l-md dark:bg-crater-brown peer-checked:dark:bg-zorba">Mensual</span>
+                <span class="px-4 py-2 rounded-r-md dark:bg-zorba peer-checked:dark:bg-crater-brown">Trimestral</span>
+            </label>
+            <select (change)="changeYear($event)" id="year"
+                class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+                formControlName="year">
+                <option value=0 selected>Todos</option>
+                @for (year of loadInvoicesYears(this.invoiceService.invoices$()); track year) {
+                <option [value]="year">{{ year }}</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div
+        class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+        <div class="h-full w-full flex items-center justify-center">
+            @if(hasCashFlowData()) {
+            <app-chart class="h-full w-full flex flex-col justify-center items-center" [labels]="labelsCashFlow"
+                [datasets]="variationType === 'months' ? this.reportUserService.invoicesMonthlyCashFlow$() : this.reportUserService.invoicesTrimesterCashFlow$()"
+                [type]="'line'">
+            </app-chart>
+            } @else{
+            <div class="flex flex-col items-center justify-center h-full w-full">
+                <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                    contract_delete
+                </span>
+                <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="flex justify-center mt-2">
+        <button class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+            (click)="closeReport('cashFlow')">Regresar</button>
+    </div>
+</ng-container>
+} @else if(expenseCategories) {
+<ng-container>
+    <div class="flex flex-row w-full justify-between items-center mb-2">
+        <h1 class="text-2xl font-bold text-center text-crater-brown">Top 5 gastos por categoría</h1>
+        <select (change)="changeYear($event)" id="year"
+            class="bg-crater-brown text-bisque text-base font-bold rounded-md px-4 py-2.5 placeholder:text-zorba focus:outline-none focus:border-golden-glow"
+            formControlName="year">
+            <option value=0 selected>Todos</option>
+            @for (year of loadInvoicesYears(this.invoiceService.invoices$()); track year) {
+            <option [value]="year">{{ year }}</option>
+            }
+        </select>
+    </div>
+
+    <div
+        class="border border-crater-brown p-4 rounded-md w-[60rem] 2xl:w-[80rem] h-[30rem] 2xl:h-[45rem] mx-auto overflow-auto">
+        <div class="h-full w-full flex items-center justify-center">
+            @if(hasExpenseCategoriesData()) {
+            <app-chart class="h-full w-full flex flex-col justify-center items-center"
+                [labels]="this.reportUserService.invoicesTop5ExpenseCategories$()[0].labels"
+                [datasets]="this.reportUserService.invoicesTop5ExpenseCategories$()[0].datasets" [type]="'pie'">
+            </app-chart>
+            } @else{
+            <div class="flex flex-col items-center justify-center h-full w-full">
+                <span class="material-symbols-rounded text-7xl mb-5 text-crater-brown">
+                    contract_delete
+                </span>
+                <p class="text-center text-crater-brown">No hay datos disponibles para mostrar.</p>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="flex justify-center mt-2">
+        <button class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold"
+            (click)="closeReport('expenseCategories')">Regresar</button>
+    </div>
+</ng-container>
+}

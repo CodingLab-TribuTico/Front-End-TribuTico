@@ -25,16 +25,20 @@
         <td class="p-3" scope="row">{{item.email}}</td>
         <th class="p-3" scope="col">{{statusText(item.status)}}</th>
         <td class="p-3 space-x-1">
-          <button (click)="callModalAction.emit(item);"
-            class="group bg-flamenco hover:bg-golden-glow hover:text-flamenco px-2 p-0.5 rounded-md" type="button">
-            <span class="material-symbols-rounded text-lg text-bisque group-hover:text-flamenco">
+          <button (click)="callModalAction.emit(item)" [disabled]="item.id == idUser"
+            class="group bg-flamenco hover:bg-golden-glow hover:text-flamenco px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber"
+            type="button">
+            <span
+              class="material-symbols-rounded text-lg text-bisque group-hover:text-flamenco group-disabled:text-bisque">
               edit
             </span>
           </button>
+
           <button (click)="openModal(item)" [disabled]="(item.id == idUser)"
-            class="group bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-golden-glow hover:bg-bisque ml-2"
+            class="group bg-golden-glow px-2 p-0.5 rounded-md disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber hover:bg-bisque ml-2"
             type="button">
-            <span class="material-symbols-rounded text-lg text-crater-brown">
+            <span class="material-symbols-rounded text-lg"
+              [ngClass]="item.id === idUser ? 'text-bisque' : 'text-crater-brown'">
               delete
             </span>
           </button>

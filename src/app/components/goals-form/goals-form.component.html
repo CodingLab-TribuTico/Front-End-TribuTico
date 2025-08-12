@@ -1,0 +1,96 @@
+<div class="w-full flex items-start justify-center mt-10">
+  <div class="text-center w-full max-w-2xl">
+    
+    @if (isLoadingOllama()) {
+      <div class="bg-crater-brown rounded-lg p-8 shadow-2xl">
+        <div class="flex flex-col items-center justify-center py-12">
+          <div class="llama-loader-wrapper">
+            <app-llama-loader></app-llama-loader>
+          </div>
+          <p class="mt-6 text-lg text-golden-glow font-semibold">Tu meta está en buenas patas.</p>
+          <p class="mt-2 text-sm text-bisque">Ollama está trabajando en ello.</p>
+          <p class="mt-4 text-lg text-bisque font-bold">Generando meta con IA...</p>
+          <p class="mt-2 text-sm text-golden-glow">Por favor espera un momento</p>
+        </div>
+      </div>
+    } @else {
+      <div class="bg-crater-brown rounded-lg p-8 shadow-2xl">
+        <form [formGroup]="goalsForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          
+          <div class="form-field">
+            <label for="declaration" class="block text-base font-semibold text-bisque mb-2 text-left">
+              Declaración
+            </label>
+            <select id="declaration" 
+                    formControlName="declaration"
+                    class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
+              <option value="" disabled>Seleccionar...</option>
+              @for (option of declarationOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-field">
+              <label for="taxType" class="block text-base font-semibold text-bisque mb-2 text-left">
+                Tipo de impuesto
+              </label>
+              <select id="taxType" 
+                      formControlName="type"
+                      class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
+                @for (option of taxTypeOptions; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="date" class="block text-base font-semibold text-bisque mb-2 text-left">
+                Fecha
+              </label>
+              <input type="date" 
+                     id="date" 
+                     formControlName="date"
+                     class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow [color-scheme:dark]">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="objective" class="block text-base font-semibold text-bisque mb-2 text-left">
+              Objetivo
+            </label>
+            <select id="objective" 
+                    formControlName="objective"
+                    class="bg-crater-brown border-2 border-zorba text-bisque text-base rounded-md w-full p-3 focus:outline-none focus:border-golden-glow">
+              @for (option of objectiveOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="flex gap-3 justify-center pt-6">
+            <button type="submit" 
+                    [disabled]="!isFormValid || isLoadingOllama()"
+                    class="bg-flamenco text-bisque py-2 px-4 rounded-md font-bold text-sm hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque disabled:bg-burnt-umber">
+              Crear
+            </button>
+            <button type="button" 
+                    (click)="onCancel()"
+                    class="bg-golden-glow text-crater-brown rounded-md font-bold text-sm px-4 py-2 hover:bg-bisque transition-colors">
+              Cancelar
+            </button>
+          </div>
+
+        </form>
+      </div>
+    }
+  </div>
+</div>
+
+<style>
+.llama-loader-wrapper app-llama-loader ::ng-deep .text-content,
+.llama-loader-wrapper app-llama-loader ::ng-deep p {
+  display: none !important;
+}
+</style>

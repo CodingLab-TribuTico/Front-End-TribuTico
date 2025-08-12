@@ -17,7 +17,8 @@ export class CardDetailComponent {
   @Input() category: string = '';
   @Input() total: Number = 0;
   @Input() description: string = '';
-  @Input() index: number = 0; // Para identificar qué item editar/eliminar
+  @Input() index: number = 0;
+  @Input() isDetailInvalid: boolean = false;
 
   @Output() editDetail = new EventEmitter<number>();
   @Output() deleteDetail = new EventEmitter<number>();

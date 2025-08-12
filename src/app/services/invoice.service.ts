@@ -8,6 +8,7 @@ import { AlertService } from "./alert.service";
 })
 export class InvoiceService extends BaseService<IManualInvoice> {
   protected override source: string = 'invoices';
+  private alertService: AlertService = inject(AlertService);
   private invoicesList = signal<IManualInvoice[]>([]);
   private currentInvoice = signal<IManualInvoice | null>(null);
   private invoicesByUserIdList = signal<IManualInvoice[]>([]);
@@ -30,11 +31,10 @@ export class InvoiceService extends BaseService<IManualInvoice> {
     search: "",
   };
 
-  public totalItems: any = [];
-  private alertService: AlertService = inject(AlertService);
+  public totalItems: number[] = [];
+
 
   getAll() {
-    console.log("Fetching all invoices with search params:", this.search);
     this.findAllWithParams({
       page: this.search.page,
       size: this.search.size,
@@ -43,13 +43,13 @@ export class InvoiceService extends BaseService<IManualInvoice> {
       next: (response: IResponse<IManualInvoice[]>) => {
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from(
-          { length: this.search.totalPages ? this.search.totalPages : 0 },
+          { length: this.search.totalPages ?? 0 },
           (_, i) => i + 1
         );
         this.invoicesList.set(response.data);
       },
-      error: (err: any) => {
-        console.error("error", err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al recuperar las facturas');
       },
     });
   }
@@ -59,44 +59,20 @@ export class InvoiceService extends BaseService<IManualInvoice> {
       next: (response: IResponse<IManualInvoice>) => {
         this.currentInvoice.set(response.data);
       },
-      error: (err: any) => {
-        console.error("error", err);
+      error: () => {
+        this.alertService.showAlert('error', 'Ocurrió un error al recuperar la factura');
       },
-    });
-  }
-
-  getByUserId(userId: number) {
-    this.findAllWithParams({ userId: userId }).subscribe({
-      next: (response: IResponse<IManualInvoice[]>) => {
-        this.invoicesByUserIdList.set(response.data);
-      },
-      error: (err: any) => {
-        console.error('error', err);
-      }
     });
   }
 
   save(item: IManualInvoice) {
     this.add(item).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
-        this.alertService.displayAlert(
-          "success",
-          response.message || 'Factura guardada correctamente!',
-          "center",
-          "top",
-          ["success-snackbar"]
-        );
+        this.alertService.showAlert("success", response.message);
         this.getAll();
       },
-      error: (err: any) => {
-        this.alertService.displayAlert(
-          "error",
-          "Error al guardar la factura",
-          "center",
-          "top",
-          ["error-snackbar"]
-        );
-        console.error("error", err);
+      error: () => {
+        this.alertService.showAlert("error", "Ocurrió un error al guardar la factura");
       },
     });
   }
@@ -104,24 +80,11 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   update(item: IManualInvoice) {
     this.edit(item.id, item).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
-        this.alertService.displayAlert(
-          "success",
-          response.message,
-          "center",
-          "top",
-          ["success-snackbar"]
-        );
+        this.alertService.showAlert("success", response.message);
         this.getAll();
       },
-      error: (err: any) => {
-        this.alertService.displayAlert(
-          "error",
-          "An error occurred adding the team",
-          "center",
-          "top",
-          ["error-snackbar"]
-        );
-        console.error("error", err);
+      error: () => {
+        this.alertService.showAlert("error", "Ocurrió un error al actualizar la factura");
       },
     });
   }
@@ -129,24 +92,11 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   delete(item: IManualInvoice) {
     this.del(item.id).subscribe({
       next: (response: IResponse<IManualInvoice>) => {
-        this.alertService.displayAlert(
-          "success",
-          response.message,
-          "center",
-          "top",
-          ["success-snackbar"]
-        );
+        this.alertService.showAlert("success", response.message);
         this.getAll();
       },
-      error: (err: any) => {
-        this.alertService.displayAlert(
-          "error",
-          "An error occurred adding the team",
-          "center",
-          "top",
-          ["error-snackbar"]
-        );
-        console.error("error", err);
+      error: () => {
+        this.alertService.showAlert("error", "Ocurrió un error al eliminar la factura");
       },
     });
   }
@@ -154,5 +104,4 @@ export class InvoiceService extends BaseService<IManualInvoice> {
   clearCurrentInvoice() {
     this.currentInvoice.set(null);
   }
-
 }

@@ -58,6 +58,7 @@ export interface ISearch {
   query?: string;
   page?: number;
   size?: number;
+  year?: number;
   pageNumber?: number;
   pageSize?: number;
   totalElements?: number;
@@ -93,8 +94,8 @@ export interface IManualInvoice {
   key?: string;
   issueDate?: string;
   details?: IDetailInvoice[];
-  receiver?: IInvoiceUser;  // Usuario que recibe la factura
-  issuer?: IInvoiceUser;    // Usuario que emite la factura
+  receiver?: IInvoiceUser;
+  issuer?: IInvoiceUser;
   users?: IUser;
 }
 
@@ -160,4 +161,78 @@ export interface IIsrSimulation {
   totalTaxDebt: number;
   requestedCompensation: number;
   totalDebtToPay: number;
+}
+
+export interface IIvaCalculation {
+  id?: number;
+  year: number;
+  month: number;
+  calculationDate: string;
+  ivaVentasBienes: number;
+  ivaVentasServicios: number;
+  ivaExportaciones: number;
+  ivaActividadesAgropecuarias: number;
+  ivaComprasBienes: number;
+  ivaComprasServicios: number;
+  ivaImportaciones: number;
+  ivaGastosGenerales: number;
+  ivaActivosFijos: number;
+  totalIvaDebito: number;
+  totalIvaCredito: number;
+  ivaNetoPorPagar: number;
+  ivaAFavor: number;
+  automaticCalculation: boolean;
+
+  iva1Percent: number;
+  iva2Percent: number;
+  iva4Percent: number;
+  iva8Percent: number;
+  iva10Percent: number;
+  iva13Percent: number;
+  ivaExento: number;
+
+  user?: IUser;
+}
+export interface INotification {
+  id: number;
+  name?: string;
+  description?: string;
+  type?: string;
+  closeDate?: string;
+  state?: string;
+  isRead?: boolean;
+}
+
+export interface IFiscal {
+  id: number;
+  name?: string;
+  description?: string;
+  taxDeclarationDeadline?: string;
+  type?: string;
+}
+
+export interface NotificationMessage {
+  action: string;
+  data?: any;
+  id?: number;
+}
+export interface IChatbotRequest {
+  chatId?: string;
+  question: string;
+}
+
+export interface IChatbotResponse {
+  chatId?: string;
+  from: 'user' | 'bot';
+  answer: string;
+}
+export interface IGoals {
+  id?: number;
+  declaration?: string;
+  type?: string;
+  date?: Date | string;
+  objective?: string;
+  status?: 'pending' | 'in-progress' | 'completed';
+  recommendations?: string;
+  createdAt?: string | Date;
 }

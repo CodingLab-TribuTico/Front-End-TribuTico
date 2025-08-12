@@ -1,0 +1,53 @@
+<div class="flex flex-col space-y-4 w-full">
+    <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
+        IV. Base imponible
+    </h1>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            46 - Renta neta
+        </p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ netTaxableIncome }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            46 (bis) - Monto no sujeto aplicado al impuesto al salario
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ nonTaxableSalaryAmount }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            47 - Impuesto sobre la renta
+        </p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ incomeTax }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            51 - Exoneración de zona franca
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ freeTradeZoneExemption }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            53 - Exoneración de otros conceptos
+        </p>
+        <span class="w-60 px-4 py-3 rounded-md text-right ml-10 border-2 border-crater-brown text-crater-brown">
+            {{ otherExemptions }}
+        </span>
+    </div>
+    <div class="flex flex-row items-center w-full justify-between">
+        <p class="w-auto text-crater-brown">
+            54 - Impuesto sobre la renta después de exoneraciones
+        </p>
+        <span class="w-60 px-4 py-3 bg-zorba rounded-md text-right ml-10 text-crater-brown">
+            {{ netIncomeTaxAfterExemptions }}
+        </span>
+    </div>
+</div>

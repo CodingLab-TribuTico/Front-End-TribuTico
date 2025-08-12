@@ -1,0 +1,81 @@
+<div class="w-full">
+    <div class="flex flex-col w-full space-y-10">
+        <div class="flex flex-col space-y-4 w-full">
+            <h1 class="text-left text-crater-brown border-b-2 pb-2 border-crater-brown text-2xl font-bold">
+                D-104 - Declaración del Impuesto al Valor Agregado
+            </h1>
+
+            <div class="flex flex-row items-center w-full">
+                <p class="w-40 text-crater-brown">02 - Período</p>
+                <span class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">
+                    {{ currentSimulation ? getMonthName(currentSimulation.month) + ' ' + currentSimulation.year : simulationPeriod }}
+                </span>
+            </div>
+
+            <div class="flex flex-row items-center w-full">
+                <p class="w-40 text-crater-brown">04 - Cédula</p>
+                <span class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">
+                    {{ simulationIdentification }}
+                </span>
+            </div>
+
+            <div class="flex flex-row items-center w-full">
+                <p class="w-40 text-crater-brown">06 - Nombre</p>
+                <span
+                    class="flex-grow px-4 py-3 bg-zorba rounded-md text-left text-crater-brown">{{simulationName}}</span>
+            </div>
+        </div>
+
+        <div *ngIf="currentSimulation" class="space-y-8">
+            <app-section-iva-simulation 
+                [sectionTitle]="ventasSujetasSection.sectionTitle"
+                [hasToggle]="ventasSujetasSection.hasToggle"
+                [toggleState]="ventasSujetasSection.toggleState"
+                [onToggle]="ventasSujetasSection.onToggle"
+                [items]="ventasSujetasSection.items"
+                [subsections]="ventasSujetasSection.subsections">
+            </app-section-iva-simulation>
+
+            <div class="py-4"></div>
+
+            <app-tax-base
+                [simulationPeriod]="simulationPeriod"
+                [simulationName]="simulationName"
+                [simulationIdentification]="simulationIdentification"
+                [simulation]="currentSimulation">
+            </app-tax-base>
+
+            <div class="py-4"></div>
+
+            <app-exempt-sales
+                [simulationPeriod]="simulationPeriod"
+                [simulationName]="simulationName"
+                [simulationIdentification]="simulationIdentification"
+                [simulation]="currentSimulation">
+            </app-exempt-sales>
+
+            <div class="py-4"></div>
+
+            <app-sales-not-subject
+                [simulationPeriod]="simulationPeriod"
+                [simulationName]="simulationName"
+                [simulationIdentification]="simulationIdentification"
+                [simulation]="currentSimulation">
+            </app-sales-not-subject>
+
+            <div class="py-4"></div>
+
+            <app-total-sales
+                [simulationPeriod]="simulationPeriod"
+                [simulationName]="simulationName"
+                [simulationIdentification]="simulationIdentification"
+                [simulation]="currentSimulation">
+            </app-total-sales>
+        </div>
+
+        <div *ngIf="!currentSimulation && !loading" class="text-center py-8">
+            <p class="text-gray-600">No hay datos de simulación disponibles.</p>
+            <p class="text-gray-600">Complete el formulario anterior para crear una simulación.</p>
+        </div>
+    </div>
+</div>
