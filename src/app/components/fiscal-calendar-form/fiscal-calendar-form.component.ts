@@ -25,8 +25,6 @@ export class FiscalCalendarFormComponent {
   ];
 
   callSave() {
-    console.log('Formulario valido:', this.fiscalCalendarForm.valid);
-    console.log("Errores del formulario:", this.fiscalCalendarForm.errors);
     if (this.fiscalCalendarForm.invalid) {
       return;
     }

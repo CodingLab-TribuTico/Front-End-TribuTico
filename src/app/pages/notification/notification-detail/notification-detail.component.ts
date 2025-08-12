@@ -6,8 +6,8 @@ import { ModalComponent } from "../../../components/modal/modal.component";
 import { ModalService } from "../../../services/modal.service";
 import { NotificationFormComponent } from "../../../components/notification-form/notification-form.component";
 import { FormBuilder, Validators } from "@angular/forms";
-import { INotificationGlobal } from "../../../interfaces";
 import { NotificationListComponent } from "../../../components/notification-list/notification-list.component";
+import { INotification } from "../../../interfaces";
 
 
 @Component({
@@ -22,7 +22,7 @@ import { NotificationListComponent } from "../../../components/notification-list
   ],
   templateUrl: "./notification-detail.component.html",
 })
-export class NotificationDetailComponent{
+export class NotificationDetailComponent {
   public notificationService: NotificationService = inject(NotificationService);
   @Output() callCustomSearchMethod = new EventEmitter();
   public modalService: ModalService = inject(ModalService);
@@ -42,12 +42,12 @@ export class NotificationDetailComponent{
     this.notificationService.search.page = 1;
     this.notificationService.getAll();
   }
-  
-  saveNotification(notification: INotificationGlobal) {
+
+  saveNotification(notification: INotification) {
     this.notificationService.saveNotification(notification);
     this.modalService.closeAll();
   }
-  
+
   openModal() {
     this.modalService.displayModal(this.addNotificationsModal);
   }

@@ -68,7 +68,6 @@ export class WebSocketService {
       return;
     }
 
-    // Notificaciones globales
     this.client.subscribe('/topic/notifications', (message) => {
       this.processMessage(message);
     });

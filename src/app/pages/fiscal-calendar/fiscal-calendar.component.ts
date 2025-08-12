@@ -2,7 +2,6 @@ import { Component, EventEmitter, inject, Output, ViewChild } from '@angular/cor
 import { FormBuilder, Validators } from '@angular/forms';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { ModalComponent } from '../../components/modal/modal.component';
-import { NotificationListComponent } from '../../components/notification-detail/notification-list.component';
 import { NotificationFormComponent } from '../../components/notification-form/notification-form.component';
 import { PaginationComponent } from '../../components/pagination/pagination.component';
 import { IFiscal, INotification } from '../../interfaces';
@@ -54,10 +53,7 @@ export class FiscalCalendarComponent {
       type: formValue.type
     };
 
-    console.log('Se esta editando:', this.isEditing);
-    console.log('Viene el id:', fiscalCalendar.id);
     if (this.isEditing && fiscalCalendar.id) {
-      console.log('editando', fiscalCalendar, this.isEditing);
       this.fiscalCalendarService.updateFiscalCalendar(fiscalCalendar);
       this.hideModal();
       this.resetForm();

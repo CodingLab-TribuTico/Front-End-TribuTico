@@ -30,7 +30,6 @@ export class FiscalCalendarService extends BaseService<IResponse<any>> {
       search: this.search.search,
     }).subscribe({
       next: (response: any) => {
-        console.log(response);
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from(
           { length: this.search.totalPages ? this.search.totalPages : 0 },
@@ -59,7 +58,6 @@ export class FiscalCalendarService extends BaseService<IResponse<any>> {
   }
 
   updateFiscalCalendar(calendar: IFiscal) {
-    console.log(calendar);
     this.edit(calendar.id, calendar).subscribe({
       next: (response: IResponse<any>) => {
         this.alertService.showAlert(
