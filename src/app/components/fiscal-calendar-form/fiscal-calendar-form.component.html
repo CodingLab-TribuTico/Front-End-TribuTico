@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-2 col-span-2">
                 <label class="block my-2 text-base font-bold text-bisque" for="type">Tipo<span
                         class="text-burnt-umber">*</span></label>
                 <select id="type" formControlName="type"
@@ -84,7 +84,7 @@
 
         <div class="col-span-2 flex justify-center items-center w-full">
             <button (click)="callSave()" [disabled]="fiscalCalendarForm.invalid"
-                class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-flamenco disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque font-bold hover:bg-golden-glow hover:text-flamenco transition-colors"
+                class="bg-flamenco text-bisque py-1 px-3 rounded-md cursor-pointer disabled:bg-burnt-umber disabled:opacity-80 disabled:cursor-not-allowed disabled:text-bisque font-bold hover:bg-golden-glow hover:text-flamenco transition-colors"
                 type="button">{{isEditMode ? 'Actualizar' : 'Guardar'}}</button>
             @if (cancelOption) {
             <button (click)="callCancel()"

@@ -153,7 +153,7 @@ export class ReportUserService extends BaseService<IResponse<any>> {
         ]);
       },
       error: (err: any) => {
-        console.error("error", err);
+        this.alertService.showAlert('error', 'Ocurrió al obtener el flujo de caja trimestral');
       },
     });
   }

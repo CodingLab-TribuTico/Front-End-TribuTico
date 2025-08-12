@@ -1,82 +1,101 @@
 
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Client } from '@stomp/stompjs';
 import { environment } from '../../environments/environment.development';
 import { NotificationMessage } from '../interfaces';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: "root",
 })
 export class WebSocketService {
+  private alertService: AlertService = inject(AlertService);
   private client!: Client;
   private notificationSubject = new Subject<NotificationMessage>();
   private connectionStatusSubject = new Subject<boolean>();
+  private userId: number | null = null;
+  private isConnected = false;
 
   constructor() {
+    this.initializeUserId();
     this.initializeConnection();
+  }
+
+  private initializeUserId(): void {
+    try {
+      const authUser = localStorage.getItem('auth_user');
+      if (authUser) {
+        const user = JSON.parse(authUser);
+        this.userId = user.id;
+      }
+    } catch (error) {
+      this.alertService.displayAlert('error', 'Error al obtener user ID');
+    }
   }
 
   private initializeConnection(): void {
     this.client = new Client({
       brokerURL: environment.wsUrl,
       reconnectDelay: 5000,
-      debug: (str) => console.log('[WebSocket]', str),
-      connectHeaders: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`
-      },
       onConnect: () => this.handleSuccessfulConnection(),
       onStompError: (frame) => this.handleError(frame),
-      onWebSocketError: (event) => this.handleError(event)
+      onWebSocketError: (event) => this.handleError(event),
+      onDisconnect: () => this.handleDisconnect()
     });
 
     this.client.activate();
   }
 
   private handleSuccessfulConnection(): void {
-    console.log('Conexión STOMP establecida correctamente');
+    this.isConnected = true;
     this.connectionStatusSubject.next(true);
     this.subscribeToTopics();
   }
 
+  private handleDisconnect(): void {
+    this.isConnected = false;
+    this.connectionStatusSubject.next(false);
+  }
+
   private handleError(error: any): void {
-    console.error('Error en WebSocket:', error);
     this.connectionStatusSubject.next(false);
   }
 
   private subscribeToTopics(): void {
+    if (!this.userId) {
+      this.alertService.displayAlert('warning', 'No hay userId disponible para suscripción privada');
+      return;
+    }
+
+    // Notificaciones globales
     this.client.subscribe('/topic/notifications', (message) => {
-      console.log('Mensaje recibido en /topic/notifications:', message.body);
-
-      try {
-        const payload = JSON.parse(message.body);
-        console.log('Payload parseado:', payload);
-
-        // Asegurar que coincida con la estructura del backend
-        const notificationMessage: NotificationMessage = {
-          action: payload.action,
-          data: payload.data,
-          id: payload.id
-        };
-
-        this.notificationSubject.next(notificationMessage);
-      } catch (e) {
-        console.error('Error al procesar mensaje:', e);
-      }
+      this.processMessage(message);
     });
 
-    // Mismo patrón para private-notifications
-    this.client.subscribe('/user/queue/private-notifications', (message) => {
-      console.log('Mensaje privado recibido:', message.body);
-      // ... mismo procesamiento
-    });
+    if (this.userId) {
+      const privateDest = `/user/${this.userId}/queue/private-notifications`;
+      this.client.subscribe(privateDest, (message) => {
+        this.processMessage(message);
+      });
+    }
+
   }
-  private processIncomingMessage(message: any): void {
+
+
+  private processMessage(message: any): void {
     try {
-      const notification = JSON.parse(message.body) as NotificationMessage;
-      this.notificationSubject.next(notification);
-    } catch (error) {
-      console.error('Error procesando mensaje:', error);
+      const payload = JSON.parse(message.body);
+
+      const notificationMessage: NotificationMessage = {
+        action: payload.action,
+        data: payload.data,
+        id: payload.id
+      };
+
+      this.notificationSubject.next(notificationMessage);
+    } catch (e) {
+      this.alertService.displayAlert('error', 'Error al procesar mensaje');
     }
   }
 
@@ -89,9 +108,8 @@ export class WebSocketService {
   }
 
   public disconnect(): void {
-    if (this.client && this.client.connected) {
+    if (this.client && this.isConnected) {
       this.client.deactivate();
-      console.log('Conexión WebSocket cerrada');
     }
   }
 }

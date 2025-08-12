@@ -51,10 +51,11 @@ export class NotificationService extends BaseService<IResponse<any>> {
   private setupWebSocketListeners(): void {
     this.wsSubscription = this.webSocketService.getNotifications().subscribe({
       next: (message) => {
-        console.log('Mensaje WebSocket crudo:', message); // Agrega esto para debug
         this.handleWebSocketMessage(message);
       },
-      error: (err) => console.error('WebSocket error:', err)
+      error: (err) => {
+        this.alertService.showAlert('error', 'Error en la conexión WebSocket');
+      }
     });
   }
 
@@ -83,10 +84,11 @@ export class NotificationService extends BaseService<IResponse<any>> {
 
   private handleNewNotification(notification: INotification): void {
     this.notificationsList.update((list) => [notification, ...list]);
+    this.allNotificationList.update((list) => [notification, ...list]);
     this.pendingNotificationsList.update((list) => [notification, ...list]);
     this.alertService.showAlert(
-      "error",
-      `Nueva notificación: ${notification.name}`
+      "success",
+      "Tienes una nueva notificación"
     );
   }
 
@@ -119,23 +121,23 @@ export class NotificationService extends BaseService<IResponse<any>> {
   }
 
   private handleMarkAsRead(data: INotification): void {
-    this.pendingNotificationsList.update((list) =>
-      list.filter((item) => item.id !== data.id)
-    );
     this.allNotificationList.update((list) =>
       list.map((item) =>
-        item.id === data.id
-          ? { ...item, read: true }
-          : item
+        item.id === data.id ? { ...item, read: true, isRead: true } : item
       )
+    );
+
+    this.pendingNotificationsList.update((list) =>
+      list.filter((item) => item.id !== data.id)
     );
   }
 
   private handleMarkAllAsRead(): void {
-    this.pendingNotificationsList.set([]);
     this.allNotificationList.update((list) =>
-      list.map((item) => ({ ...item, read: true }))
+      list.map((item) => ({ ...item, read: true, isRead: true }))
     );
+
+    this.pendingNotificationsList.set([]);
   }
 
   private handleUserNotification(data: INotification): void {
@@ -253,7 +255,6 @@ export class NotificationService extends BaseService<IResponse<any>> {
   }
 
   markNotificationRead(notificationId: number) {
-    console.log(notificationId);
     this.patchCustomSource(`read/${notificationId}`, {}).subscribe({
       next: (response: IResponse<any>) => {
         this.alertService.showAlert("success", response.message);

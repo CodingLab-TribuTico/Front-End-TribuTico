@@ -39,16 +39,14 @@ export class NotificationBellComponent {
   }
 
   handleNotificationClick(notification: INotification) {
-    this.notificationService.markNotificationRead(notification.id);
-    
     this.router.navigate(['/app/notifications'], {
-      state: { selectedNotificationId: notification.id }
+      queryParams: { select: notification.id }
     });
-    
     this.dropdownOpen = false;
+
   }
 
- 
+
   markAllAsRead() {
     this.notificationService.markAllAsRead();
   }

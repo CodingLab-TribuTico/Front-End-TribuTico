@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationBellComponent } from '../../components/notification-bell/notification-bell.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: "app-notifications",
@@ -14,12 +15,29 @@ import { NotificationBellComponent } from '../../components/notification-bell/no
 })
 export class NotificationsComponent {
   private notificationService = inject(NotificationService);
-
+  private router = inject(Router);
   allNotifications = this.notificationService.allNotifications$;
   selectedNotification: INotification | null = null;
 
   ngOnInit() {
     this.loadNotifications();
+    // Escucha cambios en los parámetros de la URL
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state?.['notification']) {
+      this.selectedNotification = navigation.extras.state['notification'];
+    }
+  }
+
+  // Nuevo método para seleccionar notificación por ID
+  selectNotificationById(id: number) {
+    const notification = this.allNotifications().find(n => n.id === id);
+    if (notification) {
+      this.selectedNotification = notification;
+      // Si la notificación no está leída, márcala como leída
+      if (!notification.isRead) {
+        this.handleMarkAsRead(notification.id);
+      }
+    }
   }
 
   loadNotifications() {
@@ -38,7 +56,9 @@ export class NotificationsComponent {
 
   handleMarkAsRead(notificationId: number) {
     this.notificationService.markNotificationRead(notificationId);
-    this.loadNotifications();
+    if (this.selectedNotification) {
+      this.selectedNotification.isRead = true;
+    }
   }
 
 }
