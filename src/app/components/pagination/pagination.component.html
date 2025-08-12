@@ -1,53 +1,54 @@
-<div class="flex items-center justify-between py-3">
-  <div class="sm:flex sm:flex-1 sm:items-center sm:justify-between">
-    <div>
-      <p class="text-base font-base text-crater-brown">
-        Mostrando de
-        <span>{{ ((service.search.pageNumber - 1) * service.search.pageSize) + 1 }}</span>
-        a
-        <span>{{ Math.min(service.search.pageNumber * service.search.pageSize, service.search.totalElements) }}</span>
-        de
-        <span>{{ service.search.totalElements }}</span>
-        resultados
-      </p>
-    </div>
-
-    <div>
-      <nav class="isolate inline-flex -space-x-px rounded-md" aria-label="Pagination">
-        <button (click)="onPage(1)" [disabled]="service.search.pageNumber === 1"
-          class="text-bisque rounded-l-md px-2 py-2 border-r-2 border-zorba bg-crater-brown disabled:text-zorba">
-          <span class="material-symbols-rounded text-lg">keyboard_double_arrow_left</span>
-        </button>
-
-        <button (click)="onPage(service.search.pageNumber - 1)" [disabled]="service.search.pageNumber === 1"
-          class="text-bisque px-2 py-2 border-r-2 border-zorba bg-crater-brown disabled:text-zorba">
-          <span class="material-symbols-rounded text-lg">chevron_left</span>
-        </button>
-
-        @for (page of pageRange; track page) {
-        @if (Math.abs(service.search.pageNumber - page) <= 2) { <button (click)="onPage(page)"
-          [disabled]="service.search.pageNumber === page" class="text-bisque px-4 py-2 border-r-2 border-zorba"
-          [ngClass]="{
-                  'bg-zorba': service.search.pageNumber === page,
-                  'bg-crater-brown': service.search.pageNumber !== page
-                }">
-          {{ page }}
-          </button>
-          }
-          }
-
-          <button (click)="onPage(service.search.pageNumber + 1)"
-            [disabled]="service.search.pageNumber === service.search.totalPages"
-            class="text-bisque px-2 py-2 bg-crater-brown border-r-2 border-zorba disabled:text-zorba">
-            <span class="material-symbols-rounded text-lg">chevron_right</span>
-          </button>
-
-          <button (click)="onPage(service.search.totalPages)"
-            [disabled]="service.search.pageNumber === service.search.totalPages"
-            class="text-bisque rounded-r-md px-2 py-2 bg-crater-brown disabled:text-zorba">
-            <span class="material-symbols-rounded text-lg">keyboard_double_arrow_right</span>
-          </button>
-      </nav>
-    </div>
+<div class="flex flex-row mt-2 justify-between items-center">
+  <div>
+    <p class="text-base font-base text-crater-brown" *ngIf="customCall">
+      Mostrando de
+      <span>{{ ((effectivePage - 1) * effectivePageSize) + 1 }}</span>
+      a
+      <span>{{ Math.min(effectivePage * effectivePageSize, effectiveTotalElements) }}</span>
+      de
+      <span>{{ effectiveTotalElements }}</span>
+      resultados
+    </p>
+    <p class="text-base font-base text-crater-brown" *ngIf="!customCall && service?.search">
+      Mostrando de
+      <span>{{ ((effectivePage - 1) * effectivePageSize) + 1 }}</span>
+      a
+      <span>{{ Math.min(effectivePage * effectivePageSize, effectiveTotalElements) }}</span>
+      de
+      <span>{{ effectiveTotalElements }}</span>
+      resultados
+    </p>
   </div>
+
+  <nav class="isolate inline-flex -space-x-px rounded-md" aria-label="Pagination">
+    <button (click)="onPage(1)" [disabled]="effectivePage === 1"
+      class="text-bisque rounded-l-md px-2 py-2 border-r-2 border-zorba bg-crater-brown disabled:text-zorba">
+      <span class="material-symbols-rounded text-lg">keyboard_double_arrow_left</span>
+    </button>
+
+    <button (click)="onPage(effectivePage - 1)" [disabled]="effectivePage === 1"
+      class="text-bisque px-2 py-2 border-r-2 border-zorba bg-crater-brown disabled:text-zorba">
+      <span class="material-symbols-rounded text-lg">chevron_left</span>
+    </button>
+
+    <ng-container *ngFor="let p of pageRange">
+      <button *ngIf="Math.abs(effectivePage - p) <= 2" (click)="onPage(p)" [disabled]="effectivePage === p"
+        class="text-bisque px-4 py-2 border-r-2 border-zorba" [ngClass]="{
+        'bg-zorba': effectivePage === p,
+        'bg-crater-brown': effectivePage !== p
+      }">
+        {{ p }}
+      </button>
+    </ng-container>
+
+    <button (click)="onPage(effectivePage + 1)" [disabled]="effectivePage === effectiveTotalPages"
+      class="text-bisque px-2 py-2 bg-crater-brown border-r-2 border-zorba disabled:text-zorba">
+      <span class="material-symbols-rounded text-lg">chevron_right</span>
+    </button>
+
+    <button (click)="onPage(effectiveTotalPages)" [disabled]="effectivePage === effectiveTotalPages"
+      class="text-bisque rounded-r-md px-2 py-2 bg-crater-brown disabled:text-zorba">
+      <span class="material-symbols-rounded text-lg">keyboard_double_arrow_right</span>
+    </button>
+  </nav>
 </div>

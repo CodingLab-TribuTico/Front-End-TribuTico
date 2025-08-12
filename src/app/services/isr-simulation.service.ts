@@ -20,7 +20,7 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
   get simulationsIsr$() {
     return this.simulationListSignal;
   }
- 
+
   get currentIsrSimulation$() {
     return this.currentSimulation;
   }
@@ -36,7 +36,7 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
   }
 
   createSimulation(year: number, childrenNumber: number, hasSpouse: boolean) {
-    this.currentSubscription = this.findAllWithParamsAndCustomSource('create',{
+    this.currentSubscription = this.findAllWithParamsAndCustomSource('create', {
       year: year,
       childrenNumber: childrenNumber,
       hasSpouse: hasSpouse
@@ -54,7 +54,8 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
     this.add(simulation).subscribe({
       next: (response: any) => {
         this.alertService.showAlert('success', response.message);
-        },
+        this.getAll();
+      },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al guardar la simulación del ISR');
       }
@@ -79,7 +80,7 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
       }
     });
   }
- 
+
   getById(id: number) {
     this.find(id).subscribe({
       next: (response: IResponse<IIsrSimulation>) => {
@@ -90,13 +91,13 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
       },
     });
   }
- 
+
   getByUserId(userId: number) {
     this.findAllWithParams({ userId }).subscribe({
       next: (response: IResponse<IIsrSimulation[]>) => {
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from(
-          { length: this.search.totalPages ? this.search.totalPages : 0 }, 
+          { length: this.search.totalPages ? this.search.totalPages : 0 },
           (_, i) => i + 1);
         this.simulationListSignal.set(response.data);
       },
@@ -105,14 +106,15 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
       }
     });
   }
-   
+
   delete(simulation: IIsrSimulation) {
     this.delCustomSource(`${simulation.id}`).subscribe({
       next: (response: any) => {
         this.alertService.showAlert('success', response.message);
+        this.getAll();
       },
       error: () => {
-      this.alertService.showAlert('error', 'Ocurrió un error eliminando al usuario');
+        this.alertService.showAlert('error', 'Ocurrió un error eliminando al usuario');
       }
     });
   }
@@ -120,5 +122,5 @@ export class IsrSimulationService extends BaseService<IIsrSimulation> {
   clearCurrentSimulation() {
     this.currentSimulation.set(null);
   }
-  
+
 }

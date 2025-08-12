@@ -9,22 +9,51 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './pagination.component.html',
 })
 export class PaginationComponent {
-  @Input() service: any;
-  @Output() callCustomPaginationMethod = new EventEmitter<void>();
-  @Input() customCall: boolean = false;
   public Math = Math;
 
-  onPage(pPage: number) {
-    this.service.search.page = pPage;
+  @Input() service: any;
+  @Input() page: number = 1;
+  @Input() totalPages: number = 1;
+  @Input() customCall: boolean = false;
 
-    if (this.customCall) {
-      this.callCustomPaginationMethod.emit();
-    } else {
-      this.service.getAll();
+  @Input() pageSize: number = 10;
+  @Input() totalElements: number = 0;
+
+  @Output() pageChange = new EventEmitter<number>();
+
+  get effectivePage(): number {
+    return this.service ? this.service.search.page : this.page;
+  }
+
+  get effectivePageSize(): number {
+    return this.service ? (this.service.search.pageSize ?? 10) : this.pageSize;
+  }
+
+  get effectiveTotalElements(): number {
+    return this.service ? (this.service.search.totalElements ?? 0) : this.totalElements;
+  }
+
+  get effectiveTotalPages(): number {
+    if (this.service) {
+      return this.service.search.totalPages ?? 1;
     }
+    return this.totalPages;
   }
 
   get pageRange(): number[] {
-    return Array.from({ length: this.service.search.totalPages ?? 0 }, (_, i) => i + 1);
+    return Array.from({ length: this.effectiveTotalPages }, (_, i) => i + 1);
+  }
+
+  onPage(pPage: number) {
+    if (pPage < 1 || pPage > this.effectiveTotalPages) return;
+
+    if (this.customCall) {
+      this.pageChange.emit(pPage);
+    } else if (this.service) {
+      this.service.search.page = pPage;
+      this.service.getAll();
+    } else {
+      this.pageChange.emit(pPage);
+    }
   }
 }

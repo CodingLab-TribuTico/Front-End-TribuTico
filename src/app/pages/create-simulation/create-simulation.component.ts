@@ -205,7 +205,7 @@ export class CreateSimulationComponent {
 
   saveSimulationIsr(): void {
     const userId = this.authService.getCurrentUserId();
-    if (!this.isrSimulationService || !userId || !this.isrSimulation){
+    if (!this.isrSimulationService || !userId || !this.isrSimulation) {
       return;
     }
     const simulationToSave = {
@@ -218,7 +218,7 @@ export class CreateSimulationComponent {
 
   saveSimulationIva(): void {
     const userId = this.authService.getCurrentUserId();
-    if (!this.ivaSimulationService || !userId || !this.ivaSimulation){
+    if (!this.ivaSimulationService || !userId || !this.ivaSimulation) {
       return;
     }
     const simulationToSave = {
