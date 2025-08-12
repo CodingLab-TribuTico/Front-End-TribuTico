@@ -128,8 +128,8 @@
         <app-card-detail [cabys]="detail.cabys || '0'" [quantity]="detail.quantity || 0" [unit]="detail.unit || ''"
           [unitPrice]="detail.unitPrice || 0" [discount]="detail.discount || 0" [tax]="detail.tax || 0"
           [taxAmount]="detail.taxAmount || 0" [category]="detail.category || ''" [total]="detail.total || 0"
-          [description]="detail.description || ''" [index]="$index" (editDetail)="editDetailItem($event)"
-          (deleteDetail)="deleteDetailItem($event)">
+          [description]="detail.description || ''" [index]="$index" [isDetailInvalid]="isDetailInvalid(detail)"
+          (editDetail)="editDetailItem($event)" (deleteDetail)="deleteDetailItem($event)">
         </app-card-detail>
         }
       </div>
@@ -266,7 +266,7 @@
       </div>
       @if(isEditingDetail) {
       <div class="flex gap-4 justify-center mt-2">
-        <button (click)="cancelEdit()" [disabled]="detailForm.invalid" type="button"
+        <button (click)="cancelEdit()" type="button"
           class="bg-golden-glow text-crater-brown font-bold rounded px-8 py-2 hover:bg-bisque transition-colors">
           Cancelar edición
         </button>
@@ -276,7 +276,8 @@
   </form>
 
   <div class="flex gap-4 justify-center">
-    <button (click)="callSave()" [disabled]="invoiceForm.invalid || this.details.length == 0" ctype="button"
+    <button (click)="callSave()" [disabled]="invoiceForm.invalid || this.details.length == 0 || hasInvalidDetails()"
+      ctype="button"
       class="bg-flamenco text-bisque font-bold rounded px-8 py-2 hover:bg-golden-glow hover:text-flamenco transition-colors disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-burnt-umber disabled:text-bisque">
       {{textConfirmButton}}
     </button>
