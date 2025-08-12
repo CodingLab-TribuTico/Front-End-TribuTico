@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
   selector: "app-goals-view",
   standalone: true,
   imports: [
-    GoalsListComponent
+    GoalsListComponent, LoaderComponent
   ],
   templateUrl: "./goals-view.component.html",
 })

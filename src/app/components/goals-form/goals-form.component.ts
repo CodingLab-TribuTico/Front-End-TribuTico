@@ -1,17 +1,24 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, computed, inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IGoals } from '../../interfaces';
+import { LlamaLoaderComponent } from '../llama-loader/llama-loader.component';
+import { GoalsService } from '../../services/goals.service';
 
 @Component({
   selector: 'app-goals-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LlamaLoaderComponent],
   templateUrl: './goals-form.component.html'
 })
 export class GoalsFormComponent {
   private fb = inject(FormBuilder);
+  private goalsService = inject(GoalsService);
   
+  public isLoadingOllama = computed(() => {
+    return this.goalsService.isLoadingOllama();
+  });
+
   @Output() saveGoal = new EventEmitter<IGoals>();
   @Output() cancelForm = new EventEmitter<void>();
   
@@ -35,7 +42,7 @@ export class GoalsFormComponent {
   public objectiveOptions = [
     { value: 'Reducir en un 10% el monto del IVA', label: 'Reducir en un 10% el monto del IVA' },
     { value: 'Reducir en un 15% el monto del ISR', label: 'Reducir en un 15% el monto del ISR' },
-    { value: 'optimize_deductions', label: 'Optimizar deducciones fiscales' },
+    { value: 'Optimizar deducciones fiscales', label: 'Optimizar deducciones fiscales' },
   ];
 
   onSubmit() {
@@ -50,8 +57,8 @@ export class GoalsFormComponent {
         createdAt: new Date().toISOString()
       };
       
-      this.saveGoal.emit(newGoal);
-      this.resetForm(); 
+      this.goalsService.save(newGoal);
+      this.resetForm();
     }
   }
 
@@ -65,11 +72,13 @@ export class GoalsFormComponent {
       declaration: '',
       type: 'IVA',
       date: '2025-06-28',
-      Objective: 'reduce_10_iva'
+      objective: 'reduce_10_iva'
     });
   }
 
   get isFormValid(): boolean {
     return this.goalsForm.valid;
   }
+
+  
 }

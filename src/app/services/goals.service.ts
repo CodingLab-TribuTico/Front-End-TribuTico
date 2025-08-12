@@ -4,6 +4,8 @@ import { IResponse, IGoals, ISearch } from "../interfaces";
 import { AlertService } from "./alert.service";
 import { AuthService } from "./auth.service";
 import { BaseService } from "./base-service";
+import { Observable } from "rxjs";
+import { finalize } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -63,6 +65,8 @@ export class GoalsService extends BaseService<IGoals> {
       return;
     }
 
+    this.isLoadingOllama.set(true); // ← Activar loading
+
     const goalData = {
       user: { id: currentUserId },
       declaration: item.declaration,
@@ -75,10 +79,12 @@ export class GoalsService extends BaseService<IGoals> {
     this.createGoal(goalData as any).subscribe({
       next: (response: IResponse<IGoals>) => {
         this.alertService.showAlert("success", response.message);
+        this.isLoadingOllama.set(false); // ← Desactivar loading
       },
       error: (error) => {
         console.error('Error al crear meta:', error);
         this.alertService.showAlert("error", "Ocurrió un error al guardar la meta");
+        this.isLoadingOllama.set(false); // ← Desactivar loading también en error
       },
     });
   }
@@ -108,5 +114,9 @@ export class GoalsService extends BaseService<IGoals> {
       }
     });
   }
+  
+  public isLoading = signal(false);
+  public isLoadingOllama = signal(false);
+  
   
 }
