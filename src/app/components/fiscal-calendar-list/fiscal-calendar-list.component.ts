@@ -9,7 +9,6 @@ import { ModalComponent } from '../modal/modal.component';
   standalone: true,
   imports: [CommonModule, ModalComponent],
   templateUrl: './fiscal-calendar-list.component.html',
-  styleUrl: './fiscal-calendar-list.component.scss'
 })
 export class FiscalCalendarListComponent {
   @Input() fiscalNotifications: IFiscal[] = [];
