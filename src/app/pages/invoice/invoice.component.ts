@@ -59,16 +59,18 @@ export class InvoiceComponent {
   });
 
   callEdition(invoice: IManualInvoice) {
+    const person = invoice.type === 'ingreso' ? invoice.receiver || {} : invoice.type === 'gasto' ? invoice.issuer || {} : {};
+
     this.invoiceForm.patchValue({
       id: JSON.stringify(invoice.id),
       type: invoice.type,
       consecutive: invoice.consecutive?.toString() || '',
       key: invoice.key,
       issueDate: invoice.issueDate,
-      identification: invoice.issuer?.identification,
-      name: invoice.issuer?.name,
-      lastName: invoice.issuer?.lastName,
-      email: invoice.issuer?.email
+      identification: person.identification || '',
+      name: person.name || '',
+      lastName: person.lastName || '',
+      email: person.email || ''
     });
 
     this.details = invoice.details ?? [];

@@ -151,14 +151,7 @@ export class ManualInvoicesFormComponent implements OnInit {
   }
 
   updateFormForType(data: any) {
-    const person = data.receiver || data.issuer || {};
-    let firstName = '', lastName = '';
-
-    if (person.name) {
-      const fullName = person.name.trim().split(/\s+/);
-      firstName = fullName[0];
-      lastName = fullName.slice(1).join(' ');
-    }
+    const person = data.type === 'ingreso' ? data.receiver || {} : data.type === 'gasto' ? data.issuer || {} : {};
 
     this.invoiceForm.patchValue({
       type: data.type || '',
@@ -166,8 +159,8 @@ export class ManualInvoicesFormComponent implements OnInit {
       key: data.key || '',
       issueDate: data.issueDate || '',
       identification: person.identification || '',
-      name: firstName,
-      lastName: lastName,
+      name: person.name || '',
+      lastName: person.lastName || '',
       email: person.email || ''
     });
 
