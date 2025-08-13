@@ -153,14 +153,28 @@ export class ManualInvoicesFormComponent implements OnInit {
   updateFormForType(data: any) {
     const person = data.type === 'ingreso' ? data.receiver || {} : data.type === 'gasto' ? data.issuer || {} : {};
 
+    let firstName = '';
+    let lastName = '';
+
+    if (person.name) {
+      const nameParts = person.name.split(' ');
+      if (nameParts.length > 1) {
+        firstName = nameParts[0];
+        lastName = nameParts.slice(1).join(' ');
+      } else {
+        firstName = person.name;
+        lastName = person.lastName || '';
+      }
+    }
+
     this.invoiceForm.patchValue({
       type: data.type || '',
       consecutive: data.consecutive || '',
       key: data.key || '',
       issueDate: data.issueDate || '',
       identification: person.identification || '',
-      name: person.name || '',
-      lastName: person.lastName || '',
+      name: firstName || '',
+      lastName: lastName || '',
       email: person.email || ''
     });
 
@@ -279,28 +293,22 @@ export class ManualInvoicesFormComponent implements OnInit {
   }
 
   public hasInvalidDetails(): boolean {
-    return this.details.some(detail =>
-      !detail.cabys ||
-      !detail.quantity ||
-      !detail.unit ||
-      !detail.unitPrice ||
-      detail.discount === null || detail.discount === undefined ||
-      detail.tax === null || detail.tax === undefined ||
-      !detail.category ||
-      detail.total === null || detail.total === undefined ||
-      !detail.description
-    );
+    return this.details.some(detail => this.isDetailInvalid(detail));
   }
 
   public isDetailInvalid(detail: IDetailInvoice): boolean {
-    return !detail.cabys ||
-      !detail.quantity ||
-      !detail.unit ||
-      !detail.unitPrice ||
-      detail.discount === null || detail.discount === undefined ||
-      detail.tax === null || detail.tax === undefined ||
-      !detail.category ||
-      detail.total === null || detail.total === undefined ||
-      !detail.description;
+    const cabys = Number(detail.cabys);
+    if (!Number.isInteger(cabys) || cabys <= 0) return true;
+    const quantity = Number(detail.quantity);
+    if (!Number.isInteger(quantity) || quantity <= 0) return true;
+    if (!detail.unit || typeof detail.unit !== 'string' || detail.unit.trim() === '') return true;
+    const unitPrice = Number(detail.unitPrice);
+    if (isNaN(unitPrice) || unitPrice <= 0) return true;
+    if (detail.discount === null || detail.discount === undefined || isNaN(Number(detail.discount))) return true;
+    if (detail.tax === null || detail.tax === undefined || isNaN(Number(detail.tax))) return true;
+    if (detail.total === null || detail.total === undefined || isNaN(Number(detail.total))) return true;
+    if (!detail.category || typeof detail.category !== 'string' || detail.category.trim() === '') return true;
+    if (!detail.description || typeof detail.description !== 'string' || detail.description.trim() === '') return true;
+    return false;
   }
 }
