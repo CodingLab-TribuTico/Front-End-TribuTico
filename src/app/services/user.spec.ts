@@ -45,7 +45,7 @@ describe('UserService', () => {
     }
   }
 
-  it('debería devolver todos los usuarios', () => {
+  it('debería devolver los usuarios paginados', () => {
     userService.getAll();
 
     const req = http.expectOne(`users?page=1&size=5&search=`);

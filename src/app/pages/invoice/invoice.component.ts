@@ -38,37 +38,39 @@ export class InvoiceComponent {
     id: [''],
     type: ['', Validators.required],
     issueDate: ['', Validators.required],
-    consecutive: ['', Validators.required],
-    key: ['', Validators.required],
-    identification: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+    consecutive: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+    key: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+    identification: ['', [Validators.required, Validators.pattern(/^(\d{9}|\d{12})$/)]],
     name: ['', Validators.required],
     lastName: ['', Validators.required],
-    email: [{ value: '', disabled: true }, Validators.required],
+    email: ['', [Validators.required, Validators.email]],
   });
 
   public detailForm = this.fb.group({
-    cabys: ['', Validators.required],
+    cabys: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
     unit: ['', Validators.required],
-    quantity: ['', [Validators.required, Validators.min(1)]],
-    unitPrice: ['', [Validators.required, Validators.min(0)]],
-    discount: ['', Validators.required],
-    tax: ['', [Validators.required, Validators.min(0)]],
-    total: [{ value: '', disabled: true }, Validators.required],
+    quantity: [null, [Validators.required, Validators.pattern(/^\d+$/)]],
+    unitPrice: [null, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+    discount: [0, [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]],
+    tax: ['', Validators.required],
+    total: [{ value: '', disabled: true }],
     category: ['', Validators.required],
     description: ['', Validators.required]
   });
 
   callEdition(invoice: IManualInvoice) {
+    const person = invoice.type === 'ingreso' ? invoice.receiver || {} : invoice.type === 'gasto' ? invoice.issuer || {} : {};
+
     this.invoiceForm.patchValue({
       id: JSON.stringify(invoice.id),
       type: invoice.type,
       consecutive: invoice.consecutive?.toString() || '',
       key: invoice.key,
       issueDate: invoice.issueDate,
-      identification: invoice.issuer?.identification,
-      name: invoice.issuer?.name,
-      lastName: invoice.issuer?.lastName,
-      email: invoice.issuer?.email
+      identification: person.identification || '',
+      name: person.name || '',
+      lastName: person.lastName || '',
+      email: person.email || ''
     });
 
     this.details = invoice.details ?? [];

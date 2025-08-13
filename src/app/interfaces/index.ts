@@ -101,13 +101,9 @@ export interface IManualInvoice {
 
 export interface IIsrSimulation {
   id?: number;
-
-  // I. Datos generales
   simulationPeriod: string;
   simulationName: string;
   simulationIdentification: string;
-
-  // I. Activos y pasivos
   currentAssets: number;
   equityInvestments: number;
   inventory: number;
@@ -115,8 +111,6 @@ export interface IIsrSimulation {
   totalNetAssets: number;
   totalLiabilities: number;
   netEquity: number;
-
-  // II. Ingresos y gastos
   salesRevenue: number;
   professionalFees: number;
   commissions: number;
@@ -126,8 +120,6 @@ export interface IIsrSimulation {
   otherIncome: number;
   nonTaxableIncome: number;
   grossIncomeTotal: number;
-
-  // III. Costos, gastos y deducciones
   initialInventory: number;
   purchases: number;
   finalInventory: number;
@@ -138,16 +130,12 @@ export interface IIsrSimulation {
   pensionContributions: number;
   otherAllowableDeductions: number;
   totalAllowableDeductions: number;
-
-  // IV. Base imponible
   netTaxableIncome: number;
   nonTaxableSalaryAmount: number;
   incomeTax: number;
   freeTradeZoneExemption: number;
   otherExemptions: number;
   netIncomeTaxAfterExemptions: number;
-
-  // V. Créditos
   familyCredit: number;
   otherCredits: number;
   periodTax: number;
@@ -155,12 +143,12 @@ export interface IIsrSimulation {
   otherWithholdings: number;
   partialPayments: number;
   totalNetTax: number;
-
-  // VI. Liquidación deuda tributaria
   interests: number;
   totalTaxDebt: number;
   requestedCompensation: number;
   totalDebtToPay: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IIvaCalculation {
@@ -182,7 +170,6 @@ export interface IIvaCalculation {
   ivaNetoPorPagar: number;
   ivaAFavor: number;
   automaticCalculation: boolean;
-
   iva1Percent: number;
   iva2Percent: number;
   iva4Percent: number;
@@ -192,6 +179,8 @@ export interface IIvaCalculation {
   ivaExento: number;
 
   user?: IUser;
+  createdAt?: string;
+  updatedAt?: string;
 }
 export interface INotification {
   id: number;

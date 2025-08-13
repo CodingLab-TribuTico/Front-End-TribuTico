@@ -120,11 +120,11 @@
         placeholder="Correo" />
       @if (invoiceForm.controls['email'].invalid && (invoiceForm.controls['email'].dirty ||
       invoiceForm.controls['email'].touched)) {
+      @if (invoiceForm.controls['email'].errors?.['required']) {
       <div class="text-burnt-umber text-sm">El correo electrónico es obligatorio.</div>
-      }
-      @if (invoiceForm.controls['email'].errors?.['email'] && (invoiceForm.controls['email'].dirty ||
-      invoiceForm.controls['email'].touched)) {
+      } @else if (invoiceForm.controls['email'].errors?.['email']) {
       <div class="text-burnt-umber text-sm">Correo electrónico inválido.</div>
+      }
       }
     </div>
   </div>
@@ -266,7 +266,7 @@
 
       <div class="flex flex-col gap-2 flex-1 min-w-[200px]">
         <label class="text-bisque font-bold" for="total">Total<span class="text-burnt-umber">*</span></label>
-        <input id="total" formControlName="total" type="number"
+        <input id="total" formControlName="total" type="text"
           class="border-2 border-zorba bg-crater-brown text-bisque placeholder:text-zorba rounded p-2 focus:outline-none focus:border-golden-glow"
           placeholder="Total" />
         @if (detailForm.controls['total'].invalid && (detailForm.controls['total'].dirty ||

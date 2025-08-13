@@ -39,8 +39,8 @@ export class WebSocketService {
       brokerURL: environment.wsUrl,
       reconnectDelay: 5000,
       onConnect: () => this.handleSuccessfulConnection(),
-      onStompError: (frame) => this.handleError(frame),
-      onWebSocketError: (event) => this.handleError(event),
+      onStompError: (frame: any) => this.handleError(frame),
+      onWebSocketError: (event: any) => this.handleError(event),
       onDisconnect: () => this.handleDisconnect()
     });
 
@@ -68,13 +68,13 @@ export class WebSocketService {
       return;
     }
 
-    this.client.subscribe('/topic/notifications', (message) => {
+    this.client.subscribe('/topic/notifications', (message: any) => {
       this.processMessage(message);
     });
 
     if (this.userId) {
       const privateDest = `/user/${this.userId}/queue/private-notifications`;
-      this.client.subscribe(privateDest, (message) => {
+      this.client.subscribe(privateDest, (message: any) => {
         this.processMessage(message);
       });
     }

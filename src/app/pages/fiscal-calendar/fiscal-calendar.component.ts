@@ -2,11 +2,9 @@ import { Component, EventEmitter, inject, Output, ViewChild } from '@angular/cor
 import { FormBuilder, Validators } from '@angular/forms';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { ModalComponent } from '../../components/modal/modal.component';
-import { NotificationFormComponent } from '../../components/notification-form/notification-form.component';
 import { PaginationComponent } from '../../components/pagination/pagination.component';
-import { IFiscal, INotification } from '../../interfaces';
+import { IFiscal } from '../../interfaces';
 import { ModalService } from '../../services/modal.service';
-import { NotificationService } from '../../services/notification.service';
 import { FiscalCalendarListComponent } from '../../components/fiscal-calendar-list/fiscal-calendar-list.component';
 import { FiscalCalendarService } from '../../services/fiscal-calendar.service';
 import { FiscalCalendarFormComponent } from "../../components/fiscal-calendar-form/fiscal-calendar-form.component";
@@ -20,7 +18,6 @@ import { FiscalCalendarFormComponent } from "../../components/fiscal-calendar-fo
     ModalComponent,
     FiscalCalendarFormComponent],
   templateUrl: './fiscal-calendar.component.html',
-  styleUrl: './fiscal-calendar.component.scss'
 })
 export class FiscalCalendarComponent {
   public fiscalCalendarService = inject(FiscalCalendarService);

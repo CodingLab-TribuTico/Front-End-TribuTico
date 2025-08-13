@@ -3,7 +3,6 @@
         <p class="font-bold text-xl text-bisque">Notificaciones</p>
     </div>
     <div class="grid grid-cols-3 gap-2 py-4 w-full">
-        <!-- Panel izquierdo - Lista de notificaciones (ancho fijo) -->
         <div class="col-span-1 border-bisque/30 border rounded-md p-2 h-[43rem] overflow-y-auto w-[350px]">
             @if(allNotifications().length > 0) {
             @for(item of allNotifications().slice().reverse(); track item.id) {
@@ -45,8 +44,6 @@
             </div>
             }
         </div>
-
-        <!-- Panel derecho - Detalles de notificación -->
         <div class="col-span-2 w-full border-bisque/30 border rounded-md p-2">
             @if(selectedNotification) {
             <div class="p-4">
