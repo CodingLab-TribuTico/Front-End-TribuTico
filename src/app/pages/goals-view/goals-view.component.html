@@ -1,3 +1,4 @@
+@defer{
 <div class="p-4 flex flex-col items-center gap-6">
   <div class="mx-auto max-w-3xl w-[400px]">
     <div class="flex items-center bg-crater-brown rounded-md px-4 py-2">
@@ -8,7 +9,7 @@
         (keyup)="search($event)" 
         type="text"
         class="bg-crater-brown text-bisque placeholder:text-bisque text-lg font-bold w-full outline-none"
-        placeholder="Buscar por tipo de impuesto"/>
+        placeholder="Buscar por tipo"/>
     </div>
   </div>
 
@@ -19,7 +20,7 @@
     />
   </div>
 
-  <div class="flex justify-center mt-3">
+  <div class="flex justify-center mt-12">
     <button 
         (click)="goBack()"
         class="bg-flamenco hover:bg-golden-glow hover:text-flamenco py-2 px-4 rounded-md text-bisque font-bold">
@@ -27,3 +28,6 @@
     </button>
   </div>
 </div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}

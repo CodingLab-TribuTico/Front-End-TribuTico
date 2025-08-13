@@ -171,24 +171,50 @@ export class ManualInvoicesFormComponent implements OnInit {
       email: person.email || ''
     });
 
-    this.details = [];
+    this.details = (data.details || []).map((d: any) => {
+      const quantity = d.quantity || 0;
+      const unitPrice = d.unitPrice || 0;
+      const discount = d.discount || 0;
+      const tax = d.tax || 0;
 
-    if (data.details?.length) {
-      const firstDetail = data.details[0];
-      this.detailForm.patchValue({
-        cabys: firstDetail.cabys || '',
-        quantity: firstDetail.quantity || 0,
-        unit: firstDetail.unit || '',
-        unitPrice: firstDetail.unitPrice || 0,
-        discount: firstDetail.discount || 0,
-        tax: firstDetail.tax || 0,
-        category: firstDetail.category || '',
-        description: firstDetail.description || ''
-      });
-      this.calculateTotal();
-    } else {
-      this.detailForm.reset({ category: '', tax: '' });
-    }
+      const calculatedTaxAmount = ((quantity * unitPrice - discount) * tax) / 100;
+
+      let taxAmount = d.taxAmount;
+      if (
+        taxAmount === undefined ||
+        taxAmount === null ||
+        taxAmount <= 0 ||
+        taxAmount > (quantity * unitPrice)
+      ) {
+        taxAmount = calculatedTaxAmount;
+      }
+
+      const calculatedTotal = (quantity * unitPrice - discount) + taxAmount;
+      let total = d.total;
+      if (
+        total === undefined ||
+        total === null ||
+        total <= 0 ||
+        Math.abs(total - calculatedTotal) > 0.01
+      ) {
+        total = calculatedTotal;
+      }
+
+      return {
+        cabys: d.cabys || '',
+        quantity,
+        unit: d.unit || '',
+        unitPrice,
+        discount,
+        tax,
+        category: d.category || '',
+        description: d.description || '',
+        total,
+        taxAmount
+      };
+    });
+
+    this.detailForm.reset({ category: '', tax: '' });
   }
 
   calculateTotal(): void {
@@ -207,6 +233,8 @@ export class ManualInvoicesFormComponent implements OnInit {
   callCancel() {
     this.details.length = 0;
     this.details.push(...JSON.parse(JSON.stringify(this.originalDetailsBackup)));
+    this.isEditingDetail = false;
+    this.editingIndex = -1;
     this.callCancelMethod.emit();
   }
 
@@ -255,5 +283,31 @@ export class ManualInvoicesFormComponent implements OnInit {
   hideDeleteModal() {
     this.showDeleteModal = false;
     this.indexToDelete = -1;
+  }
+
+  public hasInvalidDetails(): boolean {
+    return this.details.some(detail =>
+      !detail.cabys ||
+      !detail.quantity ||
+      !detail.unit ||
+      !detail.unitPrice ||
+      detail.discount === null || detail.discount === undefined ||
+      detail.tax === null || detail.tax === undefined ||
+      !detail.category ||
+      detail.total === null || detail.total === undefined ||
+      !detail.description
+    );
+  }
+
+  public isDetailInvalid(detail: IDetailInvoice): boolean {
+    return !detail.cabys ||
+      !detail.quantity ||
+      !detail.unit ||
+      !detail.unitPrice ||
+      detail.discount === null || detail.discount === undefined ||
+      detail.tax === null || detail.tax === undefined ||
+      !detail.category ||
+      detail.total === null || detail.total === undefined ||
+      !detail.description;
   }
 }

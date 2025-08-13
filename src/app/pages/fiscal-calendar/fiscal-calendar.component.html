@@ -1,0 +1,44 @@
+@defer {
+<div class="p-4 h-full">
+    <div class="pb-2 justify-between flex flex-row items-end">
+        <button (click)="openModal()"
+            class="bg-golden-glow rounded-md w-8 h-8 flex items-center justify-center hover:bg-bisque transition-colors">
+            <span class="material-symbols-rounded text-crater-brown text-xl">add</span>
+        </button>
+        <h1 class="text-lg text-crater-brown font-bold text-center flex-1">Fechas Fiscales</h1>
+        <div class="flex items-center bg-crater-brown rounded-md px-2 py-1">
+            <span class="material-symbols-rounded text-2xl pr-2 text-bisque">
+                search
+            </span>
+            <input (keyup)="search($event)" type="text"
+                class="bg-crater-brown text-bisque placeholder:text-bisque text-base font-bold w-full"
+                placeholder="Buscar por nombre">
+        </div>
+    </div>
+
+    <div>
+
+        <app-fiscal-calendar-list (callDeleteAction)="fiscalCalendarService.delete($event)"
+            (callEditAction)="editFiscalCalendar($event)"
+            [fiscalNotifications]="fiscalCalendarService.fiscalCalendar$()" />
+
+        @if(fiscalCalendarService.fiscalCalendar$().length) {
+        <app-pagination [service]="fiscalCalendarService" />
+        }
+    </div>
+</div>
+} @loading (minimum 1.5s){
+<app-loader></app-loader>
+}
+
+<ng-template #addFiscalCalendarModal>
+    <app-modal [hideFooter]="true" (callCancelMethod)="hideModal()">
+        <div>
+
+            <app-fiscal-calendar-form [fiscalCalendarForm]="fiscalForm" [cancelOption]="true" [isEditMode]="isEditing"
+                (callSaveMethod)="saveFiscalNotification($event)" (callUpdateMethod)="saveFiscalNotification($event)"
+                (callCancelMethod)="cancelForm()" />
+
+        </div>
+    </app-modal>
+</ng-template>

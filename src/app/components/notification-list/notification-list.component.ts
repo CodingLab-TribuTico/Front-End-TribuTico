@@ -1,9 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, inject, Input, Output, ViewChild } from "@angular/core";
-import { INotificationGlobal } from "../../interfaces";
 import { ModalService } from "../../services/modal.service";
 import { MatIconModule } from "@angular/material/icon";
 import { ModalComponent } from "../modal/modal.component";
+import { INotification } from "../../interfaces";
 
 @Component({
   selector: 'app-notification-list',
@@ -16,14 +16,14 @@ import { ModalComponent } from "../modal/modal.component";
   templateUrl: './notification-list.component.html'
 })
 export class NotificationListComponent {
-  @Input() notifications: INotificationGlobal[] = [];
-  @Output() callDeleteAction = new EventEmitter<INotificationGlobal>();
-  @Output() callEditAction = new EventEmitter<INotificationGlobal>();
+  @Input() notifications: INotification[] = [];
+  @Output() callDeleteAction = new EventEmitter<INotification>();
+  @Output() callEditAction = new EventEmitter<INotification>();
   @ViewChild('confirmationModal') public confirmationModal: any;
   public modalService: ModalService = inject(ModalService);
-  public selectedNotification: INotificationGlobal | null = null;
+  public selectedNotification: INotification | null = null;
 
-  openModal(item: INotificationGlobal) {
+  openModal(item: INotification) {
     this.selectedNotification = item;
     this.modalService.displayModal(this.confirmationModal);
   }
@@ -32,7 +32,7 @@ export class NotificationListComponent {
     this.modalService.closeAll();
   }
 
-  deleteNotification(id: INotificationGlobal["id"]) {
+  deleteNotification(id: INotification["id"]) {
     this.hideModal();
     const notification = this.notifications.find(u => u.id === id);
     if (notification) {
@@ -41,7 +41,7 @@ export class NotificationListComponent {
     this.selectedNotification = null;
   }
 
-  editNotification(item: INotificationGlobal) {
+  editNotification(item: INotification) {
     this.callEditAction.emit(item);
   }
 }

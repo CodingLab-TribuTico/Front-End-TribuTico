@@ -28,12 +28,13 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
   public totalItems: any = [];
 
   createSimulation(year: number, month: number, userId: number) {
-    this.currentSubscription = this.findAllWithParams({
+    this.currentSubscription = this.findAllWithParamsAndCustomSource('create', {
       year: year,
       month: month,
       userId: userId,
     }).subscribe({
       next: (response: any) => {
+        this.ivaSimulation = response.data;
         this.currentIvaSimulationSignal.set(response.data);
       },
       error: () => {
@@ -54,6 +55,7 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
     return this.add(simulation).subscribe({
       next: (response: any) => {
         this.alertService.showAlert('success', response.message);
+        this.getAll();
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error al guardar la simulación de IVA');
@@ -90,13 +92,13 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
       },
     });
   }
-   
+
   getByUserId(userId: number) {
     this.findAllWithParams({ userId }).subscribe({
       next: (response: IResponse<IIvaCalculation[]>) => {
         this.search = { ...this.search, ...response.meta };
         this.totalItems = Array.from(
-          { length: this.search.totalPages ? this.search.totalPages : 0 }, 
+          { length: this.search.totalPages ? this.search.totalPages : 0 },
           (_, i) => i + 1);
         this.simulationsIvaSignal.set(response.data);
       },
@@ -105,18 +107,19 @@ export class IvaSimulationService extends BaseService<IIvaCalculation> {
       }
     });
   }
-     
+
   delete(simulation: IIvaCalculation) {
     this.delCustomSource(`${simulation.id}`).subscribe({
       next: (response: any) => {
         this.alertService.showAlert('success', response.message);
+        this.getAll();
       },
       error: () => {
         this.alertService.showAlert('error', 'Ocurrió un error eliminando al usuario');
       }
     });
   }
-  
+
   clearCurrentSimulation() {
     this.currentIvaSimulationSignal.set(null);
   }

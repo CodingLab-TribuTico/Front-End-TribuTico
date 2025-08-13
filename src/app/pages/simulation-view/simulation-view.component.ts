@@ -1,4 +1,4 @@
-import { Component, computed, inject } from "@angular/core";
+import { Component, computed, inject, signal } from "@angular/core";
 import { SimulationListComponent } from "../../components/simulation-list/simulation-list.component";
 import { PaginationComponent } from "../../components/pagination/pagination.component";
 import { LoaderComponent } from "../../components/loader/loader.component";
@@ -25,15 +25,44 @@ export class SimulationViewComponent {
   public isrExportService = inject(IsrExportService);
   public ivaExportService = inject(IvaExportService);
   public alertService = inject(AlertService);
+  public searchType = signal<string>('');
+
+  public currentPage = signal(1);
+  public pageSize = 5;
 
   public allSimulations = computed(() => {
-    const iva = this.ivaService.simulationsIva$().map(ivaCalculation => (
-      { ...ivaCalculation, type: 'IVA' }));
+    const iva = this.ivaService.simulationsIva$().map(i => ({ ...i, type: 'IVA' }));
+    const isr = this.isrService.simulationsIsr$().map(s => ({ ...s, type: 'ISR' }));
 
-    const isr = this.isrService.simulationsIsr$().map(isrSimulation => (
-      { ...isrSimulation, type: 'ISR' }));
-    return [...iva, ...isr];
+    const all = [...iva, ...isr].sort((a, b) => {
+      const dateA = new Date(a.createdAt ?? 0).getTime();
+      const dateB = new Date(b.createdAt ?? 0).getTime();
+      return dateA - dateB;
+    });
+
+    const search = this.searchType().trim().toLowerCase();
+    if (!search) return all;
+
+    return all.filter(sim => sim.type.toLowerCase().includes(search));
   });
+
+
+  public paginatedSimulations = computed(() => {
+    const all = this.allSimulations();
+    const page = this.currentPage();
+    const start = (page - 1) * this.pageSize;
+    return all.slice(start, start + this.pageSize);
+  });
+
+  public totalPages = computed(() => {
+    return Math.ceil(this.allSimulations().length / this.pageSize) || 1;
+  });
+
+  search(event: Event) {
+    const value = (event.target as HTMLInputElement).value || '';
+    this.searchType.set(value.trim().toLowerCase());
+    this.currentPage.set(1);
+  }
 
   constructor() {
     const user = JSON.parse(localStorage.getItem('auth_user') || '{}');
@@ -44,6 +73,10 @@ export class SimulationViewComponent {
   loadSimulations(userId: number) {
     this.ivaService.getByUserId(userId);
     this.isrService.getByUserId(userId);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
   }
 
   downloadPdf(simulation: any) {
@@ -73,17 +106,4 @@ export class SimulationViewComponent {
   isIvaSimulation(simulation: any): boolean {
     return simulation && typeof simulation.year === 'number' && typeof simulation.month === 'number';
   }
-
-  search(event: Event) {
-    let input = (event.target as HTMLInputElement).value
-      .trim()
-      .toLocaleLowerCase();
-    this.isrService.search.page = 1;
-    this.isrService.search.search = input;
-    this.isrService.getAll();
-  }
 }
-
-
-
-

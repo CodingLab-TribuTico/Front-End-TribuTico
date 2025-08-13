@@ -66,7 +66,6 @@ export class ResetPasswordFormComponent {
         this.router.navigateByUrl('/app/profile');
       },
       error: (err) => {
-        console.error('Error al cambiar la contraseña:', err);
         const errorMessage = err?.message;
         this.alertService.displayAlert(
           'error',
