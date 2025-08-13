@@ -54,6 +54,7 @@ describe('AuthService', () => {
     expect(localStorage.getItem('expiresIn')).toBeNull();
   });
 
+  
   it('debería retornar true cuando existe token', () => {
     localStorage.setItem('access_token', JSON.stringify('test-token'));
     authService['load']();
@@ -66,5 +67,5 @@ describe('AuthService', () => {
 
     expect(authService.check()).toBe(false);
   });
-
+  
 });
