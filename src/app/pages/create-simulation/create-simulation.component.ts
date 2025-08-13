@@ -160,15 +160,17 @@ export class CreateSimulationComponent {
     }
 
     const availableMonths = new Set<number>();
+
     invoices.forEach(invoice => {
       if (invoice.issueDate) {
-        const month = new Date(invoice.issueDate).getMonth() + 1;
-        availableMonths.add(month);
+        const [year, month, day] = invoice.issueDate.split('-').map(Number);
+        if (year && month && day) {
+          availableMonths.add(month);
+        }
       }
     });
 
     const filteredMonths = this.months.filter(month => availableMonths.has(month.value));
-
     return filteredMonths.length > 0 ? filteredMonths : this.months;
   }
 
