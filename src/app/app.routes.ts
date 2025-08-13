@@ -17,7 +17,6 @@ import { InvoiceDetailComponent } from './pages/invoice-detail/invoice-detail.co
 import { LandingPageTributicoComponent } from './pages/landing-page-tributico/landing-page-tributico.component';
 import { CreateSimulationComponent } from './pages/create-simulation/create-simulation.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { NotificationDetailComponent } from './pages/notification/notification-detail/notification-detail.component';
 import { ReportsUserComponent } from './pages/reports-user/reports-user.component';
 import { LandingPageTeamComponent } from './pages/landing-page-team/landing-page-team.component';
 import { ReportsAdminComponent } from './pages/reports-admin/reports-admin.component';
@@ -27,6 +26,7 @@ import { SimulationDetailComponent } from './pages/simulation-detail/simulation-
 import { GoalsComponent } from './pages/goals/goals.component';
 import { GoalsViewComponent } from './pages/goals-view/goals-view.component';
 import { FiscalCalendarComponent } from './pages/fiscal-calendar/fiscal-calendar.component';
+import { NotificationComponent } from './pages/notification/notification.component';
 
 
 export const routes: Routes = [
@@ -125,7 +125,7 @@ export const routes: Routes = [
       },
       {
         path: 'notification',
-        component: NotificationDetailComponent,
+        component: NotificationComponent,
         data: {
           authorities: [IRoleType.superAdmin],
           name: 'Notificaciones',

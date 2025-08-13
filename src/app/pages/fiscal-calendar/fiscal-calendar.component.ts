@@ -20,7 +20,6 @@ import { FiscalCalendarFormComponent } from "../../components/fiscal-calendar-fo
     ModalComponent,
     FiscalCalendarFormComponent],
   templateUrl: './fiscal-calendar.component.html',
-  styleUrl: './fiscal-calendar.component.scss'
 })
 export class FiscalCalendarComponent {
   public fiscalCalendarService = inject(FiscalCalendarService);

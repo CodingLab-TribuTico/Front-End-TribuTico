@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './fiscal-calendar-form.component.html',
-  styleUrl: './fiscal-calendar-form.component.scss'
 })
 export class FiscalCalendarFormComponent {
   public fb: FormBuilder = inject(FormBuilder);

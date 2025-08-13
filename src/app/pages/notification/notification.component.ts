@@ -19,9 +19,9 @@ import { NotificationListComponent } from "../../components/notification-list/no
     ModalComponent,
     NotificationFormComponent
   ],
-  templateUrl: "./notification-detail.component.html",
+  templateUrl: "./notification.component.html",
 })
-export class NotificationDetailComponent {
+export class NotificationComponent {
   public notificationService = inject(NotificationService);
   public title: string = 'Notificaciones';
   public isEditing: boolean = false;
